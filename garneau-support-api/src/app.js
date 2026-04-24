@@ -3,12 +3,15 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const db = require('./database/connection');
+const authRoute = require('./routes/authRoute')
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.use("/auth", authRoute);
 
 (async () => {
   try {
