@@ -1,32 +1,32 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database/connection');
 
-const utilisateur = sequelize.define(
-  'utilisateurs',
+const user = sequelize.define(
+  'users',
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    prenom: {
+    first_name: {
       type: DataTypes.STRING(50),
       allowNull: false
     },
-    nom: {
+    last_name: {
       type: DataTypes.STRING(50),
       allowNull: false
     },
-    courriel: {
+    email: {
       type: DataTypes.STRING(50),
       allowNull: false,
       unique: true
     },
-    mot_de_passe: {
+    password_hash: {
       type: DataTypes.STRING(255),
       allowNull: false
     },
-    telephone: {
+    phone_number: {
       type: DataTypes.STRING(20),
       allowNull: false
     },
@@ -34,24 +34,27 @@ const utilisateur = sequelize.define(
       type: DataTypes.ENUM('client', 'technicien', 'admin'),
       allowNull: false
     },
-    est_actif: {
+    is_active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true
     },
-    date_creation: {
+    created_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW
     },
-    date_modification: {
+    updated_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW
     }
   },
   {
-    tableName: 'utilisateurs',
+    tableName: 'users',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   }
 );
-module.exports = utilisateur;
+module.exports = user;
