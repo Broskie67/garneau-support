@@ -1,12 +1,12 @@
 "use strict";
 /**
- * fonction utilitaire pour formater les réponses d'erreur de l'API
+ * utility function to format API error responses
  * 
- * @param {number} statusCode - le statut HTTP de l'erreur.
- * @param {string} errorType - le type d'erreur (ex: "Bad Request", "Unauthorized", etc.).
- * @param {string} message - le message d'erreur détaillé à retourner au client.
- * @param {string} path - le chemin de la requête qui a causé l'erreur.
- * @returns {Object} - un objet formaté contenant les informations de l'erreur, prêt à être envoyé en réponse à une requête API.
+ * @param {number} statusCode - the HTTP status code of the response.
+ * @param {string} errorType - the type of error to return to the client.
+ * @param {string} message - the error message to return to the client.
+ * @param {string} path - the path of the request that caused the error.
+ * @returns {Object} - a formatted object containing the error information, ready to be sent in response to an API request.
  */
 const formatErrorResponse = (statusCode, errorType, message, path) => {
   return {
@@ -19,13 +19,12 @@ const formatErrorResponse = (statusCode, errorType, message, path) => {
 }
 
 /**
- * fonction utilitaire pour formater les réponses de succès de l'API
- * 
- * @param {number} statusCode - le statut HTTP de la réponse.
- * @param {string} message - le message de succès à retourner au client.
- * @param {any} data - les données de succès à retourner au client.
- * @param {string} path - le chemin de la requête qui a causé la réponse.
- * @returns {Object} - un objet formaté contenant les informations de la réponse, prêt à être envoyé en réponse à une requête API.
+ * utility function to format API success responses
+ * @param {number} statusCode - the HTTP status code of the response.
+ * @param {string} message - the success message to return to the client.
+ * @param {Object} data - the data to return to the client in case of a successful response.
+ * @param {string} path - the path of the request that caused the response.
+ * @returns {Object} - a formatted object containing the success information, ready to be sent in response to an API request.
  */
 const formatValidResponse = (statusCode, message, data, path) => {
   return {
@@ -36,3 +35,8 @@ const formatValidResponse = (statusCode, message, data, path) => {
     timestamp: new Date().toISOString()
   };
 }
+
+module.exports = {
+  formatErrorResponse,
+  formatValidResponse
+};
