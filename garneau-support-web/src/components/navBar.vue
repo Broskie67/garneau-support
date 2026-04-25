@@ -10,11 +10,10 @@
           Garneau Support
         </router-link>
       </h1>
-
       <nav class="app-header-nav">
         <ul class="app-header-menu">
-          <li><router-link to="/about">S'inscrire</router-link></li>
-          <li><router-link to="/contact">Se connecter</router-link></li>
+          <li><router-link to="/login">Se connecter</router-link></li>
+          <li><router-link to="/signin">S'inscrire</router-link></li>
         </ul>
       </nav>
     </div>
@@ -22,7 +21,6 @@
 </template>
 
 <style scoped>
-
   .app-header {
     display: flex;
     justify-content: space-between;
@@ -49,6 +47,7 @@
 
   nav li {
     display: inline-block;
+    font-size: 17px;
     margin-right: 20px;
   }
 </style>
