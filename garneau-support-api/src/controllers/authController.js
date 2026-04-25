@@ -1,7 +1,7 @@
 const { formatErrorResponse, formatValidResponse } = require('../utils/formatErrorResponse');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const user = require('../models/user');
+const User = require('../models/user');
 
 /**
  * Controller for handling user signup. Validates input, checks for existing users, hashes the password, and creates a new user record.
@@ -72,7 +72,7 @@ exports.signup = async (req, res, next) => {
  * @param {Object} res - Express response object used to send back the appropriate response.
  * @param {Function} next - Express next middleware function for error handling.
  */
-exports.login = async (req, res, next) => {
+exports.signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -89,7 +89,7 @@ exports.login = async (req, res, next) => {
   }
 
   try {
-    const user = await user.findOne({ where: { email: email } }); 
+    const user = await User.findOne({ where: { email: email } }); 
     if (!user) {
       return res
         .status(401)
@@ -141,7 +141,18 @@ exports.login = async (req, res, next) => {
         formatValidResponse(
           200,
           "Connexion réussie.",
-          { token },
+          {
+            user: {
+              _id: user._id,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              email: user.email,
+              phone_number: user.phone_number,
+              role: user.role,
+              is_active: user.is_active
+            },
+            token: token,
+          },  
           req.originalUrl
         )
       );
@@ -155,5 +166,5 @@ exports.login = async (req, res, next) => {
 
 exports.authController = {
   signup: exports.signup,
-  login: exports.login
+  signin: exports.signin
 };
