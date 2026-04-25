@@ -1,6 +1,6 @@
 const { formatErrorResponse } = require("../utils/formatErrorResponse");
 
-function loginValidation(req, res, next) {
+function signinValidation(req, res, next) {
   const { email, password } = req.body;
   const trimmedEmail = email ? email.trim().toLowerCase() : '';
 
@@ -36,4 +36,4 @@ function loginValidation(req, res, next) {
   next();
 }
 
-module.exports = loginValidation;
+module.exports = signinValidation;

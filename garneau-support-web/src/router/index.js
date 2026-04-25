@@ -1,4 +1,5 @@
 import HomeView from '@/view/HomeView.vue'
+import SigninView from '@/view/SigninView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -8,13 +9,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      beforeEnter: (to, from, next) => {
-        // TODO
-        
-      },
     },
     {
-      
+      path: '/signin',
+      name: 'signin',
+      component: SigninView,
     }
   ],
 })
