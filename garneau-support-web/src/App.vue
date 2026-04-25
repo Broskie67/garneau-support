@@ -1,13 +1,13 @@
 <script setup>
   import { RouterView } from 'vue-router';
-  import HomeView from './view/HomeView.vue';
+  import NavBar from './components/navBar.vue';
 
 </script>
 
 <template>
   <body>
+    <NavBar />
     <RouterView />
-    <HomeView />
 
     <footer>
       <p> Nathan Milot, ASP 2026. All rights reserved.</p>
