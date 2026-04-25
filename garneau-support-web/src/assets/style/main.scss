@@ -1,0 +1,84 @@
+@import "bootstrap/scss/bootstrap";
+
+:root {
+  /* Couleurs principales */
+  --color-primary: #39F780;
+  --color-primary-hover: #2ED66E;
+  --color-primary-dark: #0F5132;
+  --color-primary-soft: #A7F3D0;
+  --color-accent: #22C55E;
+
+  /* Couleurs de base */
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-text: #1E293B;
+  --color-text-muted: #64748B;
+  --color-border: #E2E8F0;
+
+  /* Boutons */
+  --button-primary-bg: var(--color-primary);
+  --button-primary-text: var(--color-primary-dark);
+  --button-primary-border: var(--color-primary);
+  --button-primary-hover-bg: var(--color-primary-dark);
+  --button-primary-hover-text: #FFFFFF;
+
+  --button-secondary-bg: #FFFFFF;
+  --button-secondary-text: var(--color-primary-dark);
+  --button-secondary-border: var(--color-primary-dark);
+  --button-secondary-hover-bg: var(--color-primary-soft);
+  --button-secondary-hover-text: var(--color-primary-dark);
+
+  /* Statuts des tickets */
+  --status-open: #2563EB;
+  --status-assigned: #7C3AED;
+  --status-in-progress: #F59E0B;
+  --status-waiting: #64748B;
+  --status-resolved: #10B981;
+  --status-closed: #334155;
+  --status-archived: #94A3B8;
+
+  /* Priorités */
+  --priority-low: #22C55E;
+  --priority-medium: #EAB308;
+  --priority-high: #F97316;
+  --priority-critical: #DC2626;
+
+  /* États généraux */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #DC2626;
+  --color-info: #0EA5E9;
+}
+
+body {
+  min-height: 100vh;
+  margin: 10;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.page-title {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+footer {
+  margin-top: 2rem;
+  padding: 1rem 0;
+  text-align: center;
+  background-color: #e9ecef;
+}
