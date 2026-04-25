@@ -1,9 +1,10 @@
 <script setup>
+import { useAuthStore } from '@/stores/authStore';
 
+const authStore = useAuthStore()
 </script>
 
 <template>
-  
   <div class="layout">
     <main class="content">
       <div class="welcome-content">
@@ -20,9 +21,12 @@
             Connectez-vous à votre compte pour consulter vos tickets, ou créez un compte afin de signaler un problème.
           </p>
         </div>
-        <div class="buttons">
-          <button class="connect-btn">Se connecter</button>
-          <button class="login-btn">S'inscrire</button>
+        <div class="buttons" v-if="authStore.isConnected">
+      
+        </div>
+        <div class="buttons" v-else>
+          <router-link to="/signin" class="connect-btn">Se connecter</router-link>
+          <router-link to="/sign" class="login-btn">S'inscrire</router-link>
         </div>
       </div>
     </main>  
@@ -89,7 +93,7 @@
     border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
-    transition: 0.2s ease;
+    text-decoration: none;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
   }
 
