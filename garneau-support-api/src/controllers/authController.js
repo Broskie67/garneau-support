@@ -10,10 +10,10 @@ const User = require('../models/user');
  * @param {Function} next - Express next middleware function for error handling.
  */
 exports.signup = async (req, res, next) => {
-  const { firstname, lastname, email, phoneNumber, password, confirmPassword } = req.body;
+  const { firstName, lastName, email, phoneNumber, password, confirmPassword } = req.body;
 
   try {
-    const existingUser = await user.findOne({ where: { email: email } });
+    const existingUser = await User.findOne({ where: { email: email } });
     if (existingUser) {
       return res  
         .status(409)
@@ -29,23 +29,29 @@ exports.signup = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await user.create({
-      first_name: firstname,
-      last_name: lastname,
+    const newUser = await User.create({
+      first_name: firstName,
+      last_name: lastName,
       email: email,
       password_hash: hashedPassword,
       phone_number: phoneNumber,
       role: 'client'
     });
 
-    const returnUser = {
-      id: newUser.id,
-      first_name: newUser.first_name,
-      last_name: newUser.last_name,
-      email: newUser.email,
-      phone_number: newUser.phone_number,
-      role: newUser.role
-    };
+    const token = jwt.sign(
+      { userId: newUser.id, role: newUser.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // const returnUser = {
+    //   id: newUser.id,
+    //   first_name: newUser.first_name,
+    //   last_name: newUser.last_name,
+    //   email: newUser.email,
+    //   phone_number: newUser.phone_number,
+    //   role: newUser.role
+    // };
 
     return res
       .status(201)
@@ -53,7 +59,18 @@ exports.signup = async (req, res, next) => {
         formatValidResponse(
           201,
           "Utilisateur créé avec succès.",
-          returnUser,
+          {
+            user: {
+              _id: newUser._id,
+              first_name: newUser.first_name,
+              last_name: newUser.last_name,
+              email: newUser.email,
+              phone_number: newUser.phone_number,
+              role: newUser.role,
+              is_active: newUser.is_active
+            },
+            token: token,
+          },
           req.originalUrl
         )
       );

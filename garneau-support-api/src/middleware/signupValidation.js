@@ -1,14 +1,14 @@
 const { formatErrorResponse } = require("../utils/formatErrorResponse");
 
 function signupValidation(req, res, next) {
-  const { firstname, lastname, email, phoneNumber, password, confirmPassword } = req.body;
+  const { firstName, lastName, email, phoneNumber, password, confirmPassword } = req.body;
 
-  const trimmedFirstname = firstname ? firstname.trim() : '';
-  const trimmedLastname = lastname ? lastname.trim() : '';
+  const trimmedFirstName = firstName ? firstName.trim() : '';
+  const trimmedLastName = lastName ? lastName.trim() : '';
   const trimmedEmail = email ? email.trim().toLowerCase() : '';
   const trimmedPhoneNumber = phoneNumber ? phoneNumber.trim() : '';
 
-  if (!trimmedFirstname || !trimmedLastname || !trimmedEmail || !trimmedPhoneNumber || !password || !confirmPassword) {
+  if (!trimmedFirstName || !trimmedLastName || !trimmedEmail || !trimmedPhoneNumber || !password || !confirmPassword) {
     return res
       .status(422)
       .json(
@@ -21,7 +21,7 @@ function signupValidation(req, res, next) {
       );
   }
 
-  if (trimmedFirstname.length < 2 || trimmedFirstname.length > 50) {
+  if (trimmedFirstName.length < 2 || trimmedFirstName.length > 50) {
     return res
       .status(422)
       .json(
@@ -34,7 +34,7 @@ function signupValidation(req, res, next) {
       );
   }
 
-  if (trimmedLastname.length < 2 || trimmedLastname.length > 50) {
+  if (trimmedLastName.length < 2 || trimmedLastName.length > 50) {
     return res
       .status(422)
       .json(
@@ -115,8 +115,8 @@ function signupValidation(req, res, next) {
         );
     }
 
-    req.body.firstname = trimmedFirstname;
-    req.body.lastname = trimmedLastname;
+    req.body.firstName = trimmedFirstName;
+    req.body.lastName = trimmedLastName;
     req.body.email = trimmedEmail;
     req.body.phoneNumber = trimmedPhoneNumber;
     req.body.password = password;

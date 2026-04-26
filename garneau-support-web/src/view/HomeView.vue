@@ -26,7 +26,7 @@ const authStore = useAuthStore()
         </div>
         <div class="buttons" v-else>
           <router-link to="/signin" class="connect-btn">Se connecter</router-link>
-          <router-link to="/sign" class="login-btn">S'inscrire</router-link>
+          <router-link to="/signup" class="login-btn">S'inscrire</router-link>
         </div>
       </div>
     </main>  

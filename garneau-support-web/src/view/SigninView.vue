@@ -52,8 +52,8 @@ function isValidEmail(email) {
 </script>
 
 <template>
-  <div class="login-page">
-    <div class="login-card">
+  <div class="signin-page">
+    <div class="signin-card">
       <h2>Connectez-vous</h2>
       <form @submit.prevent="signin" novalidate>
         <div class="field">
@@ -76,14 +76,14 @@ function isValidEmail(email) {
 
 <style scoped>
   /* centre tout dans la page */
-  .login-page {
+  .signin-page {
     display: flex;
     justify-content: center;
     padding-top: 40px;
     padding-bottom: 80px;
   }
 
-  .login-card {
+  .signin-card {
     background: #ffffff;
     width: 420px;
     padding: 32px 38px;
@@ -92,7 +92,7 @@ function isValidEmail(email) {
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
   }
 
-  .login-card h2 {
+  .signin-card h2 {
     margin-bottom: 20px;
     font-size: 1.8rem;
     font-weight: 700;
