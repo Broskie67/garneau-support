@@ -54,6 +54,36 @@ export const useAuthStore = defineStore('authStore', () => {
     } 
   }
 
+  async function signup(firstName, lastName, email, phoneNumber, password, confirmPassword) {
+    try {
+      const response = await fetch(`${apiUrl}/auth/signup`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          password,
+          confirmPassword
+        })
+      })
+      if(response.ok) {
+        const data = await response.json()
+        setToken(data.data.token)
+        setUser(data.data.user)
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.message)
+      }
+
+    } catch (error) {
+      throw error
+    }
+  }
+
 
   return {
     user,
@@ -62,7 +92,8 @@ export const useAuthStore = defineStore('authStore', () => {
     setToken,
     setUser,
     logout,
-    signin
+    signin,
+    signup
   };
 },{
   persist: true
