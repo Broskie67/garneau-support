@@ -76,7 +76,7 @@ function isValidEmail(email) {
 
 <style scoped>
   /* centre tout dans la page */
-  .signim-page {
+  .signin-page {
     display: flex;
     justify-content: center;
     padding-top: 40px;
