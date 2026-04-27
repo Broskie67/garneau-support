@@ -2,7 +2,7 @@
 
 :root {
   /* Couleurs principales */
-  --color-primary: #39F780;
+  --color-primary: #39f780;
   --color-primary-hover: #2ED66E;
   --color-primary-dark: #0F5132;
   --color-primary-soft: #A7F3D0;
@@ -21,6 +21,7 @@
   --button-primary-border: var(--color-primary);
   --button-primary-hover-bg: var(--color-primary-dark);
   --button-primary-hover-text: #FFFFFF;
+
 
   --button-secondary-bg: #FFFFFF;
   --button-secondary-text: var(--color-primary-dark);
@@ -46,8 +47,11 @@
   /* États généraux */
   --color-success: #10B981;
   --color-warning: #F59E0B;
-  --color-danger: #DC2626;
+  --color-danger: #dc2626;
   --color-info: #0EA5E9;
+
+  --success-message-transparent: #10B98133;
+  --error-message-transparent: #dc262633;
 }
 
 body {
