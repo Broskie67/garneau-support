@@ -39,19 +39,13 @@ exports.signup = async (req, res, next) => {
     });
 
     const token = jwt.sign(
-      { userId: newUser.id, role: newUser.role },
+      { 
+        userId: newUser.id,
+        role: newUser.role 
+      },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
-
-    // const returnUser = {
-    //   id: newUser.id,
-    //   first_name: newUser.first_name,
-    //   last_name: newUser.last_name,
-    //   email: newUser.email,
-    //   phone_number: newUser.phone_number,
-    //   role: newUser.role
-    // };
 
     return res
       .status(201)
@@ -61,7 +55,7 @@ exports.signup = async (req, res, next) => {
           "Utilisateur créé avec succès.",
           {
             user: {
-              _id: newUser._id,
+              id: newUser.id,
               first_name: newUser.first_name,
               last_name: newUser.last_name,
               email: newUser.email,
