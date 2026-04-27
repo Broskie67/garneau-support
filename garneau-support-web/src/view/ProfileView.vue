@@ -88,6 +88,10 @@
 
     isEditing.value = !isEditing.value
     successMessage.value = ''
+    firstNameError.value = ''
+    lastNameError.value = ''
+    phoneNumberError.value = ''
+
   }
 
   function isValidPhoneNumber(phoneNumber) {
@@ -135,7 +139,7 @@
           </div>
 
           <div>
-            <button class="btn" @click="toggleEditMode">Modifier le profile</button>
+            <button class="btn" @click="toggleEditMode">Modifier le profil</button>
           </div>
         </div>
         <div v-else>
@@ -216,7 +220,7 @@
   }
 
   .profile-input-group {
-    width: 260px;
+    width: 200px;
     display: flex;
     flex-direction: column;
 }
@@ -273,7 +277,8 @@
 
   .error {
     display: inline-block;
-    text-align:right;
+    text-align:left;
+    margin-left: ;
     color: var(--color-danger);
     font-size: 0.85rem;
     margin-top: 4px;
