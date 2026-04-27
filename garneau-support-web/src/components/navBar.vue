@@ -25,7 +25,7 @@ const logout = () => {
           <li><router-link to="/">Accueil</router-link></li>
           <li><router-link to="/">Tableau de bord</router-link></li>
           <li><router-link to="/">Créer un ticket</router-link></li>
-          <li><router-link>Profile</router-link></li>
+          <li><router-link to="/profile">Profile</router-link></li>
           <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
         <ul class="app-header-menu" v-if="authStore.user.role === 'technicien'">
