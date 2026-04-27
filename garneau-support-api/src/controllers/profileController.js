@@ -43,6 +43,56 @@ exports.getProfile = async (req, res, next) => {
   }
 }
 
+exports.updateProfile = async (req, res, next) => {
+  try{
+    const userId = req.user.id
+    const {firstName, lastName, phoneNumber} = req.body
+
+    const user = await User.findOne({ where: { id: userId } });
+    if(!user){
+      return res
+        .status(404)
+        .json(
+          formatErrorResponse(
+            404,
+            'Not Found',
+            'L\'utilisateur spécifié n\'éxiste pas',
+            req.originalUrl
+          )
+        )
+    }
+
+    user.first_name = firstName
+    user.last_name = lastName
+    user.phone_number = phoneNumber
+
+    const updatedUser = await user.save()
+
+    const returnedUser = {
+      id: updatedUser.id,
+      first_name: updatedUser.first_name,
+      last_name: updatedUser.last_name,
+      email: updatedUser.email,
+      phone_number: updatedUser.phone_number,
+      role: updatedUser.role,
+      is_active: updatedUser.is_active
+    }
+
+    res.status(200).json(formatValidResponse(
+      200,
+      'L\'utilisateur a été modifier avec succès',
+       returnedUser,
+       req.originalUrl
+    ))
+  } catch(error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
 exports.profileController = {
-  getProfile: exports.getProfile
+  getProfile: exports.getProfile,
+  updateProfile: exports.updateProfile
 }

@@ -146,7 +146,7 @@ function isValidPhoneNumber(phoneNumber) {
           <input type="confirmPassword" id="confirmPassword" v-model="confirmPassword" required />
           <span v-if="confirmPasswordError" class="error">{{confirmPasswordError }}</span>
         </div>
-
+        <p class="note">une fois le compte créer, il vous sera impossible de modifier votre courriel</p>
         <span v-if="errorMessage" class="error center">{{ errorMessage }}</span>
 
         <button type="submit" class="btn btn-primary">S'inscrire</button>
