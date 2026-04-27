@@ -9,10 +9,47 @@
   const firstName = ref('')
   const lastName = ref('')
   const phoneNumber = ref('')
+  const successMessage = ref('')
 
+  const firstNameError = ref('')
+  const lastNameError = ref('')
+  const phoneNumberError = ref('')
   const errorMessage = ref('')
 
   const isEditing = ref(false)
+
+  const validateForm = () => {
+    let isValid = true
+    firstNameError.value = ''
+    lastNameError.value = ''
+    phoneNumberError.value = ''
+
+    if(!firstName.value || firstName.value.trim().length === 0) {
+      firstNameError.value = "Le prénom est requis"
+      isValid = false
+    } else if (firstName.value.length < 2 || firstName.value.length > 50) {
+      firstNameError.value = 'Le prénom doit contenir entre 2 et 50 caractères '
+      isValid = false
+    }
+
+    if(!lastName.value || lastName.value.trim().length === 0) {
+      lastNameError.value = "le nom de famille est requis"
+      isValid = false
+    } else if (lastName.value.lenght < 2 || lastName.value.lenght > 50) {
+      lastNameError.value = "Le nom doit contenir entre 2 et 50 caractères"
+      isValid = false
+    }
+
+    if(!phoneNumber.value || phoneNumber.value.trim().length === 0) {
+      phoneNumberError.value = "Le numéro de téléphone est requis"
+      isValid = false
+    } else if (!isValidPhoneNumber(phoneNumber.value)) {
+      phoneNumberError.value = "Le numéro de téléphone n'est pas valide"
+      isValid = false
+    }
+
+    return isValid
+  }
 
   const getProfile = async () => {
     if(authStore.token === null){
@@ -20,7 +57,23 @@
     }
     try {
       await profileStore.getProfile(authStore.token)
+    } catch (error) {
+      errorMessage.value = error.message
+    }
+  }
 
+  const updateProfile = async () => {
+    if(!validateForm()) return
+
+    try {
+      await profileStore.updateProfile(
+        firstName.value, 
+        lastName.value, 
+        phoneNumber.value, 
+        authStore.token
+      )
+      successMessage.value = 'Votre profile a bien été enregistré'
+      isEditing.value = !isEditing.value
     } catch (error) {
       errorMessage.value = error.message
     }
@@ -34,7 +87,12 @@
     }
 
     isEditing.value = !isEditing.value
+    successMessage.value = ''
+  }
 
+  function isValidPhoneNumber(phoneNumber) {
+    const re = /^\d{10}$/
+    return re.test(phoneNumber)
   }
 
   onMounted(() =>{
@@ -47,7 +105,12 @@
   <div class="profile-page">
     <div class="profile-card">
       <h2>Votre Profil</h2>
-      <p v-if="errorMessage">{{ errorMessage }}</p>
+      <div v-if="successMessage" class="profile-success">
+        <span class="success">{{ successMessage }}</span>
+      </div>  
+      <div v-if="errorMessage" class="profile-error">
+         <span class="error">{{ errorMessage }}</span>
+      </div>
       <div v-if="!isEditing">
         <div class="user-profile" v-if="profileStore.userProfile">
           <div class="profile-field">
@@ -85,34 +148,28 @@
           <div class="user-profile" v-if="profileStore.userProfile">
             <div class="profile-field">
               <label for="firstName" class="profile-label">Prénom :</label>
-              <input
-                id="firstName"
-                class="profile-input"
-                type="text"
-                v-model="firstName"
-              />
+              <div class="profile-input-group">
+                <input id="firstName" class="profile-input" type="text" v-model="firstName"/>
+                <span v-if="firstNameError" class="error">{{ firstNameError }}</span>
+              </div>
+              
             </div>
             <div class="profile-field">
               <label for="lastName" class="profile-label">Nom de famille :</label>
-              <input
-                id="lastName"
-                class="profile-input"
-                type="text"
-                v-model="lastName"
-              />
+              <div class="profile-input-group">
+                <input id="lastName" class="profile-input" type="text" v-model="lastName"/>
+                <span v-if="lastNameError" class="error">{{ lastNameError }}</span>
+              </div>
             </div>
             <div class="profile-field">
               <label for="phoneNumber" class="profile-label">Téléphone :</label>
-              <input
-                id="phoneNumber"
-                class="profile-input"
-                type="text"
-                v-model="phoneNumber"
-              />
+              <div class="profile-input-group">
+                <input id="phoneNumber" class="profile-input" type="text" v-model="phoneNumber"/>
+                <span v-if="phoneNumberError" class="error">{{ phoneNumberError }}</span>
+              </div>
             </div>
-            <p class="note">Il est impossible de modifier votre courriel après la création du profil </p>
             <div class="update-button">
-              <button class="btn" type="button" @click="toggleEditMode">Confirmer</button>
+              <button type="submit" class="btn">Confirmer</button>
               <button class="btn" type="button" @click="toggleEditMode">Annuler</button>
             </div>
           </div>    
@@ -130,6 +187,7 @@
     padding-top: 40px;
     padding-bottom: 80px;
   }
+
   .profile-card{
     background: #ffffff;
     width: 420px;
@@ -137,27 +195,48 @@
     border-radius: 18px;
     border: 1px solid rgba(148, 163, 184, 0.25);
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
-    margin-bottom: 10px;
   }
 
   .user-profile{
     margin-bottom: 20px;
   }
+
   .profile-field{
-    display: flex;
+    display: grid;
+    grid-template-columns: 130px 0.5fr;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
+    column-gap: 40px;
+    margin-bottom: 22px;  
   }
 
   .profile-label{
-    width: 140px;
-    margin: 0;
+    width: 180px;
     font-weight: 600;
+    margin: 0;
+  }
+
+  .profile-input-group {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+}
+
+  .profile-input{
+    width: 180px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    outline: none;
   }
 
   .profile-value {
     margin: 0;
+  }
+
+  .field input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent);
   }
 
   .btn {
@@ -172,6 +251,37 @@
   }
   .update-button{
     display: flex;
-    gap: 10px
+    gap: 10px;
+    margin-top: 20px
+  }
+
+  .profile-success{
+    background-color:var(--success-message-transparent);
+    padding:10px;
+    border-radius: 8px;
+    border: 1px solid var(--color-success);
+    margin-bottom: 20px;
+  }
+
+  .profile-error{
+    background-color: var(--error-message-transparent);
+    padding:10px;
+    border-radius: 8px;
+    border: 1px solid var(--color-danger);
+    margin-bottom: 20px;
+  }
+
+  .error {
+    display: inline-block;
+    text-align:right;
+    color: var(--color-danger);
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+
+  .error.center {
+    display: block;
+    text-align: center;
+    margin: 8px 0 10px;
   }
 </style>
