@@ -4,7 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const db = require('./database/connection');
 const authRoute = require('./routes/authRoute')
-
+const profileRoute = require('./routes/profileRoute')
 dotenv.config();
 
 const app = express();
@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRoute);
+app.use("/profile", profileRoute);
 
 (async () => {
   try {
