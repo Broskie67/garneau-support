@@ -1,3 +1,4 @@
+import CreateTechView from '@/view/CreateTechView.vue'
 import HomeView from '@/view/HomeView.vue'
 import PasswordView from '@/view/PasswordView.vue'
 import ProfileView from '@/view/ProfileView.vue'
@@ -38,6 +39,11 @@ const router = createRouter({
       path:'/admin/users',
       name: 'users',
       component: UserListView
+    },
+    {
+      path:'/admin/technicians/create',
+      name: 'createTech',
+      component: CreateTechView
     }
   ],
 })
