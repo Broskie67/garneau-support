@@ -1,5 +1,6 @@
 const { formatErrorResponse, formatValidResponse } = require('../utils/formatErrorResponse');
 const User = require('../models/user')
+const bcrypt = require('bcrypt')
 const { Op } = require('sequelize');
 
 exports.getUsers = async (req, res, next) => {
@@ -85,8 +86,66 @@ exports.updateUserActiveStatus = async (req, res, next) => {
   }
 }
 
+exports.createTech = async (req, res, next) => {
+  const { firstName, lastName, email, phoneNumber, password, confirmPassword } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ where: { email: email } });
+    if (existingUser) {
+      return res  
+        .status(409)
+        .json(
+          formatErrorResponse(
+            409,
+            "Conflict",
+            "Un utilisateur avec ce courriel existe déjà.", 
+            req.originalUrl
+          )
+        );
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const newTech = await User.create({
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      password_hash: hashedPassword,
+      phone_number: phoneNumber,
+      role: 'technicien'
+    })
+
+    const returnedTech = {
+      id: newTech.id,
+      first_name: newTech.first_name,
+      last_name: newTech.last_name,
+      email: newTech.email,
+      phone_number: newTech.phone_number,
+      role: newTech.role,
+      is_active: newTech.is_active
+    }
+
+    return res
+      .status(201)
+      .json(
+        formatValidResponse(
+          201,
+          "Techniciens créé avec succès.",
+          returnedTech,
+          req.originalUrl
+        )
+      );
+
+  } catch (error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
 exports.adminController = {
   getUsers: exports.getUsers,
-  updateUserActiveStatus: exports.updateUserActiveStatus
+  updateUserActiveStatus: exports.updateUserActiveStatus,
+  createTech: exports.createTech
 
 }
