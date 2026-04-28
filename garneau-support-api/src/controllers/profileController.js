@@ -1,4 +1,5 @@
 const { formatErrorResponse, formatValidResponse } = require('../utils/formatErrorResponse');
+const bcrypt = require('bcrypt')
 const User = require('../models/user');
 
 exports.getProfile = async (req, res, next) => {
