@@ -100,6 +100,7 @@ function isValidPassword(password) {
         </div>
         <button type="submit" class="btn btn-primary">Confirmer</button>
       </form>
+      <router-link to="/profile" class="back">Retourner au profil</router-link>
     </div>
   </div>
 </template>
@@ -185,10 +186,29 @@ function isValidPassword(password) {
     background-color: var(--button-primary-bg);
     color: var(--button-primary-text);
     border: 1px solid var(--button-primary-border);
+    margin-bottom: 20px;
   }
 
-.btn:hover{
-  background-color: var(--button-primary-hover-bg);
-  color: var(--button-primary-hover-text);
-}
+  .btn:hover{
+    background-color: var(--button-primary-hover-bg);
+    color: var(--button-primary-hover-text);
+  }
+
+  .back{
+    min-width: 145px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border: 1px solid var(--button-primary-border);
+  }
+
+  .back:hover{
+    background-color: var(--button-primary-hover-bg);
+    color: var(--button-primary-hover-text);
+  }
 </style>
