@@ -31,14 +31,14 @@ const logout = () => {
         <ul class="app-header-menu" v-if="authStore.user.role === 'technicien'">
           <li><router-link to="/">Accueil</router-link></li>
           <li><router-link to="/">Tableau de bord</router-link></li>
-          <li><router-link to="/">Profil</router-link></li>
+          <li><router-link to="/profile">Profil</router-link></li>
           <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
         <ul class="app-header-menu" v-if="authStore.user.role === 'admin'">
           <li><router-link to="/">Accueil</router-link></li>
-          <li><router-link to="/">Liste des utilisateurs</router-link></li>
+          <li><router-link to="/admin/users">Liste des utilisateurs</router-link></li>
           <li><router-link to="/">Créer un technicien</router-link></li>
-          <li><router-link to="/">Profil</router-link></li>
+          <li><router-link to="/profile">Profil</router-link></li>
           <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
       </nav>

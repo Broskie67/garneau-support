@@ -3,6 +3,7 @@ import PasswordView from '@/view/PasswordView.vue'
 import ProfileView from '@/view/ProfileView.vue'
 import SigninView from '@/view/SigninView.vue'
 import SignupView from '@/view/SignupView.vue'
+import UserListView from '@/view/UserListView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -32,6 +33,11 @@ const router = createRouter({
       path:'/profile/password',
       name: 'password',
       component: PasswordView
+    },
+    {
+      path:'/admin/users',
+      name: 'users',
+      component: UserListView
     }
   ],
 })
