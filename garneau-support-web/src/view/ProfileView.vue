@@ -178,6 +178,9 @@
             </div>
           </div>    
         </form> 
+        <div>
+          <router-link to="/profile/password" class="update-password">Modifier le mot de passe</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -259,6 +262,23 @@
     margin-top: 20px
   }
 
+  .update-password{
+    min-width: 145px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border: 1px solid var(--button-primary-border);
+  }
+
+  .update-password:hover{
+    background-color: var(--button-primary-hover-bg);
+    color: var(--button-primary-hover-text);
+  }
   .profile-success{
     background-color:var(--success-message-transparent);
     padding:10px;
@@ -278,7 +298,6 @@
   .error {
     display: inline-block;
     text-align:left;
-    margin-left: ;
     color: var(--color-danger);
     font-size: 0.85rem;
     margin-top: 4px;

@@ -96,7 +96,7 @@ const signup = async () => {
     )
     router.push({name: 'home'})
   } catch (error) {
-    errorMessage.value =error.message
+    errorMessage.value = error.message
   }
 } 
 

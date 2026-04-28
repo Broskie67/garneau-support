@@ -67,4 +67,51 @@ function profileValidation(req, res, next) {
     next()
 }
 
+function updatePasswordValidation(req, res, next) {
+  const {currentPassword, newPassword, confirmPassword} = req.body
+
+  if(!currentPassword || !newPassword || !confirmPassword){
+    return res
+      .status(422)
+      .json(
+        formatErrorResponse(
+          422,
+          "Unprocessable Entity",
+          "Tous les champs sont requis.", 
+          req.originalUrl
+        )
+      );
+  }
+
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[#?!@$%^&*-]).{6,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res 
+        .status(422)
+        .json(
+          formatErrorResponse(
+            422,
+            "Unprocessable Entity",
+            "Le mot de passe doit contenir au moins 6 caractères, une majuscule, un chiffre et un caractère spécial.", 
+            req.originalUrl
+          )
+        );
+    }
+  
+    if(newPassword !== confirmPassword) {
+    return res
+      .status(422)
+      .json(
+        formatErrorResponse(
+          422,
+          "Unprocessable Entity",
+          "Les mots de passe ne correspondent pas.", 
+          req.originalUrl
+        )
+      );
+    }
+
+    next()
+}
+
 module.exports = profileValidation
+module.exports = updatePasswordValidation
