@@ -278,7 +278,6 @@
   .error {
     display: inline-block;
     text-align:left;
-    margin-left: ;
     color: var(--color-danger);
     font-size: 0.85rem;
     margin-top: 4px;

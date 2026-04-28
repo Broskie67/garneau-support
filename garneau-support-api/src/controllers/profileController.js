@@ -92,7 +92,61 @@ exports.updateProfile = async (req, res, next) => {
   }
 }
 
+exports.updatePassword = async (req, res, next) => {
+  try {
+    const userId = req.user.id
+    const {currentPassword, newPassword, confirmPassword} = req.body
+
+    const user = await User.findOne({ where: { id: userId } })
+    if(!user) {
+      return res
+        .status(404)
+        .json(
+          formatErrorResponse(
+            404,
+            'Not Found',
+            'L\'utilisateur spécifié n\'éxiste pas',
+            req.originalUrl
+          )
+        )
+    }
+
+    const isSamePassword = await bcrypt.compare(currentPassword, user.password_hash)
+    if(!isSamePassword) {
+      return res
+        .status(401)
+        .json(
+          formatErrorResponse(
+            401,
+            'Unauthorized',
+            'le mot de passe actuel est incorrect',
+            req.originalUrl
+          )
+        )
+    }
+    const hashNewPassword = await bcrypt.hash(newPassword, 10)
+
+    user.password_hash = hashNewPassword
+
+    const updatedUser = await user.save()
+
+    res.status(200).json(formatValidResponse(
+      200,
+      'Le mot de passe a été modifié avec succès',
+       null,
+       req.originalUrl
+    ))
+
+  } catch (error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
 exports.profileController = {
   getProfile: exports.getProfile,
-  updateProfile: exports.updateProfile
+  updateProfile: exports.updateProfile,
+  updatePassword: exports.updatePassword
 }
