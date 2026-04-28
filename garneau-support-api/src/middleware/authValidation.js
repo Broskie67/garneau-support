@@ -32,6 +32,7 @@ function signinValidation(req, res, next) {
     }
 
     req.body.email = trimmedEmail;
+    
 
   next();
 }
@@ -161,5 +162,8 @@ function signupValidation(req, res, next) {
   next();
 }
 
-module.exports = signinValidation;
-module.exports = signupValidation;
+module.exports = {
+  signinValidation,
+  signupValidation
+} 
+

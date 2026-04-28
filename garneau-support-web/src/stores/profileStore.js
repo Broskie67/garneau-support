@@ -50,11 +50,38 @@ export const useProfileStore = defineStore('profileStore', () => {
       throw error
     }
   }
+
+  async function updatePassword(currentPassword, newPassword, confirmPassword, token) {
+    try {
+      const response = await fetch(`${apiUrl}/profile/password`, {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword
+        })
+      })
+      if(response.ok) {
+        const data = await response.json()
+        userProfile.value = data.data
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.message)
+      } 
+    } catch (error) {
+      throw error
+    }
+  }
   
   return {
     userProfile,
     getProfile,
-    updateProfile
+    updateProfile,
+    updatePassword
   };
 },{
   persist: true

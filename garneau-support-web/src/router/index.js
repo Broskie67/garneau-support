@@ -1,4 +1,5 @@
 import HomeView from '@/view/HomeView.vue'
+import PasswordView from '@/view/PasswordView.vue'
 import ProfileView from '@/view/ProfileView.vue'
 import SigninView from '@/view/SigninView.vue'
 import SignupView from '@/view/SignupView.vue'
@@ -26,9 +27,12 @@ const router = createRouter({
       path:'/profile',
       name: 'profile',
       component: ProfileView
+    },
+    {
+      path:'/profile/password',
+      name: 'password',
+      component: PasswordView
     }
-
-
   ],
 })
 
