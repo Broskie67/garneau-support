@@ -5,5 +5,6 @@ const express = require('express');
 const router = express.Router()
 
 router.get('/users', isAuth, isAdmin, adminController.getUsers)
+router.patch('/users/:id/status', isAuth, isAdmin, adminController.updateUserActiveStatus)
 
 module.exports = router
