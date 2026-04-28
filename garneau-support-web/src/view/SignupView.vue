@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
-
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -143,7 +142,7 @@ function isValidPhoneNumber(phoneNumber) {
         </div>
         <div class="field">
           <label for="confirmPassword">Confirmation du mot de passe</label>
-          <input type="confirmPassword" id="confirmPassword" v-model="confirmPassword" required />
+          <input type="password" id="confirmPassword" v-model="confirmPassword" required />
           <span v-if="confirmPasswordError" class="error">{{confirmPasswordError }}</span>
         </div>
         <p class="note">une fois le compte créer, il vous sera impossible de modifier votre courriel</p>
@@ -185,47 +184,47 @@ function isValidPhoneNumber(phoneNumber) {
   }
 
   .field label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 0.95rem;
-  color: #1e293b;
-}
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: #1e293b;
+  }
 
-.field input {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 1rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  outline: none;
-}
+  .field input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    outline: none;
+  }
 
-.field input:focus {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px var(--color-accent);
-}
+  .field input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent);
+  }
 
-.error {
-  color: var(--color-danger);
-  font-size: 0.85rem;
-  margin-top: 4px;
-}
+  .error {
+    color: var(--color-danger);
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
 
-.error.center {
-  display: block;
-  text-align: center;
-  margin: 8px 0 10px;
-}
+  .error.center {
+    display: block;
+    text-align: center;
+    margin: 8px 0 10px;
+  }
 
-.btn {
-  background-color: var(--button-primary-bg);
-  color: var(--button-primary-text);
-  border: 1px solid var(--button-primary-border);
-}
+  .btn {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border: 1px solid var(--button-primary-border);
+  }
 
-.btn:hover{
-  background-color: var(--button-primary-hover-bg);
-  color: var(--button-primary-hover-text);
-}
+  .btn:hover{
+    background-color: var(--button-primary-hover-bg);
+    color: var(--button-primary-hover-text);
+  }
 
 </style>
