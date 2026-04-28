@@ -113,5 +113,7 @@ function updatePasswordValidation(req, res, next) {
     next()
 }
 
-module.exports = profileValidation
-module.exports = updatePasswordValidation
+module.exports = {
+  profileValidation,
+  updatePasswordValidation
+}
