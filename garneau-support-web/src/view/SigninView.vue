@@ -16,6 +16,7 @@ const validateForm = () => {
   let isValid = true
   emailError.value = ''
   passwordError.value = ''
+  errorMessage.value = ''
 
   if(!email.value) {
     emailError.value = "L'email est requis"
