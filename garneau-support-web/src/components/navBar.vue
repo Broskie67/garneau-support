@@ -25,7 +25,7 @@ const logout = () => {
           <li><router-link to="/">Accueil</router-link></li>
           <li><router-link to="/">Tableau de bord</router-link></li>
           <li><router-link to="/">Créer un ticket</router-link></li>
-          <li><router-link to="/profile">Profile</router-link></li>
+          <li><router-link to="/profile">Profil</router-link></li>
           <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
         <ul class="app-header-menu" v-if="authStore.user.role === 'technicien'">
@@ -39,7 +39,7 @@ const logout = () => {
           <li><router-link to="/admin/users">Liste des utilisateurs</router-link></li>
           <li><router-link to="/admin/technicians/create">Créer un technicien</router-link></li>
           <li><router-link to="/profile">Profil</router-link></li>
-          <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
+          <li><a href="#" class="btn-deconnection" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
       </nav>
       <nav class="app-header-nav" v-else>
@@ -87,4 +87,39 @@ const logout = () => {
   .btn-deconnexion{
     text-decoration: none;
   }
+
+  @media (max-width: 960px) {
+    .app-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap:16px;
+    }
+    .app-header-menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px, 18px;
+    }
+  }
+
+  @media (max-width: 576px) {
+  .app-header {
+    align-items: center;
+    text-align: center;
+  }
+
+  .app-header-title {
+    font-size: 1.6rem;
+  }
+
+  .app-header-menu {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  nav li {
+    display: block;
+    font-size: 16px;
+  }
+}
 </style>

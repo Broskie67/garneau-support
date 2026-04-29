@@ -123,12 +123,12 @@ function isValidPhoneNumber(phoneNumber) {
       <form @submit.prevent="signup" novalidate>
         <div class="field">
           <label for="firstName">Prénom</label>
-          <input type="firstName" id="firstName" v-model="firstName" required />
+          <input type="firstName" id="firstName" v-model="firstName"/>
           <span v-if="firstNameError" class="error">{{ firstNameError }}</span>
         </div>
         <div class="field">
           <label for="firstName">Nom</label>
-          <input type="lastName" id="lastName" v-model="lastName" required />
+          <input type="lastName" id="lastName" v-model="lastName" />
           <span v-if="lastNameError" class="error">{{ lastNameError }}</span>
         </div>
         <div class="field">
@@ -138,7 +138,7 @@ function isValidPhoneNumber(phoneNumber) {
         </div>
         <div class="field">
           <label for="phoneNumber">Téléphone</label>
-          <input type="phoneNumber" id="phoneNumber" v-model="phoneNumber" required />
+          <input type="phoneNumber" id="phoneNumber" v-model="phoneNumber"/>
           <span v-if="phoneNumberError" class="error">{{ phoneNumberError }}</span>
         </div>
         <div class="field">
@@ -148,7 +148,7 @@ function isValidPhoneNumber(phoneNumber) {
         </div>
         <div class="field">
           <label for="confirmPassword">Confirmation du mot de passe</label>
-          <input type="password" id="confirmPassword" v-model="confirmPassword" required />
+          <input type="password" id="confirmPassword" v-model="confirmPassword"/>
           <span v-if="confirmPasswordError" class="error">{{confirmPasswordError }}</span>
         </div>
         <p class="note">une fois le compte créer, il vous sera impossible de modifier votre courriel</p>
@@ -237,6 +237,46 @@ function isValidPhoneNumber(phoneNumber) {
   .btn:hover{
     background-color: var(--button-primary-hover-bg);
     color: var(--button-primary-hover-text);
+  }
+
+  @media (max-width: 768px) {
+    .signup-page {
+      padding-top: 25px;
+      padding-bottom: 50px;
+    }
+
+    .signup-card {
+      padding: 28px 30px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .signup-page {
+      padding: 20px 16px 40px;
+    }
+
+    .signup-card {
+      width: 100%;
+      padding: 24px 20px;
+      border-radius: 14px;
+    }
+
+    .signup-card h2 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .field input {
+      padding: 11px 12px;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      border: 1px solid var(--button-primary-border);
+    }
   }
 
 </style>

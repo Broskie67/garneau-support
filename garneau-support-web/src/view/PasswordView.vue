@@ -183,6 +183,7 @@ function isValidPassword(password) {
   }
 
   .btn {
+    width: 50%;
     background-color: var(--button-primary-bg);
     color: var(--button-primary-text);
     border: 1px solid var(--button-primary-border);
@@ -195,8 +196,8 @@ function isValidPassword(password) {
   }
 
   .back{
-    min-width: 145px;
-    padding: 12px 22px;
+    min-width: 50%;
+    padding: 10px 18px;
     border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
@@ -210,5 +211,71 @@ function isValidPassword(password) {
   .back:hover{
     background-color: var(--button-primary-hover-bg);
     color: var(--button-primary-hover-text);
+  }
+
+  @media (max-width: 768px) {
+    .password-page {
+      padding:25px 16px 50px;
+      align-items: flex-start;
+    }
+
+    .password-card {
+      width: 100%;
+      padding: 28px 24px;
+    }
+
+    .btn {
+      width: 50%;
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      border: 1px solid var(--button-primary-border);
+      margin-bottom: 20px;
+    }
+
+    .back{
+      width: 100%;
+      padding: 10px 18px;;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      border: 1px solid var(--button-primary-border);
+    }
+
+  }
+
+  @media (max-width: 576px) {
+    .password-page {
+      padding: 20px 12px 40px;
+    }
+
+    .password-card {
+      padding: 22px 16px;
+      border-radius: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      border: 1px solid var(--button-primary-border);
+      margin-bottom: 20px;
+    }
+
+    .back{
+      width: 100%;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      border: 1px solid var(--button-primary-border);
+    }
   }
 </style>

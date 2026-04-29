@@ -49,8 +49,6 @@ const router = createRouter({
         const authStore = useAuthStore()
         if(authStore.isConnected) {
           if(authStore.user.role !== 'admin'){
-            next('/forbidden')
-          } else {
             next()
           }
         } else {
@@ -87,7 +85,6 @@ const router = createRouter({
           } else {
             next()
           }
-          
         } else {
           next('/signin')
         }
