@@ -117,10 +117,7 @@ function isValidPhoneNumber(phoneNumber) {
 <template>
   <div class="create-tech-page">
     <div class="create-tech-card">
-      <h2>Ajouter un technicien</h2>
-      <div v-if="successMessage" class="profile-success">
-        <span class="success">{{ successMessage }}</span>
-      </div>  
+      <h2>Ajouter un technicien</h2> 
       <div v-if="errorMessage" class="profile-error">
         <span class="error">{{ errorMessage }}</span>
       </div>
@@ -240,6 +237,7 @@ function isValidPhoneNumber(phoneNumber) {
   }
 
   .btn {
+    width: 50%;
     background-color: var(--button-primary-bg);
     color: var(--button-primary-text);
     border: 1px solid var(--button-primary-border);
@@ -248,5 +246,44 @@ function isValidPhoneNumber(phoneNumber) {
   .btn:hover{
     background-color: var(--button-primary-hover-bg);
     color: var(--button-primary-hover-text);
+  }
+  @media (max-width: 768px) {
+    .create-tech-page {
+      padding-top: 25px;
+      padding-bottom: 50px;
+    }
+
+    .create-tech-card {
+      padding: 28px 30px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .create-tech-page {
+      padding: 20px 16px 40px;
+    }
+
+    .create-tech-card {
+      width: 100%;
+      padding: 24px 20px;
+      border-radius: 14px;
+    }
+
+    .create-tech-card h2 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .field input {
+      padding: 11px 12px;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      border: 1px solid var(--button-primary-border);
+    }
   }
 </style>
