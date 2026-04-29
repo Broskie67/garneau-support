@@ -52,6 +52,22 @@ const ticket = sequelize.define(
       ),
       allowNull: false
     },
+    created_by: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id'
+      }
+    },
+    assigned_to: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'id'
+      }
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
