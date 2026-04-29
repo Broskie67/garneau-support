@@ -114,6 +114,12 @@ function isValidPhoneNumber(phoneNumber) {
   <div class="signup-page">
     <div class="signup-card">
       <h2>Inscrivez-vous</h2>
+      <div v-if="successMessage" class="profile-success">
+        <span class="success">{{ successMessage }}</span>
+      </div>  
+      <div v-if="errorMessage" class="profile-error">
+        <span class="error">{{ errorMessage }}</span>
+      </div>
       <form @submit.prevent="signup" novalidate>
         <div class="field">
           <label for="firstName">Prénom</label>
@@ -146,8 +152,6 @@ function isValidPhoneNumber(phoneNumber) {
           <span v-if="confirmPasswordError" class="error">{{confirmPasswordError }}</span>
         </div>
         <p class="note">une fois le compte créer, il vous sera impossible de modifier votre courriel</p>
-        <span v-if="errorMessage" class="error center">{{ errorMessage }}</span>
-
         <button type="submit" class="btn btn-primary">S'inscrire</button>
       </form>
     </div>
@@ -202,6 +206,14 @@ function isValidPhoneNumber(phoneNumber) {
   .field input:focus {
     border-color: var(--color-accent);
     box-shadow: 0 0 0 3px var(--color-accent);
+  }
+
+  .profile-error{
+    background-color: var(--error-message-transparent);
+    padding:10px;
+    border-radius: 8px;
+    border: 1px solid var(--color-danger);
+    margin-bottom: 20px;
   }
 
   .error {

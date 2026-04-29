@@ -117,10 +117,7 @@ function isValidPhoneNumber(phoneNumber) {
 <template>
   <div class="create-tech-page">
     <div class="create-tech-card">
-      <h2>Ajouter un technicien</h2>
-      <div v-if="successMessage" class="profile-success">
-        <span class="success">{{ successMessage }}</span>
-      </div>  
+      <h2>Ajouter un technicien</h2> 
       <div v-if="errorMessage" class="profile-error">
         <span class="error">{{ errorMessage }}</span>
       </div>
