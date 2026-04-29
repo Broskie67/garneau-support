@@ -1,4 +1,4 @@
-const { adminController } = require('../controllers/adminController')
+const adminController = require('../controllers/adminController')
 const isAuth = require('../middleware/isAuth')
 const { isAdmin } = require('../middleware/roleValidation')
 const { signupValidation } = require('../middleware/authValidation')

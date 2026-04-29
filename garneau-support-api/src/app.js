@@ -6,6 +6,7 @@ const db = require('./database/connection');
 const authRoute = require('./routes/authRoute')
 const profileRoute = require('./routes/profileRoute')
 const adminRoute = require('./routes/adminRoute')
+const ticketRoute = require('./routes/ticketRoute')
 dotenv.config();
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/auth", authRoute);
 app.use("/profile", profileRoute);
 app.use("/admin", adminRoute);
+app.use("/tickets", ticketRoute);
 
 (async () => {
   try {

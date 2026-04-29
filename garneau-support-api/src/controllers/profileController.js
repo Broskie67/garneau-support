@@ -145,9 +145,3 @@ exports.updatePassword = async (req, res, next) => {
     next(error);
   }
 }
-
-exports.profileController = {
-  getProfile: exports.getProfile,
-  updateProfile: exports.updateProfile,
-  updatePassword: exports.updatePassword
-}
