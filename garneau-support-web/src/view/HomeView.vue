@@ -118,4 +118,5 @@ const authStore = useAuthStore()
     background-color: var(--button-primary-hover-bg);
     color: var(--button-primary-hover-text);
   }
+
 </style>

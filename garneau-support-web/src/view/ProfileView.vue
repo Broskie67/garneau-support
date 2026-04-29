@@ -308,4 +308,44 @@
     text-align: center;
     margin: 8px 0 10px;
   }
+
+  @media (max-width: 768px) {
+    .profile-page {
+      padding-top: 25px;
+      padding-bottom: 50px;
+    }
+
+    .profile-card {
+      padding: 28px 30px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .signin-page {
+      padding: 20px 16px 40px;
+    }
+
+    .signin-card {
+      width: 100%;
+      padding: 24px 20px;
+      border-radius: 14px;
+    }
+
+    .signin-card h2 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .field input {
+      padding: 11px 12px;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      border: 1px solid var(--button-primary-border);
+    }
+  }
 </style>

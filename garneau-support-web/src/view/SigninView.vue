@@ -105,47 +105,87 @@ function isValidEmail(email) {
   }
 
   .field label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 0.95rem;
-  color: #1e293b;
-}
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: #1e293b;
+  }
 
-.field input {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 1rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  outline: none;
-}
+  .field input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    outline: none;
+  }
 
-.field input:focus {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px var(--color-accent);
-}
+  .field input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent);
+  }
 
-.error {
-  color: var(--color-danger);
-  font-size: 0.85rem;
-  margin-top: 4px;
-}
+  .error {
+    color: var(--color-danger);
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
 
-.error.center {
-  display: block;
-  text-align: center;
-  margin: 8px 0 10px;
-}
+  .error.center {
+    display: block;
+    text-align: center;
+    margin: 8px 0 10px;
+  }
 
-.btn {
-  background-color: var(--button-primary-bg);
-  color: var(--button-primary-text);
-  border: 1px solid var(--button-primary-border);
-}
+  .btn {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border: 1px solid var(--button-primary-border);
+  }
 
-.btn:hover{
-  background-color: var(--button-primary-hover-bg);
-  color: var(--button-primary-hover-text);
-}
+  .btn:hover{
+    background-color: var(--button-primary-hover-bg);
+    color: var(--button-primary-hover-text);
+  }
+
+  @media (max-width: 768px) {
+    .signup-page {
+      padding-top: 25px;
+      padding-bottom: 50px;
+    }
+
+    .signup-card {
+      padding: 28px 30px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .signin-page {
+      padding: 20px 16px 40px;
+    }
+
+    .signin-card {
+      width: 100%;
+      padding: 24px 20px;
+      border-radius: 14px;
+    }
+
+    .signin-card h2 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .field input {
+      padding: 11px 12px;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      border: 1px solid var(--button-primary-border);
+    }
+  }
 
 </style>
