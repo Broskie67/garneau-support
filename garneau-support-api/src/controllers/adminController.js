@@ -14,7 +14,7 @@ exports.getUsers = async (req, res, next) => {
       }
     })
 
-    res.status(200).json(formatValidResponse(
+    return res.status(200).json(formatValidResponse(
       200,
       'La liste des utilisateurs a été récupéré avec succès',
       allUser,
@@ -142,10 +142,4 @@ exports.createTech = async (req, res, next) => {
     }
     next(error);
   }
-}
-exports.adminController = {
-  getUsers: exports.getUsers,
-  updateUserActiveStatus: exports.updateUserActiveStatus,
-  createTech: exports.createTech
-
 }

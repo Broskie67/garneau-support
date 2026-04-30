@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database/connection');
+const User = require('./user')
 
 const ticket = sequelize.define(
   'tickets',
@@ -86,4 +87,15 @@ const ticket = sequelize.define(
     updatedAt: 'updated_at'
   }
 );
+
+ticket.belongsTo(User, {
+  foreignKey: 'created_by',
+  as: 'creator'
+})
+
+ticket.belongsTo(User, {
+  foreignKey: 'assigned_to',
+  as: 'technicien'
+})
+
 module.exports = ticket

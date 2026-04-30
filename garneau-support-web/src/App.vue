@@ -5,14 +5,16 @@
 </script>
 
 <template>
-  <body>
+  <div class="app-layout">
     <NavBar />
-    <RouterView />
-
+    <main class="main-content">
+      <RouterView />
+    </main>
     <footer>
       <p> Nathan Milot, ASP 2026. All rights reserved.</p>
     </footer>
-  </body>
+  </div>
+    
 </template>
 
 <style scoped></style>

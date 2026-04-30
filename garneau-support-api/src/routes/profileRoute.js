@@ -1,4 +1,4 @@
-const { profileController } = require('../controllers/profileController');
+const profileController = require('../controllers/profileController');
 const isAuth = require('../middleware/isAuth');
 const express = require('express');
 const {profileValidation,updatePasswordValidation } = require('../middleware/profileValidation');

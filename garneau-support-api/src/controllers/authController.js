@@ -174,8 +174,3 @@ exports.signin = async (req, res, next) => {
       next(error);
     }
 }
-
-exports.authController = {
-  signup: exports.signup,
-  signin: exports.signin
-};
