@@ -75,3 +75,41 @@ exports.getTechnicianTickets = async (req, res, next) => {
     next(error);
   }
 }
+
+exports.patchSelfAssignTicket = async (req, res, next) => {
+  const ticketId = req.param.id
+  try{
+    const userId = req.user.id
+    
+    const ticket = await Ticket.findOne({ where: { id: ticketId }})
+    if(!ticket){
+       return res
+        .status(404)
+        .json(
+          formatErrorResponse(
+            404,
+            'Not Found',
+            'L\'incident spécifié n\'éxiste pas',
+            req.originalUrl
+          )
+        )
+    }
+    
+    ticket.assigned_to = userId
+
+    const updatedTicket = await ticket.save()
+
+    return res.status(200).json(formatValidResponse(
+      200,
+      'L\'incident vous a bien été assigné',
+      updatedTicket,
+      req.originalUrl
+    ))
+    
+  } catch (error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}

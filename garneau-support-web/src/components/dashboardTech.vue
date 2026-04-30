@@ -47,7 +47,10 @@ onMounted(() => {
 
   <div class="table-active">
     <h3>Incidents actifs</h3>
-    <TicketTable :tickets="getAssignedActiveTicket" :isTechnician="true" />
+    <TicketTable 
+      :tickets="getAssignedActiveTicket" 
+      :isTechnician="true"
+      @assign-ticket="assignTicket" />
   </div>
    
   

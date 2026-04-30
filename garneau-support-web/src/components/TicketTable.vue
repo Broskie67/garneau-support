@@ -93,7 +93,7 @@ function formatDate(dateString) {
             <button 
               v-if="isTechnician && ticket.assigned_to === null" 
               class="assign-btn"
-              @onClick="assignToTech"
+              @onClick="$emit('assign-ticket', ticket.id)"
             >
               M’assigner
             </button>
