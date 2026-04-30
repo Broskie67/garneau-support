@@ -7,7 +7,7 @@ export const useTicketStore = defineStore('ticketStore', () => {
 
   async function getTickets(token) {
     try {
-      const response = await fetch(`${apiUrl}/tickets`, {
+      const response = await fetch(`${apiUrl}/tickets/client`, {
         method: 'GET',
         headers: {
           "Authorization": "Bearer " + token

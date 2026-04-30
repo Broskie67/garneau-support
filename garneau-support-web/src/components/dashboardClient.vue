@@ -2,7 +2,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
-import TicketTable from './TicketTable.vue'
+import TicketTable from '@/components/TicketTable.vue'
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()

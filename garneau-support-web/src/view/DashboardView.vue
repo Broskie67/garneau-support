@@ -1,20 +1,20 @@
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
 import DashboardClient from '@/components/DashboardClient.vue'
-import dashboardTech from '@/components/DashboardTech.vue';
+import DashboardTech from '@/components/DashboardTech.vue';
 
 const authStore = useAuthStore()
 </script>
 
 <template>
-  <div class="dashboard-page" v-if="authStore.user.role === 'client'">
+  <div class="dashboard-page">
     <div>
-      <dashboard-client />
+      <DashboardClient v-if="authStore.user?.role === 'client'"/>
     </div>
   </div>
-  <div class="dashboard-page" v-if="authStore.user.role === 'technicien'">
+  <div class="dashboard-page" >
     <div>
-      <dashboard-tech />
+      <DashboardTech v-if="authStore.user?.role === 'technicien'"/>
     </div>
   </div>
 
