@@ -77,7 +77,7 @@ exports.getTechnicianTickets = async (req, res, next) => {
 }
 
 exports.patchSelfAssignTicket = async (req, res, next) => {
-  const ticketId = req.param.id
+  const ticketId = req.params.id
   try{
     const userId = req.user.id
     

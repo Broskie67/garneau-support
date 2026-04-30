@@ -1,6 +1,4 @@
 <script setup>
-
-
 defineProps({
   tickets: {
     type: Array,
@@ -93,7 +91,7 @@ function formatDate(dateString) {
             <button 
               v-if="isTechnician && ticket.assigned_to === null" 
               class="assign-btn"
-              @onClick="$emit('assign-ticket', ticket.id)"
+              @click="$emit('self-assign-ticket', ticket.id)"
             >
               M’assigner
             </button>

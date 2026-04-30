@@ -43,12 +43,31 @@ export const useTicketStore = defineStore('ticketStore', () => {
     } catch (error) {
       throw error
     }
-    
+  }
+
+  async function selfAssignTicket(ticketId, token) {
+    try{
+      const response = await fetch(`${apiUrl}/tickets/${ticketId}/assign/me`, {
+        method: 'PATCH',
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      })
+      if(response.ok) {
+        getTechTickets(token)
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.message)
+      }
+    } catch (error) {
+      throw error
+    }
   }
 
   return {
     ticketsList,
     getClientTickets,
-    getTechTickets
+    getTechTickets,
+    selfAssignTicket
   }
 })
