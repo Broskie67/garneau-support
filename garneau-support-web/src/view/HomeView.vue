@@ -35,9 +35,6 @@ const authStore = useAuthStore()
 
 <style scoped>
   .layout {
-    min-height: 100vh;
-    display: flex;
-    justify-content: flex-start;
     background-color: var(--color-background);
   }
 

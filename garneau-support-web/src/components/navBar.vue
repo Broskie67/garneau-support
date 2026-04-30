@@ -23,7 +23,7 @@ const logout = () => {
       <nav class="app-header-nav" v-if="authStore.isConnected">
         <ul class="app-header-menu" v-if="authStore.user.role === 'client'">
           <li><router-link to="/">Accueil</router-link></li>
-          <li><router-link to="/">Tableau de bord</router-link></li>
+          <li><router-link to="/dashboard">Tableau de bord</router-link></li>
           <li><router-link to="/">Créer un ticket</router-link></li>
           <li><router-link to="/profile">Profil</router-link></li>
           <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>

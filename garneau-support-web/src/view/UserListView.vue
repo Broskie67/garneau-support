@@ -28,7 +28,6 @@
     }
   }
   
-
   onMounted(() =>{
     getUsers()
   })

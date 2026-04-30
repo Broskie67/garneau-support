@@ -1,5 +1,6 @@
 import { useAuthStore } from '@/stores/authStore'
 import CreateTechView from '@/view/CreateTechView.vue'
+import DashboardView from '@/view/DashboardView.vue'
 import ForbiddenView from '@/view/ForbiddenView.vue'
 import HomeView from '@/view/HomeView.vue'
 import NotFoundView from '@/view/NotFoundView.vue'
@@ -85,6 +86,19 @@ const router = createRouter({
           } else {
             next()
           }
+        } else {
+          next('/signin')
+        }
+      }
+    },
+    {
+      path:'/dashboard',
+      name: 'dashboard',
+      component: DashboardView,
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore()
+        if(authStore.isConnected) {
+          next()
         } else {
           next('/signin')
         }
