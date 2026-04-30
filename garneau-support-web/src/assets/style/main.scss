@@ -54,11 +54,21 @@
   --error-message-transparent: #dc262633;
 }
 
-body {
+html,
+body,
+#app {
+  min-height: 100%;
+  margin: 0;
+}
+
+.app-layout {
   min-height: 100vh;
-  margin: 10;
-  background-color: #f8f9fa;
-  color: #212529;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
 }
 
 a {
