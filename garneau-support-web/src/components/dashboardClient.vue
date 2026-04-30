@@ -15,7 +15,7 @@ const getTickets = async () => {
   }
 
   try {
-    await ticketStore.getTickets(authStore.token)
+    await ticketStore.getClientTickets(authStore.token)
   } catch (error) {
     errorMessage.value = error.message
   }

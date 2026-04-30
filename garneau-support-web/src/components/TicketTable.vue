@@ -1,8 +1,14 @@
 <script setup>
+
+
 defineProps({
   tickets: {
     type: Array,
     required: true
+  },
+  isTechnician: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -79,10 +85,18 @@ function formatDate(dateString) {
             {{ ticket.technicien ? ticket.technicien.first_name : 'Non assigné' }}
           </td>
 
-          <td>
+          <td class="action-btn">
             <router-link class="details-btn" :to="`/tickets/${ticket.id}`">
               Voir détails
             </router-link>
+
+            <button 
+              v-if="isTechnician && ticket.assigned_to === null" 
+              class="assign-btn"
+              @onClick="assignToTech"
+            >
+              M’assigner
+            </button>
           </td>
         </tr>
       </tbody>
@@ -109,7 +123,14 @@ function formatDate(dateString) {
     padding-top: 15px;
   }
 
-  .details-btn{
+  .action-btn {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .details-btn,
+  .assign-btn{
     display: inline-block;
     padding: 8px 14px;
     border-radius: 8px;
@@ -122,6 +143,12 @@ function formatDate(dateString) {
 
   .details-btn:hover {
     background-color: var(--button-secondary-hover-bg);
+    color: var(--button-secondary-hover-text);
+    text-decoration: none;
+  }
+
+  .assign-btn:hover {
+    background-color: var(--status-assigned-hover);
     color: var(--button-secondary-hover-text);
     text-decoration: none;
   }
@@ -190,5 +217,9 @@ function formatDate(dateString) {
   .priority-critical {
     background-color: var(--priority-critical);
     color: black;
+  }
+
+  .assign-btn {
+
   }
 </style>

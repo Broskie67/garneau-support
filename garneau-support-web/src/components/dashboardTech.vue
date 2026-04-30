@@ -15,14 +15,17 @@ const getTickets = async () => {
   }
 
   try {
-    await ticketStore.getTickets(authStore.token)
+    await ticketStore.getTechTickets(authStore.token)
   } catch (error) {
     errorMessage.value = error.message
   }
 }
 
 const getAssignedActiveTicket = computed(() => {
-  return ticketStore.ticketsList.filter(ticket => ticket.assigned_to === authStore.user.id && ticket.status !== 'Fermé' && ticket.status !== 'Archivé')
+  return ticketStore.ticketsList.filter(ticket =>
+    (ticket.assigned_to === authStore.user.id || ticket.assigned_to === null) && 
+    ticket.status !== 'Fermé' && ticket.status !== 'Archivé'
+  )
 })
 
 const getAssignedClosedTicket = computed(() => {
@@ -44,13 +47,14 @@ onMounted(() => {
 
   <div class="table-active">
     <h3>Incidents actifs</h3>
-    <TicketTable :tickets="getAssignedActiveTicket" />
+    <TicketTable :tickets="getAssignedActiveTicket" :isTechnician="true" />
   </div>
    
   
   <div class="table-closed" >
     <h3>Incidents fermés</h3>
-    <TicketTable :tickets="getAssignedClosedTicket" />
+    <TicketTable :tickets="getAssignedClosedTicket" 
+      />
   </div>
 
 </template>

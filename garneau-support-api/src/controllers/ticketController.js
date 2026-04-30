@@ -1,4 +1,5 @@
 const { formatErrorResponse, formatValidResponse } = require('../utils/formatErrorResponse');
+const { Op } = require('sequelize')
 const User = require('../models/user');
 const Ticket = require('../models/ticket')
 
@@ -40,7 +41,13 @@ exports.getTechnicianTickets = async (req, res, next) => {
   try {
     const userId = req.user.id
 
-    const techTickets = await Ticket.findAll({ where: { assigned_to: userId },
+    const techTickets = await Ticket.findAll({ 
+      where: {
+        [Op.or]: [
+          { assigned_to: userId },
+          { assigned_to: null }
+        ]
+      },
       include: [
         {
           model: User,

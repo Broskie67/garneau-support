@@ -25,7 +25,6 @@ const authStore = useAuthStore()
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 40px;
     padding-bottom: 100px;
   }
 
