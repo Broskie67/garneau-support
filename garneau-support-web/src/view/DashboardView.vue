@@ -1,7 +1,7 @@
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
-import DashboardClient from '@/components/dashboardClient.vue'
-import dashboardTech from '@/components/dashboardTech.vue';
+import DashboardClient from '@/components/DashboardClient.vue'
+import dashboardTech from '@/components/DashboardTech.vue';
 
 const authStore = useAuthStore()
 </script>
