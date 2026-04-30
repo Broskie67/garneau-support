@@ -1,8 +1,15 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/authStore';
 
 const authStore = useAuthStore()
+
+const props = defineProps({
+  statusOptions: {
+    type: Array,
+    default: () => []
+  }
+})
 
 const emit = defineEmits(['filters-changed'])
 
@@ -25,6 +32,10 @@ const resetFilters = () => {
   emit('filters-changed', filters.value)
 }
 
+watch(filters, () => {
+  emit('filters-changed', filters.value)
+}, { deep: true })
+
 </script>
 
 <template>
@@ -35,16 +46,15 @@ const resetFilters = () => {
       type="text"
       placeholder="Rechercher un incident"
     >
-
     <select v-model="filters.status" class="filter-select">
       <option value="">Tous les statuts</option>
-      <option value="Ouvert">Ouvert</option>
-      <option value="Assigné">Assigné</option>
-      <option value="En cours">En cours</option>
-      <option value="En attente">En attente</option>
-      <option value="Résolu">Résolu</option>
-      <option value="Fermé">Fermé</option>
-      <option value="Archivé">Archivé</option>
+      <option 
+        v-for="status in statusOptions" 
+        :key="status" 
+        :value="status"
+      >
+        {{ status }}
+      </option>
     </select>
 
     <select v-model="filters.category" class="filter-select">
@@ -58,8 +68,8 @@ const resetFilters = () => {
 
     <select v-model="filters.assignedTo" class="filter-select">
       <option value="">Assigné à</option>
-      <option value="">Non assigné</option>
-      <option value="">{{ authStore.user.first_name }}</option>
+      <option value="unassigned">Non assigné</option>
+      <option value="assigned">{{ authStore.user.first_name }}</option>
     </select>
 
     <button @click="resetFilters" class="filter-reset">

@@ -11,6 +11,35 @@ const ticketStore = useTicketStore()
 const errorMessage = ref('')
 const successMessage = ref('')
 
+const activeFilterOptions = {
+  status: [
+    'Ouvert',
+    'Assigné',
+    'En cours',
+    'En attente',
+    'Résolu'
+  ]
+}
+const closeFilterOptions = {
+  status: [
+    'Fermé'
+  ]
+}
+
+const activeFilters = ref({
+  search: '',
+  status: '',
+  category: '',
+  assignedTo: ''
+})
+
+const closedFilter = ref({
+  search: '',
+  status: '',
+  category: '',
+  assignedTo: ''
+})
+
 const getTickets = async () => {
   if (!authStore.token) {
     return
@@ -40,6 +69,13 @@ const selfAssignTicket = async (ticketId) => {
   }
 }
 
+const updateActiveFilters = (newFilters) => {
+  activeFilters.value = newFilters
+}
+const updateCloseFilters = (newFilters) => {
+  closedFilter.value = newFilters
+}
+
 const getAssignedActiveTicket = computed(() => {
   return ticketStore.ticketsList.filter(ticket =>
     (ticket.assigned_to === authStore.user.id || ticket.assigned_to === null) && 
@@ -47,8 +83,56 @@ const getAssignedActiveTicket = computed(() => {
   )
 })
 
+const filteredAssignedTickets = computed(() => {
+  return getAssignedActiveTicket.value.filter(ticket => {
+    const matchSearch = 
+      !activeFilters.value.search || 
+      ticket.title.toLowerCase().includes(activeFilters.value.search.toLowerCase()) ||
+      ticket.description.toLowerCase().includes(activeFilters.value.search.toLowerCase())
+
+    const matchStatus =
+      !activeFilters.value.status ||
+      ticket.status === activeFilters.value.status
+
+    const matchCategory =
+      !activeFilters.value.category ||
+      ticket.category === activeFilters.value.category
+
+    const matchAssignedTo =
+      !activeFilters.value.assignedTo ||
+      activeFilters.value.assignedTo === 'assigned' && ticket.assigned_to === authStore.user.id ||
+      activeFilters.value.assignedTo === 'unassigned' && ticket.assigned_to === null
+
+    return matchSearch && matchStatus && matchCategory && matchAssignedTo
+  })
+})
+
 const getAssignedClosedTicket = computed(() => {
   return ticketStore.ticketsList.filter(ticket => ticket.assigned_to === authStore.user.id && ticket.status === 'Fermé' )
+})
+
+const filteredAssignedClosedTicket = computed(() => {
+  return getAssignedClosedTicket.value.filter(ticket => {
+    const matchSearch = 
+      !closedFilter.value.search || 
+      ticket.title.toLowerCase().includes(closedFilter.value.search.toLowerCase()) ||
+      ticket.description.toLowerCase().includes(closedFilter.value.search.toLowerCase())
+
+    const matchStatus =
+      !closedFilter.value.status ||
+      ticket.status === closedFilter.value.status
+
+    const matchCategory =
+      !closedFilter.value.category ||
+      ticket.category === closedFilter.value.category
+
+    const matchAssignedTo =
+      !closedFilter.value.assignedTo ||
+      closedFilter.value.assignedTo === 'assigned' && ticket.assigned_to === authStore.user.id ||
+      closedFilter.value.assignedTo === 'unassigned' && ticket.assigned_to === null
+
+    return matchSearch && matchStatus && matchCategory && matchAssignedTo
+  })
 })
 
 
@@ -71,21 +155,24 @@ onMounted(() => {
   </p>
 
   <div class="table-active">
-    <FilterBar/>
+    <FilterBar
+      :status-options="activeFilterOptions.status"
+      @filters-changed="updateActiveFilters"/>
     <h3>Incidents actifs</h3>
     <TicketTable 
-      :tickets="getAssignedActiveTicket" 
+      :tickets="filteredAssignedTickets" 
       :isTechnician="true"
       @self-assign-ticket="selfAssignTicket" />
   </div>
    
   
   <div class="table-closed" >
-    <FilterBar
-    @reset-filter="resetFilter"/>
+    <FilterBar 
+      :status-options="closeFilterOptions.status"
+      @filters-changed="updateCloseFilters"/>
     <h3>Incidents fermés</h3>
-    <TicketTable :tickets="getAssignedClosedTicket" 
-      />
+    <TicketTable :tickets="filteredAssignedClosedTicket" 
+      :isTechnician="true"/>
   </div>
 
 </template>
