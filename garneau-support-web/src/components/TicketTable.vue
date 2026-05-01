@@ -1,5 +1,7 @@
 <script setup>
-defineProps({
+import { ref, computed } from 'vue';
+
+const props = defineProps({
   tickets: {
     type: Array,
     required: true
@@ -8,6 +10,40 @@ defineProps({
     type: Boolean,
     default: false
   }
+})
+
+const sortColumn = ref('priority')
+const sortDirection = ref('desc')
+
+const sortBy = (columm) => {
+  if(sortColumn.value === columm) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortColumn.value = columm
+    sortDirection.value = 'desc'
+  }
+}
+
+const priorityOrder = ['Basse', 'Moyenne', 'Haute', 'Critique']
+
+const sortedTickets = computed(() => {
+  return [...props.tickets].sort((a, b) => {
+    let result = 0
+
+    if (sortColumn.value === 'priority') {
+      result =
+        priorityOrder.indexOf(a.priority) -
+        priorityOrder.indexOf(b.priority)
+    }
+
+    if (sortColumn.value === 'created_at') {
+      result =
+        new Date(a.created_at) -
+        new Date(b.created_at)
+    }
+
+    return sortDirection.value === 'asc' ? result : -result
+  })
 })
 
 const getStatusClass = (status) => ({
@@ -40,7 +76,6 @@ function formatDate(dateString) {
     minute: '2-digit'
   })
 }
-
 </script>
 
 <template>
@@ -52,15 +87,25 @@ function formatDate(dateString) {
           <th>Titre</th>
           <th>Catégorie</th>
           <th>Status</th>
-          <th>Priorité</th>
-          <th>Date et heure de création</th>
+          <th @click="sortBy('priority')">
+            Priorité
+            <span v-if="sortColumn === 'priority'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}   
+            </span>
+          </th>
+          <th @click="sortBy('created_at')">
+            Date création
+            <span v-if="sortColumn === 'created_at'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}   
+            </span>
+          </th>
           <th>Assigné à</th>
           <th>Action</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr v-for="ticket in tickets" :key="ticket.id">
+        <tr v-for="ticket in sortedTickets" :key="ticket.id">
           <td>{{ ticket.id }}</td>
           <td>{{ ticket.title }}</td>
           <td>{{ ticket.category }}</td>
@@ -217,7 +262,4 @@ function formatDate(dateString) {
     color: black;
   }
 
-  .assign-btn {
-
-  }
 </style>

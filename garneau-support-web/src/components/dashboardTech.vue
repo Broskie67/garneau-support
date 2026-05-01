@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted} from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
 import TicketTable from '@/components/TicketTable.vue'
@@ -10,6 +10,8 @@ const ticketStore = useTicketStore()
 
 const errorMessage = ref('')
 const successMessage = ref('')
+const notifMessage = ref('')
+
 
 const activeFilterOptions = {
   status: [
@@ -72,6 +74,7 @@ const selfAssignTicket = async (ticketId) => {
 const updateActiveFilters = (newFilters) => {
   activeFilters.value = newFilters
 }
+
 const updateCloseFilters = (newFilters) => {
   closedFilter.value = newFilters
 }
@@ -135,10 +138,9 @@ const filteredAssignedClosedTicket = computed(() => {
   })
 })
 
+onMounted(async() => {
+  await getTickets()
 
-
-onMounted(() => {
-  getTickets()
 })
 
 </script>
@@ -146,7 +148,7 @@ onMounted(() => {
 <template>
   <h2>Tableau de bord</h2>
 
-  <p v-if="errorMessage" class="error-message">
+  <p class="error-message">
     {{ errorMessage }}
   </p>
 
@@ -155,10 +157,13 @@ onMounted(() => {
   </p>
 
   <div class="table-active">
+    <h3>Incidents actifs</h3>
     <FilterBar
       :status-options="activeFilterOptions.status"
       @filters-changed="updateActiveFilters"/>
-    <h3>Incidents actifs</h3>
+    <p v-if="notifMessage" class="notif-message">
+      {{ notifMessage }}
+    </p>
     <TicketTable 
       :tickets="filteredAssignedTickets" 
       :isTechnician="true"
@@ -167,10 +172,12 @@ onMounted(() => {
    
   
   <div class="table-closed" >
+    <h3>Incidents fermés</h3>
+
     <FilterBar 
       :status-options="closeFilterOptions.status"
       @filters-changed="updateCloseFilters"/>
-    <h3>Incidents fermés</h3>
+    
     <TicketTable :tickets="filteredAssignedClosedTicket" 
       :isTechnician="true"/>
   </div>
@@ -207,4 +214,14 @@ onMounted(() => {
     font-weight: 600;
     margin-bottom: 20px;
   }
+
+  .notif-message {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background-color: #dcfce7;
+  color: #166534;
+  font-weight: 600;
+  border: 1px solid #86efac;
+}
 </style>

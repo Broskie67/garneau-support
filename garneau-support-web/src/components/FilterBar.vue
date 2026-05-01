@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/authStore';
 
 const authStore = useAuthStore()
 
-const props = defineProps({
+defineProps({
   statusOptions: {
     type: Array,
     default: () => []
