@@ -143,6 +143,7 @@ exports.patchSelfAssignTicket = async (req, res, next) => {
     }
     
     ticket.assigned_to = userId
+    ticket.status = 'Assigné'
 
     const updatedTicket = await ticket.save()
 
