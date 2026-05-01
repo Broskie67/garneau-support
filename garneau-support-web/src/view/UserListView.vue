@@ -23,6 +23,7 @@
   const updateStatus = async (userId) => {
     try {
       await adminStore.changeUserStatus(userId, authStore.token)
+      
     } catch (error) {
       errorMessage.value = error.message
     }
