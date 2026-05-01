@@ -76,6 +76,39 @@ exports.getTechnicianTickets = async (req, res, next) => {
   }
 }
 
+exports.getTicket = async (req, res, next) => {
+  const ticketId = req.params.id
+  try {
+    const userId = req.user.id
+
+    const ticket = await Ticket.findOne({ where: { id: ticketId }})
+    if(!ticket){
+       return res
+        .status(404)
+        .json(
+          formatErrorResponse(
+            404,
+            'Not Found',
+            'L\'incident spécifié n\'éxiste pas',
+            req.originalUrl
+          )
+        )
+    }
+
+    return res.status(200).json(formatValidResponse(
+      200,
+      'La l\'incidents a été récupéré avec succès',
+      ticket,
+      req.originalUrl
+    ))
+  } catch (error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
 exports.patchSelfAssignTicket = async (req, res, next) => {
   const ticketId = req.params.id
   try{
