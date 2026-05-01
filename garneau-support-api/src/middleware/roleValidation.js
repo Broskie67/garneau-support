@@ -1,6 +1,5 @@
 const { formatErrorResponse } = require('../utils/formatErrorResponse');
 
-
 function isAdmin(req, res, next) {
   if(!req.user) {
     return res
@@ -29,7 +28,7 @@ function isAdmin(req, res, next) {
   next()
 } 
 
-function isTechician(req, res, next) {
+function isTechnician(req, res, next) {
   if(!req.user) {
     return res
       .status(401)
@@ -82,10 +81,11 @@ function isClient(req, res, next) {
         )
       );
   }
+  next()
 }
 
 module.exports = {
   isAdmin,
-  isTechician,
+  isTechnician,
   isClient
 }

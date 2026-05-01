@@ -25,6 +25,7 @@ const user = sequelize.define(
     password_hash: {
       type: DataTypes.STRING(255),
       allowNull: false
+      
     },
     phone_number: {
       type: DataTypes.STRING(20),

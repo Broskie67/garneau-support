@@ -25,13 +25,22 @@ const logout = () => {
           <li><router-link to="/">Accueil</router-link></li>
           <li><router-link to="/dashboard">Tableau de bord</router-link></li>
           <li><router-link to="/">Créer un ticket</router-link></li>
-          <li><router-link to="/profile">Profil</router-link></li>
+          <li>
+            <router-link to="/profile" class="profile-link">
+              <span class="profile-greeting">Bonjour {{ authStore.user.first_name }}!</span>
+              <span class="profile-label">Votre profil</span>
+            </router-link>
+          </li>
           <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
         <ul class="app-header-menu" v-if="authStore.user.role === 'technicien'">
           <li><router-link to="/">Accueil</router-link></li>
-          <li><router-link to="/">Tableau de bord</router-link></li>
-          <li><router-link to="/profile">Profil</router-link></li>
+          <li><router-link to="/dashboard">Tableau de bord</router-link></li>
+          <li><router-link to="/profile" class="profile-link">
+              <span class="profile-greeting">Bonjour {{ authStore.user.first_name }}!</span>
+              <span class="profile-label">Votre profil</span>
+            </router-link>
+          </li>
           <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
         <ul class="app-header-menu" v-if="authStore.user.role === 'admin'">
@@ -82,6 +91,16 @@ const logout = () => {
     display: inline-block;
     font-size: 17px;
     margin-right: 20px;
+  }
+
+  .profile-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    padding: 8px, 14px;
+    border-radius: 10px;
   }
 
   .btn-deconnexion{

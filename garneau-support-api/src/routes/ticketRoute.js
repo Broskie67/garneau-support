@@ -1,8 +1,11 @@
 const ticketController = require('../controllers/ticketController');
 const isAuth = require('../middleware/isAuth');
+const { isClient, isTechnician, isAdmin } = require('../middleware/roleValidation')
 const express = require('express');
 const router = express.Router();
 
-router.get('/', isAuth, ticketController.getTickets)
+router.get('/client', isAuth, isClient, ticketController.getClientTickets)
+router.get('/technician', isAuth, isTechnician, ticketController.getTechnicianTickets)
+router.patch('/:id/assign/me', isAuth, isTechnician, ticketController.patchSelfAssignTicket)
 
 module.exports = router

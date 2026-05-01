@@ -21,6 +21,7 @@
   --button-primary-border: var(--color-primary);
   --button-primary-hover-bg: var(--color-primary-dark);
   --button-primary-hover-text: #FFFFFF;
+  --status-assigned-hover: #6D28D933;
 
 
   --button-secondary-bg: #FFFFFF;
@@ -32,10 +33,10 @@
   /* Statuts des tickets */
   --status-open: #2563EB;
   --status-assigned: #7C3AED;
-  --status-in-progress: #F59E0B;
-  --status-waiting: #64748B;
+  --status-in-progress: #0EA5E9;
+  --status-waiting: #F59E0B;
   --status-resolved: #10B981;
-  --status-closed: #334155;
+  --status-closed: #475569;
   --status-archived: #94A3B8;
 
   /* Priorités */
