@@ -129,7 +129,7 @@ function formatDate(dateString) {
           </td>
 
           <td class="action-btn">
-            <router-link class="details-btn" :to="`/tickets/${ticket.id}`">
+            <router-link class="details-btn" :to="`/details/${ticket.id}`">
               Voir détails
             </router-link>
 

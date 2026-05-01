@@ -8,6 +8,7 @@ import PasswordView from '@/view/PasswordView.vue'
 import ProfileView from '@/view/ProfileView.vue'
 import SigninView from '@/view/SigninView.vue'
 import SignupView from '@/view/SignupView.vue'
+import TicketDetailView from '@/view/TicketDetailView.vue'
 import UserListView from '@/view/UserListView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -95,6 +96,19 @@ const router = createRouter({
       path:'/dashboard',
       name: 'dashboard',
       component: DashboardView,
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore()
+        if(authStore.isConnected) {
+          next()
+        } else {
+          next('/signin')
+        }
+      }
+    },
+    {
+      path:'/details/:id',
+      name: 'ticketId',
+      component: TicketDetailView,
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore()
         if(authStore.isConnected) {
