@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.get('/client', isAuth, isClient, ticketController.getClientTickets)
 router.get('/technician', isAuth, isTechnician, ticketController.getTechnicianTickets)
+router.get('/:id', isAuth, ticketController.getTicket)
 router.patch('/:id/assign/me', isAuth, isTechnician, ticketController.patchSelfAssignTicket)
+
 
 module.exports = router
