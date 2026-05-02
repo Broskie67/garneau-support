@@ -30,7 +30,7 @@ onMounted(async() => {
 </script>
 
 <template>
-  <h2>Tableau de bord Client</h2>
+  <h2>Détails de l'incident</h2>
   <div class="detail-card">
     <TicketDetailInfo 
       v-if="ticketStore.selectedTicket"
