@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -21,62 +21,125 @@ const passwordError = ref('')
 const confirmPasswordError = ref('')
 const errorMessage = ref('')
 
-const validateForm = () => {
-  let isValid = true
+const validateFirstName = () => {
   firstNameError.value = ''
-  lastNameError.value = ''
-  emailError.value = ''
-  phoneNumberError.value = ''
-  passwordError.value = ''
-  confirmPasswordError.value = ''
 
   if(!firstName.value || firstName.value.trim().length === 0) {
     firstNameError.value = "Le prénom est requis"
-    isValid = false
+    return false
   } else if (firstName.value.length < 2 || firstName.value.length > 50) {
     firstNameError.value = 'Le prénom doit contenir entre 2 et 50 caractères '
-    isValid = false
+    return false
   }
+
+  return true
+}
+
+const validateLastName = () => {
+  lastNameError.value = ''
 
   if(!lastName.value || lastName.value.trim().length === 0) {
     lastNameError.value = "le nom est requis"
-    isValid = false
+    return false
   } else if (lastName.value.lenght < 2 || lastName.value.lenght > 50) {
     lastNameError.value = "Le nom doit contenir entre 2 et 50 caractères"
-    isValid = false
+    return false
   }
 
+  return true
+}
+
+const validateEmail = async () => {
+  emailError.value = ''
+  errorMessage.value = ''
   if(!email.value || email.value.trim().length === 0) {
     emailError.value = "Le courriel est requis"
-    isValid = false
-  } else if (email.value.lenght > 50) {
+    return false
+  } else if (email.value.length > 50) {
     emailError.value = "Le courriel ne doit pas dépasser 50 caractères"
-    isValid = false
+    return false
   } else if (!isValidEmail(email.value)) {
     emailError.value = "Le courriel n'est pas valide"
-    isValid = false
+    return false
   }
+
+  const isExisting = await existingEmail()
+
+  if(isExisting) {
+    return false
+  }
+
+  return true
+}
+
+const validatePhoneNumber = () => {
+  phoneNumberError.value = ''
 
   if(!phoneNumber.value || phoneNumber.value.trim().length === 0) {
     phoneNumberError.value = "Le numéro de téléphone est requis"
-    isValid = false
+    return false
   } else if (!isValidPhoneNumber(phoneNumber.value)) {
     phoneNumberError.value = "Le numéro de téléphone n'est pas valide"
-    isValid = false
+    return false
   }
+}
+
+const validatePassword = () => {
+  passwordError.value = ''
 
   if(!password.value || password.value.trim().length === 0) {
     passwordError.value = "Le mot de passe est requis"
-    isValid = false
+    return false
+  } else if (isValidPassword(password.value)){
+    passwordError.value = "Le mot de passe n'est pas valide"
+    return false
   }
+
+  return true
+}
+
+const validateConfirmPassword = () => {
+  confirmPasswordError.value = ''
 
   if(!confirmPassword.value || confirmPassword.value.trim().length === 0) {
     confirmPasswordError.value = "La confirmation du mot de passe est requise"
-    isValid = false
+    return false
   } else if (password.value !== confirmPassword.value) {
     confirmPasswordError.value = "Les mots de passe ne correspondent pas"
-    isValid = false
+    return false
   }
+}
+
+const existingEmail = async () => {
+   try {
+    const exists = await authStore.checkEmail(email.value)
+
+    if(exists){
+      emailError.value = "Un utilisateur avec ce courriel existe déjà"
+      return true
+    } 
+
+    return false
+
+  } catch (error) {
+    errorMessage.value = error.message
+  }
+}
+
+const validateForm = () => {
+  let isValid = true
+
+  if(!validateFirstName()) isValid = false
+
+  if(!validateLastName()) isValid = false
+
+  if(!validateEmail()) isValid = false
+
+  if(!validatePhoneNumber()) isValid = false
+
+  if(!validatePassword()) isValid = false
+
+  if(!validateConfirmPassword()) isValid = false
 
   return isValid
 }
@@ -108,6 +171,45 @@ function isValidPhoneNumber(phoneNumber) {
   const re = /^\d{10}$/
   return re.test(phoneNumber)
 }
+
+function isValidPassword(password) {
+  const re = /^(?=.*[A-Z])(?=.*\d)(?=.*[#?!@$%^&*-]).{6,}$/
+  return re.test(password)
+}
+
+watch(firstName, () => {
+  if(validateFirstName()) {
+    firstNameError.value = ''
+  }
+})
+
+watch(lastName, () => {
+  if(validateLastName()) {
+    lastNameError.value = ''
+  }
+})
+
+watch(email, () => {
+  emailError.value = ''
+})
+
+watch(phoneNumber, () => {
+  if(validatePhoneNumber()) {
+    phoneNumberError.value = ''
+  }
+})
+
+watch(password, () => {
+  if(validatePassword()) {
+    passwordError.value = ''
+  }
+})
+
+watch(confirmPassword, () => {
+  if(validateConfirmPassword()) {
+    confirmPasswordError.value = ''
+  }
+} )
 </script>
 
 <template>
@@ -123,32 +225,32 @@ function isValidPhoneNumber(phoneNumber) {
       <form @submit.prevent="signup" novalidate>
         <div class="field">
           <label for="firstName">Prénom</label>
-          <input type="firstName" id="firstName" v-model="firstName"/>
+          <input type="firstName" id="firstName" v-model="firstName" @blur="validateFirstName"/>
           <span v-if="firstNameError" class="error">{{ firstNameError }}</span>
         </div>
         <div class="field">
           <label for="firstName">Nom</label>
-          <input type="lastName" id="lastName" v-model="lastName" />
+          <input type="lastName" id="lastName" v-model="lastName" @blur="validateLastName"/>
           <span v-if="lastNameError" class="error">{{ lastNameError }}</span>
         </div>
         <div class="field">
           <label for="email">Courriel</label>
-          <input type="email" id="email" v-model="email" required />
+          <input type="email" id="email" v-model="email" @blur="validateEmail"/>
           <span v-if="emailError" class="error">{{ emailError }}</span>
         </div>
         <div class="field">
           <label for="phoneNumber">Téléphone</label>
-          <input type="phoneNumber" id="phoneNumber" v-model="phoneNumber"/>
+          <input type="phoneNumber" id="phoneNumber" v-model="phoneNumber" @blur="validatePhoneNumber"/>
           <span v-if="phoneNumberError" class="error">{{ phoneNumberError }}</span>
         </div>
         <div class="field">
           <label for="password">Mot de passe</label>
-          <input type="password" id="password" v-model="password" required />
+          <input type="password" id="password" v-model="password" @blur="validatePassword" />
           <span v-if="passwordError" class="error">{{ passwordError }}</span>
         </div>
         <div class="field">
           <label for="confirmPassword">Confirmation du mot de passe</label>
-          <input type="password" id="confirmPassword" v-model="confirmPassword"/>
+          <input type="password" id="confirmPassword" v-model="confirmPassword" @blur="validateConfirmPassword"/>
           <span v-if="confirmPasswordError" class="error">{{confirmPasswordError }}</span>
         </div>
         <p class="note">une fois le compte créer, il vous sera impossible de modifier votre courriel</p>

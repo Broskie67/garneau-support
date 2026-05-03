@@ -84,6 +84,29 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   }
 
+  async function checkEmail(email) {
+    try {
+      const response = await fetch(`${apiUrl}/auth/check-email`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email
+        })
+      })
+      if(response.ok) {
+        const data = await response.json()
+        return data.data.exists
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.message)
+      }
+    } catch (error) {
+      throw error
+    }
+    
+  }
 
   return {
     user,
@@ -93,7 +116,8 @@ export const useAuthStore = defineStore('authStore', () => {
     setUser,
     logout,
     signin,
-    signup
+    signup,
+    checkEmail
   };
 },{
   persist: true
