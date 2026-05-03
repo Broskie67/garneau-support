@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, watch } from 'vue'
   import { useProfileStore } from '@/stores/profileStore';
   import { useAuthStore } from '@/stores/authStore';
 
@@ -18,35 +18,56 @@
 
   const isEditing = ref(false)
 
-  const validateForm = () => {
-    let isValid = true
+  const firstNameValidation = () => {
     firstNameError.value = ''
-    lastNameError.value = ''
-    phoneNumberError.value = ''
+    errorMessage.value = ''
 
     if(!firstName.value || firstName.value.trim().length === 0) {
       firstNameError.value = "Le prénom est requis"
-      isValid = false
+      return false
     } else if (firstName.value.length < 2 || firstName.value.length > 50) {
       firstNameError.value = 'Le prénom doit contenir entre 2 et 50 caractères '
-      isValid = false
+      return false
     }
+    return true
+  }
+
+  const lastNameValidation = () => {
+    lastNameError.value = ''
+    errorMessage.value = ''
 
     if(!lastName.value || lastName.value.trim().length === 0) {
       lastNameError.value = "le nom de famille est requis"
-      isValid = false
+      return false
     } else if (lastName.value.lenght < 2 || lastName.value.lenght > 50) {
       lastNameError.value = "Le nom doit contenir entre 2 et 50 caractères"
-      isValid = false
+      return false
     }
+    return true
+  }
+
+  const phoneNumberValidation = () => {
+    phoneNumberError.value = ''
+    errorMessage.value = ''
 
     if(!phoneNumber.value || phoneNumber.value.trim().length === 0) {
       phoneNumberError.value = "Le numéro de téléphone est requis"
-      isValid = false
+      return false
     } else if (!isValidPhoneNumber(phoneNumber.value)) {
       phoneNumberError.value = "Le numéro de téléphone n'est pas valide"
-      isValid = false
+      return false
     }
+    return true
+  }
+
+  const validateForm = () => {
+    let isValid = true
+
+    if(!firstNameValidation()) isValid = false
+
+    if(!lastNameValidation()) isValid = false
+
+    if(!phoneNumberValidation()) isValid = false
 
     return isValid
   }
@@ -98,6 +119,24 @@
     const re = /^\d{10}$/
     return re.test(phoneNumber)
   }
+
+  watch(firstName, () => {
+    if(firstNameValidation()) {
+      firstNameError.value = ''
+    }
+  })
+
+  watch(lastName, () => {
+    if(lastNameValidation()){
+      lastNameError.value = true
+    }
+  })
+
+  watch(phoneNumber, () => {
+    if(phoneNumberValidation()) {
+      phoneNumberError.value = ''
+    }
+  })
 
   onMounted(() =>{
     getProfile()
@@ -153,7 +192,7 @@
             <div class="profile-field">
               <label for="firstName" class="profile-label">Prénom :</label>
               <div class="profile-input-group">
-                <input id="firstName" class="profile-input" type="text" v-model="firstName"/>
+                <input id="firstName" class="profile-input" type="text" v-model="firstName" @blur="firstNameValidation"/>
                 <span v-if="firstNameError" class="error">{{ firstNameError }}</span>
               </div>
               
@@ -161,14 +200,14 @@
             <div class="profile-field">
               <label for="lastName" class="profile-label">Nom de famille :</label>
               <div class="profile-input-group">
-                <input id="lastName" class="profile-input" type="text" v-model="lastName"/>
+                <input id="lastName" class="profile-input" type="text" v-model="lastName" @blur="lastNameValidation"/>
                 <span v-if="lastNameError" class="error">{{ lastNameError }}</span>
               </div>
             </div>
             <div class="profile-field">
               <label for="phoneNumber" class="profile-label">Téléphone :</label>
               <div class="profile-input-group">
-                <input id="phoneNumber" class="profile-input" type="text" v-model="phoneNumber"/>
+                <input id="phoneNumber" class="profile-input" type="text" v-model="phoneNumber" @blur="phoneNumberValidation"/>
                 <span v-if="phoneNumberError" class="error">{{ phoneNumberError }}</span>
               </div>
             </div>
