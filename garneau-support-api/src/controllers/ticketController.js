@@ -161,3 +161,32 @@ exports.patchSelfAssignTicket = async (req, res, next) => {
     next(error);
   }
 }
+
+exports.createTicket = async (req, res, next) => {
+  const { title, description, category, priority } = req.body
+  try {
+    const userId = req.user.id
+    
+    const newTicket = await Ticket.create({
+      title: title,
+      description: description,
+      category: category,
+      priority: priority,
+      status: 'Ouvert',
+      created_by: userId,
+      assigned_to: null,
+    })
+
+    return res.status(201).json(formatValidResponse(
+      201,
+      'Incident créé avec succès',
+      newTicket,
+      req.originalUrl
+    ))
+  } catch (error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}

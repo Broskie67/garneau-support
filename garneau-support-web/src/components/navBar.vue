@@ -24,7 +24,7 @@ const logout = () => {
         <ul class="app-header-menu" v-if="authStore.user.role === 'client'">
           <li><router-link to="/">Accueil</router-link></li>
           <li><router-link to="/dashboard">Tableau de bord</router-link></li>
-          <li><router-link to="/">Créer un ticket</router-link></li>
+          <li><router-link to="/tickets/create">Créer un ticket</router-link></li>
           <li>
             <router-link to="/profile" class="profile-link">
               <span class="profile-greeting">Bonjour {{ authStore.user.first_name }}!</span>
