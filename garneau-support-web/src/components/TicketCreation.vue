@@ -64,7 +64,7 @@ const validateForm = () => {
   
   if(!validateDescription()) isValid = false
   
-  if(validatePriority()) isValid = false
+  if(!validatePriority()) isValid = false
 
   return isValid
 }

@@ -69,7 +69,7 @@ function formatDate(dateString) {
       <div class="info-grid">
         <div class="ticket-category">
           <h6>Catégorie</h6>
-           <span>{{ ticket.category }}</span>
+           <span>{{ ticket.category ? ticket.category : 'Aucune catégorie'}}</span>
         </div>
         <div class="ticket-priority">
           <h6>Priorité</h6>
