@@ -5,7 +5,6 @@ import { useAuthStore } from '@/stores/authStore'
 defineProps({
   submitLabel: {
     type: String,
-    default: 'Créer'
   },
   errorMessage: {
     type: String,
