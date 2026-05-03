@@ -1,7 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+
+
+const authStore = useAuthStore()
+const router = useRouter()
+
 
 const email = ref('')
 const password = ref('')
@@ -9,27 +14,38 @@ const emailError = ref('')
 const passwordError = ref('')
 const errorMessage = ref('')
 
-const authStore = useAuthStore()
-const router = useRouter()
-
-const validateForm = () => {
-  let isValid = true
+const emailValidation = () => {
   emailError.value = ''
-  passwordError.value = ''
   errorMessage.value = ''
 
   if(!email.value) {
     emailError.value = "L'email est requis"
-    isValid = false
+    return false
   } else if (!isValidEmail(email.value)) {
     emailError.value = "Veuillez entrer une adresse courriel valide"
-    isValid = false
+    return false
   }
+  return true
+}
 
-   if (!password.value) {
+const passwordValidation = () => {
+  passwordError.value = ''
+  errorMessage.value = ''
+
+  if (!password.value) {
     passwordError.value = 'Le mot de passe est requis.'
-    isValid = false
+    return false
   }
+  return true
+
+}
+
+const validateForm = () => {
+  let isValid = true
+
+  if(!emailValidation()) isValid = false
+
+  if(!passwordValidation()) isValid = false
 
   return isValid
 }
@@ -49,6 +65,18 @@ function isValidEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return re.test(email)
 }
+
+watch(email, () => {
+  if(emailValidation()) {
+    emailError.value = ''
+  }
+})
+
+watch(password, () => {
+  if(passwordValidation()) {
+    passwordError.value = ''
+  }
+})
 
 </script>
 

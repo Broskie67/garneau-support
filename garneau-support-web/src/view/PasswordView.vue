@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useProfileStore } from '@/stores/profileStore'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -17,36 +17,67 @@ const confirmPasswordError = ref('')
 const errorMessage = ref('')
 const successMessage = ref('')
 
-const validateForm = () => {
-  let isValid = true
-  currentPasswordError.value = '' 
-  newPasswordError.value = ''
-  confirmPasswordError.value = ''
+const currentPasswordValidation = () => {
+  currentPasswordError.value = ''
   errorMessage.value = ''
   successMessage.value = ''
-  
+
   if(!currentPassword.value || currentPassword.value.trim().length === 0) {
     currentPasswordError.value = "Le mot de passe courant est requis"
-    isValid = false
+    return false
   } 
+  return true
+}
+
+const newPasswordValidation = () => {
+  newPasswordError.value = ''
+  errorMessage.value = ''
+  successMessage.value = ''
 
   if(!newPassword.value || newPassword.value.trim().length === 0) {
     newPasswordError.value = "Le nouveau mot de passe est requis"
-    isValid = false
+    return false
   } else if (!isValidPassword(newPassword.value)) {
     newPasswordError.value = 'Le mot de passe n\'est pas valide'
-    isValid = false
+    return false
   }
+
+  return true
+}
+
+const confirmPasswordValidation = () => {
+  confirmPasswordError.value = ''
+  errorMessage.value = ''
+  successMessage.value = ''
 
   if(!confirmPassword.value || confirmPassword.value.trim().length === 0) {
     confirmPasswordError.value = 'La confirmation du mot de passe est requise'
-    isValid = false
+    return false
   } else if (newPassword.value !== confirmPassword.value) {
     confirmPasswordError.value = 'Les mots de passe ne correspondent pas'
-    isValid = false
+    return false
   }
+  return true
+}
+
+const validateForm = async () => {
+  let isValid = true
+  errorMessage.value = ''
+  successMessage.value = ''
+  
+  if(!currentPasswordValidation()) isValid = false 
+
+  if(!newPasswordValidation) isValid = false
+
+  if(!confirmPasswordValidation) isValid = false
 
   return isValid
+}
+
+const clearInput = () => {
+  currentPassword.value = ''
+  newPassword.value = ''
+  confirmPassword.value = ''
 }
 
 const updatePassword = async () => {
@@ -60,6 +91,8 @@ const updatePassword = async () => {
       authStore.token
     )
     successMessage.value = 'Votre mot de passe a été modifié avec succès'
+
+    clearInput()
   } catch (error) {
     errorMessage.value = error.message
   }
@@ -70,6 +103,24 @@ function isValidPassword(password) {
   const re = /^(?=.*[A-Z])(?=.*\d)(?=.*[#?!@$%^&*-]).{6,}$/;
   return re.test(password)
 }
+
+watch(currentPassword, () =>{
+  if(currentPasswordValidation()) {
+    currentPasswordError.value = ''
+  }
+})
+
+watch(newPassword, () =>{
+  if(newPasswordValidation()) {
+    newPasswordError.value = ''
+  }
+})
+
+watch(confirmPassword, () =>{
+  if(confirmPasswordValidation()) {
+    confirmPasswordError.value = ''
+  }
+})
 </script>
 
 <template>
@@ -85,17 +136,17 @@ function isValidPassword(password) {
       <form @submit.prevent="updatePassword" novalidate>
         <div class="field">
           <label for="currentPassword">Mot de passe actuel</label>
-          <input type="password" id="currentPassword" v-model="currentPassword" required>
+          <input type="password" id="currentPassword" v-model="currentPassword" @blur="currentPasswordValidation">
           <span v-if="currentPasswordError" class="error">{{ currentPasswordError }}</span>
         </div>
         <div class="field">
           <label for="newPassword">Nouveau mot de passe</label>
-          <input type="password" id="newPassword" v-model="newPassword" required>
+          <input type="password" id="newPassword" v-model="newPassword" @blur="newPasswordValidation">
           <span v-if="newPasswordError" class="error">{{ newPasswordError }}</span>
         </div>
         <div class="field">
           <label for="confirmPassword">Confirmation du mot de passe</label>
-          <input type="password" id="confirmPassword" v-model="confirmPassword" required>
+          <input type="password" id="confirmPassword" v-model="confirmPassword" @blur="confirmPasswordValidation">
           <span v-if="confirmPasswordError" class="error">{{ confirmPasswordError }}</span>
         </div>
         <button type="submit" class="btn btn-primary">Confirmer</button>

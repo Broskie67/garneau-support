@@ -2,96 +2,22 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import UserCreationForm from '@/components/UserCreationForm.vue'
 
-const authStore = useAuthStore()
 const router = useRouter()
+const authStore = useAuthStore()
 
-const firstName = ref('')
-const lastName = ref('')
-const email = ref('')
-const phoneNumber = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-
-const firstNameError = ref('')
-const lastNameError = ref('')
-const emailError = ref('')
-const phoneNumberError = ref('')
-const passwordError = ref('')
-const confirmPasswordError = ref('')
 const errorMessage = ref('')
 
-const validateForm = () => {
-  let isValid = true
-  firstNameError.value = ''
-  lastNameError.value = ''
-  emailError.value = ''
-  phoneNumberError.value = ''
-  passwordError.value = ''
-  confirmPasswordError.value = ''
-
-  if(!firstName.value || firstName.value.trim().length === 0) {
-    firstNameError.value = "Le prénom est requis"
-    isValid = false
-  } else if (firstName.value.length < 2 || firstName.value.length > 50) {
-    firstNameError.value = 'Le prénom doit contenir entre 2 et 50 caractères '
-    isValid = false
-  }
-
-  if(!lastName.value || lastName.value.trim().length === 0) {
-    lastNameError.value = "le nom est requis"
-    isValid = false
-  } else if (lastName.value.lenght < 2 || lastName.value.lenght > 50) {
-    lastNameError.value = "Le nom doit contenir entre 2 et 50 caractères"
-    isValid = false
-  }
-
-  if(!email.value || email.value.trim().length === 0) {
-    emailError.value = "Le courriel est requis"
-    isValid = false
-  } else if (email.value.lenght > 50) {
-    emailError.value = "Le courriel ne doit pas dépasser 50 caractères"
-    isValid = false
-  } else if (!isValidEmail(email.value)) {
-    emailError.value = "Le courriel n'est pas valide"
-    isValid = false
-  }
-
-  if(!phoneNumber.value || phoneNumber.value.trim().length === 0) {
-    phoneNumberError.value = "Le numéro de téléphone est requis"
-    isValid = false
-  } else if (!isValidPhoneNumber(phoneNumber.value)) {
-    phoneNumberError.value = "Le numéro de téléphone n'est pas valide"
-    isValid = false
-  }
-
-  if(!password.value || password.value.trim().length === 0) {
-    passwordError.value = "Le mot de passe est requis"
-    isValid = false
-  }
-
-  if(!confirmPassword.value || confirmPassword.value.trim().length === 0) {
-    confirmPasswordError.value = "La confirmation du mot de passe est requise"
-    isValid = false
-  } else if (password.value !== confirmPassword.value) {
-    confirmPasswordError.value = "Les mots de passe ne correspondent pas"
-    isValid = false
-  }
-
-  return isValid
-}
-
-const signup = async () => {
-  if(!validateForm()) return
-
+const signup = async (userData) => {
   try {
     await authStore.signup(
-      firstName.value, 
-      lastName.value, 
-      email.value, 
-      phoneNumber.value, 
-      password.value, 
-      confirmPassword.value
+      userData.firstName,
+      userData.lastName,
+      userData.email,
+      userData.phoneNumber,
+      userData.password,
+      userData.confirmPassword
     )
     router.push({name: 'home'})
   } catch (error) {
@@ -99,61 +25,16 @@ const signup = async () => {
   }
 } 
 
-function isValidEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return re.test(email)
-}
-
-function isValidPhoneNumber(phoneNumber) {
-  const re = /^\d{10}$/
-  return re.test(phoneNumber)
-}
 </script>
 
 <template>
   <div class="signup-page">
     <div class="signup-card">
       <h2>Inscrivez-vous</h2>
-      <div v-if="successMessage" class="profile-success">
-        <span class="success">{{ successMessage }}</span>
-      </div>  
-      <div v-if="errorMessage" class="profile-error">
-        <span class="error">{{ errorMessage }}</span>
-      </div>
-      <form @submit.prevent="signup" novalidate>
-        <div class="field">
-          <label for="firstName">Prénom</label>
-          <input type="firstName" id="firstName" v-model="firstName"/>
-          <span v-if="firstNameError" class="error">{{ firstNameError }}</span>
-        </div>
-        <div class="field">
-          <label for="firstName">Nom</label>
-          <input type="lastName" id="lastName" v-model="lastName" />
-          <span v-if="lastNameError" class="error">{{ lastNameError }}</span>
-        </div>
-        <div class="field">
-          <label for="email">Courriel</label>
-          <input type="email" id="email" v-model="email" required />
-          <span v-if="emailError" class="error">{{ emailError }}</span>
-        </div>
-        <div class="field">
-          <label for="phoneNumber">Téléphone</label>
-          <input type="phoneNumber" id="phoneNumber" v-model="phoneNumber"/>
-          <span v-if="phoneNumberError" class="error">{{ phoneNumberError }}</span>
-        </div>
-        <div class="field">
-          <label for="password">Mot de passe</label>
-          <input type="password" id="password" v-model="password" required />
-          <span v-if="passwordError" class="error">{{ passwordError }}</span>
-        </div>
-        <div class="field">
-          <label for="confirmPassword">Confirmation du mot de passe</label>
-          <input type="password" id="confirmPassword" v-model="confirmPassword"/>
-          <span v-if="confirmPasswordError" class="error">{{confirmPasswordError }}</span>
-        </div>
-        <p class="note">une fois le compte créer, il vous sera impossible de modifier votre courriel</p>
-        <button type="submit" class="btn btn-primary">S'inscrire</button>
-      </form>
+      <UserCreationForm
+        submit-label="S'inscrire"
+        :error-message="errorMessage"
+        @submit-user="signup" />
     </div>
   </div>
 </template>
@@ -183,61 +64,23 @@ function isValidPhoneNumber(phoneNumber) {
     color: #0f172a;
   }
 
-  .field {
-    margin-bottom: 18px;
-  }
+ 
 
-  .field label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 0.95rem;
-    color: #1e293b;
-  }
 
-  .field input {
-    width: 100%;
-    padding: 12px 14px;
-    font-size: 1rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    outline: none;
-  }
 
-  .field input:focus {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px var(--color-accent);
-  }
+  
 
-  .profile-error{
-    background-color: var(--error-message-transparent);
-    padding:10px;
-    border-radius: 8px;
-    border: 1px solid var(--color-danger);
-    margin-bottom: 20px;
-  }
+  
 
-  .error {
-    color: var(--color-danger);
-    font-size: 0.85rem;
-    margin-top: 4px;
-  }
+  
 
-  .error.center {
-    display: block;
-    text-align: center;
-    margin: 8px 0 10px;
-  }
+  
 
-  .btn {
-    background-color: var(--button-primary-bg);
-    color: var(--button-primary-text);
-    border: 1px solid var(--button-primary-border);
-  }
+  
 
-  .btn:hover{
-    background-color: var(--button-primary-hover-bg);
-    color: var(--button-primary-hover-text);
-  }
+  
+
+  
 
   @media (max-width: 768px) {
     .signup-page {

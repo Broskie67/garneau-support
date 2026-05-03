@@ -174,3 +174,57 @@ exports.signin = async (req, res, next) => {
       next(error);
     }
 }
+
+exports.checkEmail = async (req, res, next) => {
+  const { email } =  req.body
+
+  try {
+    if (!email || email.trim().length === 0) {
+      return res
+        .status(422)
+        .json(
+          formatErrorResponse(
+            422,
+            'Unprocessable Entity',
+            'Le courriel est requis',
+            req.originalUrl
+          )
+        )
+    }
+    const trimmedEmail = email.trim().toLowerCase()
+
+    const existingUser = await User.findOne({ where: { email: trimmedEmail } });
+    if (existingUser) {
+      return res  
+        .status(200)
+        .json(
+          formatValidResponse(
+            200,
+            'La vérification du courriel a été executé avec succès',
+            {
+              exists: true
+            },
+            req.originalUrl
+          )
+        );
+    }
+
+    return res  
+      .status(200)
+      .json(
+        formatValidResponse(
+          200,
+          'La vérification du couriel a été executé avec succès',
+          {
+            exists: false
+          },
+          req.originalUrl
+        )
+    );
+  } catch (error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}

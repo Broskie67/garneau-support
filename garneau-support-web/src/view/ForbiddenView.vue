@@ -1,3 +1,7 @@
+<script setup>
+
+</script>
+
 <template>
   <div class="container mt-5 text-center">
     <h1 class="display-1 text-danger mb-4">403</h1>
@@ -9,9 +13,7 @@
   </div>
 </template>
 
-<script setup>
 
-</script>
 
 <style scoped>
 .container {

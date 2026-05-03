@@ -2,98 +2,23 @@
 import { ref } from 'vue'
 import { useAdminStore } from '@/stores/adminStore'
 import { useAuthStore } from '@/stores/authStore'
+import UserCreationForm from '@/components/UserCreationForm.vue'
 
 const authStore = useAuthStore()
 const adminStore = useAdminStore()
 
-const firstName = ref('')
-const lastName = ref('')
-const email = ref('')
-const phoneNumber = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-
-const firstNameError = ref('')
-const lastNameError = ref('')
-const emailError = ref('')
-const phoneNumberError = ref('')
-const passwordError = ref('')
-const confirmPasswordError = ref('')
 const errorMessage = ref('')
 const successMessage = ref('')
 
-const validateForm = () => {
-  let isValid = true
-  firstNameError.value = ''
-  lastNameError.value = ''
-  emailError.value = ''
-  phoneNumberError.value = ''
-  passwordError.value = ''
-  confirmPasswordError.value = ''
-  successMessage.value = ''
-
-  if(!firstName.value || firstName.value.trim().length === 0) {
-    firstNameError.value = "Le prénom est requis"
-    isValid = false
-  } else if (firstName.value.length < 2 || firstName.value.length > 50) {
-    firstNameError.value = 'Le prénom doit contenir entre 2 et 50 caractères '
-    isValid = false
-  }
-
-  if(!lastName.value || lastName.value.trim().length === 0) {
-    lastNameError.value = "le nom est requis"
-    isValid = false
-  } else if (lastName.value.lenght < 2 || lastName.value.lenght > 50) {
-    lastNameError.value = "Le nom doit contenir entre 2 et 50 caractères"
-    isValid = false
-  }
-
-  if(!email.value || email.value.trim().length === 0) {
-    emailError.value = "Le courriel est requis"
-    isValid = false
-  } else if (email.value.lenght > 50) {
-    emailError.value = "Le courriel ne doit pas dépasser 50 caractères"
-    isValid = false
-  } else if (!isValidEmail(email.value)) {
-    emailError.value = "Le courriel n'est pas valide"
-    isValid = false
-  }
-
-  if(!phoneNumber.value || phoneNumber.value.trim().length === 0) {
-    phoneNumberError.value = "Le numéro de téléphone est requis"
-    isValid = false
-  } else if (!isValidPhoneNumber(phoneNumber.value)) {
-    phoneNumberError.value = "Le numéro de téléphone n'est pas valide"
-    isValid = false
-  }
-
-  if(!password.value || password.value.trim().length === 0) {
-    passwordError.value = "Le mot de passe est requis"
-    isValid = false
-  }
-
-  if(!confirmPassword.value || confirmPassword.value.trim().length === 0) {
-    confirmPasswordError.value = "La confirmation du mot de passe est requise"
-    isValid = false
-  } else if (password.value !== confirmPassword.value) {
-    confirmPasswordError.value = "Les mots de passe ne correspondent pas"
-    isValid = false
-  }
-
-  return isValid
-}
-
-const createTech = async () => {
-  if(!validateForm()) return
-
+const createTech = async (userData) => {
   try {
     await adminStore.createTech(
-      firstName.value, 
-      lastName.value, 
-      email.value, 
-      phoneNumber.value, 
-      password.value, 
-      confirmPassword.value,
+      userData.firstName,
+      userData.lastName,
+      userData.email,
+      userData.phoneNumber,
+      userData.password,
+      userData.confirmPassword,
       authStore.token
     )
     successMessage.value = 'Un nouveau technicien a été créer avec succès'
@@ -101,60 +26,19 @@ const createTech = async () => {
     errorMessage.value = error.message
   }
 }
-
-
-function isValidEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return re.test(email)
-}
-
-function isValidPhoneNumber(phoneNumber) {
-  const re = /^\d{10}$/
-  return re.test(phoneNumber)
-}
 </script>
 
 <template>
   <div class="create-tech-page">
     <div class="create-tech-card">
       <h2>Ajouter un technicien</h2> 
-      <div v-if="errorMessage" class="profile-error">
-        <span class="error">{{ errorMessage }}</span>
+      <div v-if="successMessage" class="profile-success">
+        <span class="success">{{ successMessage }}</span>
       </div>
-      <form @submit.prevent="createTech" novalidate>
-        <div class="field">
-          <label for="firstName">Prénom</label>
-          <input type="text" id="firstName" v-model="firstName" required />
-          <span v-if="firstNameError" class="error">{{ firstNameError }}</span>
-        </div>
-        <div class="field">
-          <label for="firstName">Nom</label>
-          <input type="text" id="lastName" v-model="lastName" required />
-          <span v-if="lastNameError" class="error">{{ lastNameError }}</span>
-        </div>
-        <div class="field">
-          <label for="email">Courriel</label>
-          <input type="email" id="email" v-model="email" required />
-          <span v-if="emailError" class="error">{{ emailError }}</span>
-        </div>
-        <div class="field">
-          <label for="phoneNumber">Téléphone</label>
-          <input type="tel" id="phoneNumber" v-model="phoneNumber" required />
-          <span v-if="phoneNumberError" class="error">{{ phoneNumberError }}</span>
-        </div>
-        <div class="field">
-          <label for="password">Mot de passe</label>
-          <input type="password" id="password" v-model="password" required />
-          <span v-if="passwordError" class="error">{{ passwordError }}</span>
-        </div>
-        <div class="field">
-          <label for="confirmPassword">Confirmation du mot de passe</label>
-          <input type="password" id="confirmPassword" v-model="confirmPassword" required />
-          <span v-if="confirmPasswordError" class="error">{{confirmPasswordError }}</span>
-        </div>
-        <p class="note">une fois le compte créer, il vous sera impossible de modifier le courriel</p>
-        <button type="submit" class="btn btn-primary">Créer</button>
-      </form>
+      <UserCreationForm
+        submit-label="Créer"
+        :error-message="errorMessage"
+        @submit-user="createTech"/>
     </div>
   </div>
 </template>
