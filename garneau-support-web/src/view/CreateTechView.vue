@@ -124,12 +124,12 @@ function isValidPhoneNumber(phoneNumber) {
       <form @submit.prevent="createTech" novalidate>
         <div class="field">
           <label for="firstName">Prénom</label>
-          <input type="firstName" id="firstName" v-model="firstName" required />
+          <input type="text" id="firstName" v-model="firstName" required />
           <span v-if="firstNameError" class="error">{{ firstNameError }}</span>
         </div>
         <div class="field">
           <label for="firstName">Nom</label>
-          <input type="lastName" id="lastName" v-model="lastName" required />
+          <input type="text" id="lastName" v-model="lastName" required />
           <span v-if="lastNameError" class="error">{{ lastNameError }}</span>
         </div>
         <div class="field">
@@ -139,7 +139,7 @@ function isValidPhoneNumber(phoneNumber) {
         </div>
         <div class="field">
           <label for="phoneNumber">Téléphone</label>
-          <input type="phoneNumber" id="phoneNumber" v-model="phoneNumber" required />
+          <input type="tel" id="phoneNumber" v-model="phoneNumber" required />
           <span v-if="phoneNumberError" class="error">{{ phoneNumberError }}</span>
         </div>
         <div class="field">
