@@ -16,17 +16,20 @@ const authStore = useAuthStore()
           </p>
           <p class="message">Laissez nos techniciens s'occuper de vos moindre soucis</p>
         </div>
-        <div class ="div-action">
+        <div class="div-action" v-if="authStore.isConnected">
+          <p class="action">
+            Accédez à votre tableau de bord pour consulter ou créer vos tickets.
+          </p>
+        </div>
+
+        <div class="div-action" v-else>
           <p class="action">
             Connectez-vous à votre compte pour consulter vos tickets, ou créez un compte afin de signaler un problème.
           </p>
-        </div>
-        <div class="buttons" v-if="authStore.isConnected">
-      
-        </div>
-        <div class="buttons" v-else>
-          <router-link to="/signin" class="connect-btn">Se connecter</router-link>
-          <router-link to="/signup" class="login-btn">S'inscrire</router-link>
+          <div class="buttons">
+            <router-link to="/signin" class="connect-btn">Se connecter</router-link>
+            <router-link to="/signup" class="login-btn">S'inscrire</router-link>
+          </div>
         </div>
       </div>
     </main>  
