@@ -108,7 +108,7 @@ function formatDate(dateString) {
         <tr v-for="ticket in sortedTickets" :key="ticket.id">
           <td>{{ ticket.id }}</td>
           <td>{{ ticket.title }}</td>
-          <td>{{ ticket.category }}</td>
+          <td>{{ ticket.category ? ticket.category : 'Aucune catégorie'}}</td>
 
           <td>
             <span class="badge-status" :class="getStatusClass(ticket.status)">

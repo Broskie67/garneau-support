@@ -1,7 +1,7 @@
 const adminController = require('../controllers/adminController')
 const isAuth = require('../middleware/isAuth')
 const { isAdmin } = require('../middleware/roleValidation')
-const { signupValidation } = require('../middleware/authValidation')
+const { signupValidation } = require('../middleware/formValidation')
 const express = require('express');
 const router = express.Router()
 

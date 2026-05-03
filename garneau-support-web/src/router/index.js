@@ -1,5 +1,6 @@
 import { useAuthStore } from '@/stores/authStore'
 import CreateTechView from '@/view/CreateTechView.vue'
+import CreateTicketView from '@/view/CreateTicketView.vue'
 import DashboardView from '@/view/DashboardView.vue'
 import ForbiddenView from '@/view/ForbiddenView.vue'
 import HomeView from '@/view/HomeView.vue'
@@ -100,6 +101,23 @@ const router = createRouter({
         const authStore = useAuthStore()
         if(authStore.isConnected) {
           next()
+        } else {
+          next('/signin')
+        }
+      }
+    },
+    {
+      path: '/tickets/create',
+      name: 'create-ticket',
+      component: CreateTicketView,
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore()
+        if(authStore.isConnected) {
+          if(authStore.user.role !== 'client'){
+            next('/forbidden')
+          } else {
+            next()
+          }
         } else {
           next('/signin')
         }
