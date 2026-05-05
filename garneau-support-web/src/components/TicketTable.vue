@@ -49,8 +49,8 @@ const sortedTickets = computed(() => {
 const getStatusClass = (status) => ({
   'status-open': status === 'Ouvert',
   'status-assigned': status === 'Assigné',
-  'status-in-progress': status === 'En Cours',
-  'status-waiting': status === 'En Attente',
+  'status-in-progress': status === 'En cours',
+  'status-waiting': status === 'En attente',
   'status-resolved': status === 'Résolu',
   'status-closed': status === 'Fermé',
 })
