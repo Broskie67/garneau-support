@@ -145,6 +145,29 @@ export const useTicketStore = defineStore('ticketStore', () => {
     }
   }
 
+  async function updateTicket(ticketId, token, body) {
+    try {
+      const response = await fetch(`${ticketBaseUrl}/${ticketId}`, {
+        method: 'PATCH',
+         headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(body)
+      })
+      if(response.ok) {
+        const data = await response.json()
+        selectedTicket.value = data.data
+        return data
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.message)
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
   return {
     ticketsList,
     selectedTicket,
@@ -152,6 +175,7 @@ export const useTicketStore = defineStore('ticketStore', () => {
     getTechTickets,
     selfAssignTicket,
     getTicket,
-    createTicket
+    createTicket,
+    updateTicket
   }
 })

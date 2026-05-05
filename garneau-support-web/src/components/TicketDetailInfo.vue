@@ -61,6 +61,7 @@ function formatDate(dateString) {
       </div>
     </div>
     <div class="detail-card-body">
+
       <div class="ticket-description">
         <h5>Description</h5>
         <span>{{ ticket.description }}</span>
@@ -71,6 +72,7 @@ function formatDate(dateString) {
           <h6>Catégorie</h6>
            <span>{{ ticket.category ? ticket.category : 'Aucune catégorie'}}</span>
         </div>
+
         <div class="ticket-priority">
           <h6>Priorité</h6>
            <span class="badge-priority" :class="getPriorityClass(ticket.priority)">{{ ticket.priority }}</span>
@@ -80,10 +82,12 @@ function formatDate(dateString) {
           <h6>Date de création</h6>
            <span>{{ formatDate(ticket.created_at) }}</span>
         </div>
+
         <div class="ticket-assigned">
           <h6>Assigné à</h6>
           <span>{{ ticket.technicien ? ticket.technicien.first_name : 'Non assigné' }}</span>
         </div>
+
       </div>        
     </div>
     <div class="actions">
@@ -95,9 +99,9 @@ function formatDate(dateString) {
           @click="$emit('self-assign-ticket', ticket.id)"> 
             M'assigner
         </button>
-        <button class="action-btn modify-btn">
+        <router-link :to="`/tickets/${ticket.id}/edit`" class="action-btn modify-btn" v-if="ticket.assigned_to !== null">
           modifier
-        </button>
+        </router-link>
       </div> 
     </div>
     <router-link to="/dashboard" class="back-btn">Retour à la liste</router-link>
