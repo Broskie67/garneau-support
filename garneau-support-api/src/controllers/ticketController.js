@@ -301,7 +301,21 @@ exports.updateTicket = async(req, res, next) => {
   }
 
   try {
-    const ticket = await Ticket.findOne({where: { id: ticketId}})
+    const ticket = await Ticket.findOne({  
+      where: { id: ticketId },
+        include: [
+        {
+          model: User,
+          as: 'technicien',
+          attributes: ['id', 'first_name', 'last_name']
+        },
+        {
+          model: User,
+          as: 'creator',
+          attributes: ['id', 'first_name', 'last_name']
+        }
+      ]
+    })
     if(!ticket) {
       return res
         .status(404)
