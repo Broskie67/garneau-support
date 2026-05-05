@@ -20,10 +20,10 @@ const ticket = sequelize.define(
     },
     category: {
       type: DataTypes.ENUM(
-        'matériel',
+        'Matériel',
         'Logiciel', 
         'Réseau',
-        'Accès et compte',
+        'Accès et comptes',
         'Courriel',
         'Impression',
         'Sécurité',
@@ -45,8 +45,8 @@ const ticket = sequelize.define(
       type: DataTypes.ENUM(
         'Ouvert', 
         'Assigné', 
-        'En Cours', 
-        'En Attente', 
+        'En cours', 
+        'En attente', 
         'Résolu', 
         'Fermé', 
         'Archivé'
