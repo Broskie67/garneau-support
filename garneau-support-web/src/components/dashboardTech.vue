@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted} from 'vue'
+import { computed, ref, onMounted, onUnmounted} from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
 import TicketTable from '@/components/TicketTable.vue'
@@ -11,7 +11,10 @@ const ticketStore = useTicketStore()
 const errorMessage = ref('')
 const successMessage = ref('')
 const notifMessage = ref('')
-
+const newTicketIds = ref([])
+let knownTicketIdsList = []
+let isFirstLoad = true
+let refresh = null
 
 const activeFilterOptions = {
   status: [
@@ -27,14 +30,12 @@ const closeFilterOptions = {
     'Fermé'
   ]
 }
-
 const activeFilters = ref({
   search: '',
   status: '',
   category: '',
   assignedTo: ''
 })
-
 const closedFilter = ref({
   search: '',
   status: '',
@@ -52,6 +53,29 @@ const getTickets = async () => {
   } catch (error) {
     errorMessage.value = error.message
   }
+}
+
+const refreshTicket = async () => {
+  await getTickets()
+
+  const currentTickets = filteredAssignedTickets.value
+  const currentIds = currentTickets.map(ticket => ticket.id)
+
+  if(isFirstLoad) {
+    knownTicketIdsList = currentIds
+    isFirstLoad = false
+    return
+  }
+
+  const newTicketsCreated = currentIds.filter(id => !knownTicketIdsList.includes(id))
+
+  if(newTicketsCreated.length > 0) {
+    newTicketIds.value = newTicketsCreated
+    notifMessage.value = 'Un nouvel incident est disponible'
+
+  }
+
+  knownTicketIdsList = currentIds
 }
 
 const selfAssignTicket = async (ticketId) => {
@@ -139,8 +163,15 @@ const filteredAssignedClosedTicket = computed(() => {
 })
 
 onMounted(async() => {
-  await getTickets()
+  refreshTicket()
 
+  refresh = setInterval(() => {
+    refreshTicket()
+  }, 10000)
+})
+
+onUnmounted(() => {
+  clearInterval(refresh)
 })
 
 </script>
@@ -161,12 +192,10 @@ onMounted(async() => {
     <FilterBar
       :status-options="activeFilterOptions.status"
       @filters-changed="updateActiveFilters"/>
-    <p v-if="notifMessage" class="notif-message">
-      {{ notifMessage }}
-    </p>
     <TicketTable 
       :tickets="filteredAssignedTickets" 
       :isTechnician="true"
+      :new-ticket-ids="newTicketIds"
       @self-assign-ticket="selfAssignTicket" />
   </div>
    
@@ -210,18 +239,9 @@ onMounted(async() => {
     color: #166534;
     border: 1px solid #86EFAC;
     padding: 12px 16px;
-    border-radius: 10px;
+    border-radius: 18px;
     font-weight: 600;
     margin-bottom: 20px;
   }
 
-  .notif-message {
-  margin: 12px 0;
-  padding: 12px 16px;
-  border-radius: 10px;
-  background-color: #dcfce7;
-  color: #166534;
-  font-weight: 600;
-  border: 1px solid #86efac;
-}
 </style>
