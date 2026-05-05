@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/stores/authStore'
+import { useTicketStore } from '@/stores/ticketStore'
 import CreateTechView from '@/view/CreateTechView.vue'
 import CreateTicketView from '@/view/CreateTicketView.vue'
 import DashboardView from '@/view/DashboardView.vue'
@@ -10,6 +11,7 @@ import ProfileView from '@/view/ProfileView.vue'
 import SigninView from '@/view/SigninView.vue'
 import SignupView from '@/view/SignupView.vue'
 import TicketDetailView from '@/view/TicketDetailView.vue'
+import TicketEditView from '@/view/TicketEditView.vue'
 import UserListView from '@/view/UserListView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -129,6 +131,20 @@ const router = createRouter({
       component: TicketDetailView,
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore()
+        if(authStore.isConnected) {
+          next()
+        } else {
+          next('/signin')
+        }
+      }
+    },
+    {
+      path: '/tickets/:id/edit',
+      name: 'edit-ticket',
+      component: TicketEditView,
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore()
+        const ticketStore = useTicketStore()
         if(authStore.isConnected) {
           next()
         } else {
