@@ -8,7 +8,7 @@ defineProps({
   isTechnician: {
     type: Boolean,
     default: false
-  }
+  },
 })
 
 const getStatusClass = (status) => ({
@@ -99,7 +99,10 @@ function formatDate(dateString) {
           @click="$emit('self-assign-ticket', ticket.id)"> 
             M'assigner
         </button>
-        <router-link :to="`/tickets/${ticket.id}/edit`" class="action-btn modify-btn" v-if="ticket.assigned_to !== null">
+        <router-link 
+          :to="`/tickets/${ticket.id}/edit`" 
+          class="action-btn modify-btn" 
+          v-if="ticket.assigned_to !== null || !isTechnician">
           modifier
         </router-link>
       </div> 
