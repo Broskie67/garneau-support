@@ -2,21 +2,14 @@
 import { computed, ref, onMounted, onUnmounted} from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
-import TicketTable from '@/components/TicketTable.vue'
-import FilterBar from './FilterBar.vue'
+import TicketTable from '@/components/tickets/TicketTable.vue'
+import FilterBar from '../commun/FilterBar.vue'
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()
 
 const errorMessage = ref('')
 const successMessage = ref('')
-
-const newTicketIds = ref([])
-const newAssignationMessage = ref('')
-let knownTicketIdsList = []
-let knownTicketsList = []
-let isFirstLoad = true
-let refresh = null
 
 const activeFilterOptions = {
   status: [
@@ -27,17 +20,20 @@ const activeFilterOptions = {
     'Résolu'
   ]
 }
+
 const closeFilterOptions = {
   status: [
     'Fermé'
   ]
 }
+
 const activeFilters = ref({
   search: '',
   status: '',
   category: '',
   assignedTo: ''
 })
+
 const closedFilter = ref({
   search: '',
   status: '',
@@ -45,71 +41,13 @@ const closedFilter = ref({
   assignedTo: ''
 })
 
-const getTickets = async () => {
+const getAllTickets = async () => {
   if (!authStore.token) {
     return
   }
 
   try {
-    await ticketStore.getTechTickets(authStore.token)
-  } catch (error) {
-    errorMessage.value = error.message
-  }
-}
-
-const refreshTicket = async () => {
-  await getTickets()
-
-  const currentTickets = filteredAssignedTickets.value || []
-  const currentIds = currentTickets.map(ticket => ticket.id)
-
-  if (isFirstLoad) {
-    knownTicketIdsList = currentIds
-    knownTicketsList = currentTickets
-    isFirstLoad = false
-    return
-  }
-
-  const newTicketsCreated = currentTickets.filter(ticket =>
-    !knownTicketIdsList.includes(ticket.id) && ticket.assigned_to === null
-  )
-
-  const newAssignedTicket = currentTickets.filter(currentTicket => {
-    const oldTicket = knownTicketsList.find(oldTicket =>
-      oldTicket.id === currentTicket.id
-    )
-
-    return oldTicket &&
-      oldTicket.assigned_to !== authStore.user.id &&
-      currentTicket.assigned_to === authStore.user.id
-  })
-
-  if (newAssignedTicket.length > 0) {
-    newTicketIds.value = newAssignedTicket.map(ticket => ticket.id)
-    newAssignationMessage.value = 'Nouvelle assignation'
-  }
-  
-  if (newTicketsCreated.length > 0) {
-    newTicketIds.value = newTicketsCreated.map(ticket => ticket.id)
-
-  }
-
-  knownTicketIdsList = currentIds
-  knownTicketsList = currentTickets
-}
-
-const selfAssignTicket = async (ticketId) => {
-   if (!authStore.token) {
-    return
-  }
-
-  try {
-    await ticketStore.selfAssignTicket(ticketId, authStore.token)
-    successMessage.value = 'l\'incident vous a été attribué avec succès'
-    setTimeout(() => {
-      successMessage.value = ''
-    }, 4000)
-
+    await ticketStore.getAllTickets(authStore.token)
   } catch (error) {
     errorMessage.value = error.message
   }
@@ -123,23 +61,22 @@ const updateCloseFilters = (newFilters) => {
   closedFilter.value = newFilters
 }
 
-const getAssignedActiveTicket = computed(() => {
+const getActiveTicket = computed(() => {
   return ticketStore.ticketsList.filter(ticket =>
-    (ticket.assigned_to === authStore.user.id || ticket.assigned_to === null) && 
     ticket.status !== 'Fermé' && ticket.status !== 'Archivé'
   )
 })
 
-const filteredAssignedTickets = computed(() => {
-  return getAssignedActiveTicket.value.filter(ticket => {
+const filteredActiveTickets = computed(() => {
+  return getActiveTicket.value.filter(ticket => {
     const matchSearch = 
-      !activeFilters.value.search || 
+      !activeFilters.value.search ||
       ticket.title.toLowerCase().includes(activeFilters.value.search.toLowerCase()) ||
       ticket.description.toLowerCase().includes(activeFilters.value.search.toLowerCase())
 
     const matchStatus =
       !activeFilters.value.status ||
-      ticket.status === activeFilters.value.status
+      ticket.status === activeFilters.value.status 
 
     const matchCategory =
       !activeFilters.value.category ||
@@ -154,12 +91,12 @@ const filteredAssignedTickets = computed(() => {
   })
 })
 
-const getAssignedClosedTicket = computed(() => {
+const getClosedTicket = computed(() => {
   return ticketStore.ticketsList.filter(ticket => ticket.assigned_to === authStore.user.id && ticket.status === 'Fermé' )
 })
 
-const filteredAssignedClosedTicket = computed(() => {
-  return getAssignedClosedTicket.value.filter(ticket => {
+const filteredClosedTickets = computed(() => {
+  return getClosedTicket.value.filter(ticket => {
     const matchSearch = 
       !closedFilter.value.search || 
       ticket.title.toLowerCase().includes(closedFilter.value.search.toLowerCase()) ||
@@ -182,16 +119,12 @@ const filteredAssignedClosedTicket = computed(() => {
   })
 })
 
-onMounted(async() => {
-  refreshTicket()
-
-  refresh = setInterval(() => {
-    refreshTicket()
-  }, 10000)
+onMounted(() => {
+  getAllTickets()
 })
 
-onUnmounted(() => {
-  clearInterval(refresh)
+onUnmounted(() =>{
+
 })
 
 </script>
@@ -213,11 +146,8 @@ onUnmounted(() => {
       :status-options="activeFilterOptions.status"
       @filters-changed="updateActiveFilters"/>
     <TicketTable 
-      :tickets="filteredAssignedTickets" 
-      :isTechnician="true"
-      :new-assignation-message = "newAssignationMessage"
-      :new-ticket-ids="newTicketIds"
-      @self-assign-ticket="selfAssignTicket" />
+      :tickets="filteredActiveTickets" 
+      :isAdmin="true"/>
   </div>
    
   
@@ -228,8 +158,8 @@ onUnmounted(() => {
       :status-options="closeFilterOptions.status"
       @filters-changed="updateCloseFilters"/>
     
-    <TicketTable :tickets="filteredAssignedClosedTicket" 
-      :isTechnician="true"/>
+    <TicketTable :tickets="filteredClosedTickets" 
+      :isAdmin="true"/>
   </div>
 
 </template>

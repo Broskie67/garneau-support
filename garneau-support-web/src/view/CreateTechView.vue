@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useAdminStore } from '@/stores/adminStore'
 import { useAuthStore } from '@/stores/authStore'
-import UserCreationForm from '@/components/UserCreationForm.vue'
+import UserCreationForm from '@/components/creation/UserCreationForm.vue'
 
 const authStore = useAuthStore()
 const adminStore = useAdminStore()

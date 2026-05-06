@@ -1,8 +1,8 @@
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
-import DashboardClient from '@/components/DashboardClient.vue'
-import DashboardTech from '@/components/DashboardTech.vue';
-import DashboardAdmin from '@/components/DashboardAdmin.vue';
+import DashboardClient from '@/components/dashboard/DashboardClient.vue'
+import DashboardTech from '@/components/dashboard/DashboardTech.vue';
+import DashboardAdmin from '@/components/dashboard/DashboardAdmin.vue';
 
 const authStore = useAuthStore()
 </script>

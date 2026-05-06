@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import TicketDetailInfo from './TicketDetailInfo.vue';
 import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
 import { useRoute } from 'vue-router';
+import TicketDetailInfo from '../tickets/TicketDetailInfo.vue';
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -24,6 +24,19 @@ const getTicket = async () => {
   }
 }
 
+const selfAssignTicket = async () => {
+  if (!authStore.token) {
+    return
+  }
+
+  try {
+    await ticketStore.selfAssignTicket(route.params.id, authStore.token)
+    getTicket()
+  } catch (error) {
+    errorMessage.value = error.message
+  }
+}
+
 onMounted(async() => {
   await getTicket()
 })
@@ -35,7 +48,8 @@ onMounted(async() => {
     <TicketDetailInfo
       v-if="ticketStore.selectedTicket"
       :ticket="ticketStore.selectedTicket"
-      :isAdmin = "true"/>
+      :isTechnician = "true"
+      @self-assign-ticket="selfAssignTicket"/>
   </div>
 </template>
 
