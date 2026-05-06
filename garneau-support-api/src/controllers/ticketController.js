@@ -94,6 +94,45 @@ exports.getTechnicianTickets = async (req, res, next) => {
 }
 
 /**
+ * Recherche la liste de tous les incidents 
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @returns la liste de tous les incidents
+ */
+exports.getAllTickets = async (req, res, next) => {
+  try {
+    const allTickets = await Ticket.findAll({
+      include: [
+        {
+          model: User,
+          as: 'technicien',
+          attributes: ['id', 'first_name', 'last_name']
+        },
+        {
+          model: User,
+          as: 'creator',
+          attributes: ['id', 'first_name', 'last_name']
+        }
+      ]
+    })
+
+    return res.status(200).json(formatValidResponse(
+      200,
+      'La liste des incidents a été récupéré avec succès',
+      allTickets,
+      req.originalUrl
+    ))
+  } catch (error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+/**
  * Cherche l'incident recherché par l'utilisateur
  * 
  * @param {Object} req Requête Express 
