@@ -87,6 +87,7 @@ const createTicket = async () => {
 }
 
 watch(title, (newTitle) => {
+  successMessage.value = ''
   const trimmedTitle = newTitle.trim()
 
   if (trimmedTitle.length >= 3 && trimmedTitle.length <= 100) {
@@ -95,6 +96,7 @@ watch(title, (newTitle) => {
 })
 
 watch(description, (newDescription) => {
+  successMessage.value = ''
   const trimmedDescription = newDescription.trim()
 
   if (trimmedDescription.length >= 10) {
@@ -103,6 +105,7 @@ watch(description, (newDescription) => {
 })
 
 watch(priority, (newPriority) => {
+  successMessage.value = ''
   if (newPriority) {
     priorityError.value = ''
   }

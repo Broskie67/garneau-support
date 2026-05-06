@@ -10,9 +10,11 @@ const ticketStore = useTicketStore()
 
 const errorMessage = ref('')
 const successMessage = ref('')
-const notifMessage = ref('')
+
 const newTicketIds = ref([])
+const newAssignationMessage = ref('')
 let knownTicketIdsList = []
+let knownTicketsList = []
 let isFirstLoad = true
 let refresh = null
 
@@ -58,24 +60,42 @@ const getTickets = async () => {
 const refreshTicket = async () => {
   await getTickets()
 
-  const currentTickets = filteredAssignedTickets.value
+  const currentTickets = filteredAssignedTickets.value || []
   const currentIds = currentTickets.map(ticket => ticket.id)
 
-  if(isFirstLoad) {
+  if (isFirstLoad) {
     knownTicketIdsList = currentIds
+    knownTicketsList = currentTickets
     isFirstLoad = false
     return
   }
 
-  const newTicketsCreated = currentIds.filter(id => !knownTicketIdsList.includes(id))
+  const newTicketsCreated = currentTickets.filter(ticket =>
+    !knownTicketIdsList.includes(ticket.id) && ticket.assigned_to === null
+  )
 
-  if(newTicketsCreated.length > 0) {
-    newTicketIds.value = newTicketsCreated
-    notifMessage.value = 'Un nouvel incident est disponible'
+  const newAssignedTicket = currentTickets.filter(currentTicket => {
+    const oldTicket = knownTicketsList.find(oldTicket =>
+      oldTicket.id === currentTicket.id
+    )
+
+    return oldTicket &&
+      oldTicket.assigned_to !== authStore.user.id &&
+      currentTicket.assigned_to === authStore.user.id
+  })
+
+  if (newAssignedTicket.length > 0) {
+    newTicketIds.value = newAssignedTicket.map(ticket => ticket.id)
+    newAssignationMessage.value = 'Nouvelle assignation'
+  }
+  
+  if (newTicketsCreated.length > 0) {
+    newTicketIds.value = newTicketsCreated.map(ticket => ticket.id)
 
   }
 
   knownTicketIdsList = currentIds
+  knownTicketsList = currentTickets
 }
 
 const selfAssignTicket = async (ticketId) => {
@@ -195,6 +215,7 @@ onUnmounted(() => {
     <TicketTable 
       :tickets="filteredAssignedTickets" 
       :isTechnician="true"
+      :new-assignation-message = "newAssignationMessage"
       :new-ticket-ids="newTicketIds"
       @self-assign-ticket="selfAssignTicket" />
   </div>

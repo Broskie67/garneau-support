@@ -13,6 +13,10 @@ const props = defineProps({
   newTicketIds: {
     type: Array,
     default: () => []
+  },
+  newAssignationMessage:{
+    type: String,
+    default: ''
   }
 })
 
@@ -144,6 +148,9 @@ function formatDate(dateString) {
             >
               M’assigner
             </button>
+            <span v-if="newTicketIds.includes(ticket.id) && newAssignationMessage" class="assigned-message">
+              {{ newAssignationMessage }}
+            </span>
           </td>
         </tr>
       </tbody>
@@ -167,7 +174,12 @@ function formatDate(dateString) {
   }
 
   td {
-    padding-top: 15px;
+    padding: 10px 10px 10px 0 ;
+  }
+
+  .assigned-message{
+    text-align: center;
+    padding-left: 0;
   }
 
   .action-btn {
