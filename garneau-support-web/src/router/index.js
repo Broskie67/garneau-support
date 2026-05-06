@@ -146,6 +146,7 @@ const router = createRouter({
         const authStore = useAuthStore()
         const ticketStore = useTicketStore()
         if(authStore.isConnected) {
+  
           next()
         } else {
           next('/signin')

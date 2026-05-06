@@ -9,6 +9,14 @@ const props = defineProps({
   isTechnician: {
     type: Boolean,
     default: false
+  },
+  newTicketIds: {
+    type: Array,
+    default: () => []
+  },
+  newAssignationMessage:{
+    type: String,
+    default: ''
   }
 })
 
@@ -105,7 +113,7 @@ function formatDate(dateString) {
       </thead>
 
       <tbody>
-        <tr v-for="ticket in sortedTickets" :key="ticket.id">
+        <tr v-for="ticket in sortedTickets" :key="ticket.id" :class="{'new-ticket': newTicketIds.includes(ticket.id) }">
           <td>{{ ticket.id }}</td>
           <td>{{ ticket.title }}</td>
           <td>{{ ticket.category ? ticket.category : 'Aucune catégorie'}}</td>
@@ -140,6 +148,9 @@ function formatDate(dateString) {
             >
               M’assigner
             </button>
+            <span v-if="newTicketIds.includes(ticket.id) && newAssignationMessage" class="assigned-message">
+              {{ newAssignationMessage }}
+            </span>
           </td>
         </tr>
       </tbody>
@@ -163,7 +174,12 @@ function formatDate(dateString) {
   }
 
   td {
-    padding-top: 15px;
+    padding: 10px 10px 10px 0 ;
+  }
+
+  .assigned-message{
+    text-align: center;
+    padding-left: 0;
   }
 
   .action-btn {
@@ -194,6 +210,16 @@ function formatDate(dateString) {
     background-color: var(--status-assigned-hover);
     color: var(--button-secondary-hover-text);
     text-decoration: none;
+  }
+
+  .new-ticket {
+    background-color: rgba(57, 247, 128, 0.18);
+    margin: 12px 0;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background-color: #dcfce7;
+    font-weight: 600;
+    border: 1px solid #86efac;
   }
 
   .badge-priority,
