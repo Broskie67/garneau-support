@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue'
+import { useRoute } from 'vue-router';
 
 defineProps({
   ticket: {
@@ -14,6 +16,10 @@ defineProps({
     default: false
   }
 })
+
+const route = useRoute()
+
+const successMessage = ref(route.query.succes || '')
 
 const getStatusClass = (status) => ({
   'status-open': status === 'Ouvert',
@@ -49,8 +55,13 @@ function formatDate(dateString) {
 
 <template>
   <div class="card-content">
+    <span v-if="successMessage" class="success-message">
+      {{ successMessage }}
+    </span>
     <div class="detail-card-header">
+      
       <div class="flex-title-status">
+        
         <div class="ticket-number">
           <h3>Incident #{{ ticket.id }}</h3>
         </div>
@@ -148,6 +159,16 @@ function formatDate(dateString) {
 
   .info-grid h6 {
     margin: 0;
+  }
+
+  .success-message{
+    display: block;
+    width: 100%;
+    background-color: var(--success-message-transparent);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--color-success);
+    margin-bottom: 24px;
   }
 
   .info-grid span {

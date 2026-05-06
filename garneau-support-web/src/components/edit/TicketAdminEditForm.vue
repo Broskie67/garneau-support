@@ -1,12 +1,16 @@
 <script setup>
-import {ref, computed} from 'vue'
+import {ref, computed, onMounted} from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
+import { useAdminStore } from '@/stores/adminStore';
 import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()
+const adminStore = useAdminStore()
 const route = useRoute()
+const router = useRouter()
 
 const props = defineProps({
   ticket: {
@@ -85,7 +89,12 @@ const updateTicket = async () => {
       status: form.value.status,
       assigned_to: form.value.assigned_to
     })
-    successMessage.value = 'L\'indicent à été modifié avec succès'
+    router.push({
+      path: `/details/${route.params.id}`,
+      query: {
+        succes: 'L\'incident a été modifié avec succès'
+      }
+    })
   } catch (error) {
     errorMessage.value = error.message
   }
@@ -114,13 +123,14 @@ function formatDate(dateString) {
     minute: '2-digit'
   })
 }
+
+onMounted(async () => {
+  await adminStore.getUsers(authStore.token)
+})
 </script>
 
 <template>
   <form class="card-content" @submit.prevent="updateTicket">
-    <div v-if="successMessage" class="edit-success">
-      <span class="success">{{ successMessage }}</span>
-    </div>  
     <div v-if="errorMessage" class="edit-error">
       <span class="error">{{ errorMessage }}</span>
     </div>
@@ -145,7 +155,7 @@ function formatDate(dateString) {
         <h5>Description</h5>
         <span>{{ ticket.description }}</span>
       </div>  
-      <div class="info-grid" v-if="ticket.assigned_to === authStore.user.id">
+      <div class="info-grid" >
         <div class="ticket-category">
           <label for="category">Catégorie</label>
           <select id="category" v-model="form.category" class="form-select">
@@ -183,47 +193,19 @@ function formatDate(dateString) {
             </option>
           </select>
         </div>
-      </div>
-      <div class="info-grid" v-else>
-        <div class="ticket-category">
-          <label for="category">Catégorie</label>
-          <select id="category" v-model="form.category" class="form-select" disabled>
-            <option value="Matériel">Matériel</option>
-            <option value="Logiciel">Logiciel</option>
-            <option value="Réseau">Réseau</option>
-            <option value="Accès et comptes">Accès et comptes</option>
-            <option value="Courriel">Courriel</option>
-            <option value="Impression">Impression</option>
-            <option value="Sécurité">Sécurité</option>
-            <option value="Téléphonie">Téléphonie</option>
-            <option value="Autre">Autre</option>
-          </select>
-        </div> 
-        <div class="ticket-priority">
-          <label for="priority">Priorité</label>
-          <select id="priority" v-model="form.priority" class="form-select" disabled>
-            <option value="Basse">Basse</option>
-            <option value="Moyenne">Moyenne</option>
-            <option value="Haute">Haute</option>
-            <option value="Critique">Critique</option>
-          </select>
-        </div>
-        <div class="ticket-status-edit">
-          <label for="status">Statut</label>
-          <select id="status" v-model="nextStatus" class="form-select" @change="changeStatus(nextStatus)" disabled>
-            <option value="" disabled>
-              {{ status }}
-            </option>
+        <div class="ticket-assign-to-edit">
+          <label for="status">Assigné à</label>
+          <select id="assigned" v-model="form.assigned_to" class="form-select">
             <option 
-              v-for="transition in allowedTransition" 
-              :key="transition" 
-              :value="transition">
-                {{ transition }}
+              v-for="user in adminStore.usersList.filter(user => user.role === 'technicien')"
+              :key="user.id"
+              :value="user.id">
+              {{ user.first_name }}
             </option>
           </select>
-          <span class="disable-status"> Vous ne pouvez modifier que les incidents qui vous sont assignés</span>
         </div>
       </div>
+      
 
       <div class="ticket-created-at">
         <h6>Date de création</h6>
@@ -238,7 +220,7 @@ function formatDate(dateString) {
     <div class="actions">
       <h6>Actions disponibles</h6>
       <div class="actions-buttons">
-        <button type="submit" class="action-btn save-btn" v-if="ticket.assigned_to === authStore.user.id">
+        <button type="submit" class="action-btn save-btn">
           Enregistrer
         </button>
 

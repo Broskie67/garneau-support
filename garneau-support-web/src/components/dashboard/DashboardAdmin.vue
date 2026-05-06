@@ -126,7 +126,6 @@ onMounted(() => {
 onUnmounted(() =>{
 
 })
-
 </script>
 
 <template>
@@ -165,7 +164,7 @@ onUnmounted(() =>{
 </template>
 
 <style scoped>
-.table-active {
+  .table-active {
     margin-bottom: 3rem;
     background: #ffffff;
     width: 1200px;

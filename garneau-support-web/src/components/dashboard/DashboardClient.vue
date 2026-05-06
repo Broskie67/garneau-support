@@ -2,11 +2,14 @@
 import { computed, ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
+import { useRoute } from 'vue-router'
 import TicketTable from '@/components/tickets/TicketTable.vue'
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()
+const route = useRoute()
 
+const successMessage = ref(route.query.success)
 const errorMessage = ref('')
 
 const getTickets = async () => {
@@ -20,7 +23,6 @@ const getTickets = async () => {
     errorMessage.value = error.message
   }
 }
-
 
 const getActiveTicket = computed(() => {
   return ticketStore.ticketsList.filter(ticket => ticket.status !== 'Fermé' && ticket.status !== 'Archivé')
@@ -45,6 +47,9 @@ onMounted(() => {
 
   <div class="table-active">
     <h3>Incidents actifs</h3>
+    <span v-if="successMessage" class="success-message">
+      {{ successMessage }}
+    </span>
     <TicketTable :tickets="getActiveTicket" />
   </div>
    
@@ -75,5 +80,15 @@ onMounted(() => {
     border-radius: 18px;
     border: 1px solid rgba(148, 163, 184, 0.25);
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  }
+
+  .success-message{
+    display: block;
+    width: 100%;
+    background-color: var(--success-message-transparent);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--color-success);
+    margin-bottom: 24px;
   }
 </style>
