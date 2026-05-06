@@ -9,6 +9,10 @@ defineProps({
     type: Boolean,
     default: false
   },
+  isAdmin: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const getStatusClass = (status) => ({

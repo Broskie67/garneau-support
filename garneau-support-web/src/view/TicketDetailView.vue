@@ -14,6 +14,9 @@ const authStore = useAuthStore()
     <div>
       <TicketTechActions v-if="authStore.user?.role === 'technicien'"/>
     </div>
+    <div>
+      <TicketTechActions v-if="authStore.user?.role === 'admin'"/>
+    </div>
   </div>
 
 </template>

@@ -5,6 +5,7 @@ import { useTicketStore } from '@/stores/ticketStore'
 import { useRoute } from 'vue-router';
 import TicketClientEditForm from '@/components/TicketClientEditForm.vue';
 import TicketTechEditForm from '@/components/TicketTechEditForm.vue';
+import TicketAdminEditForm from '@/components/TicketAdminEditForm.vue';
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -42,6 +43,9 @@ onMounted(async() => {
         :ticket="ticketStore.selectedTicket"/>
       <TicketTechEditForm 
         v-if="authStore.user?.role === 'technicien' && ticketStore.selectedTicket"
+        :ticket="ticketStore.selectedTicket"/>
+      <TicketAdminEditForm
+        v-if="authStore.user?.role === 'admin' && ticketStore.selectedTicket"
         :ticket="ticketStore.selectedTicket"/>
     </div>
   </div>
