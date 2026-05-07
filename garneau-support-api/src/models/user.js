@@ -10,26 +10,65 @@ const user = sequelize.define(
       autoIncrement: true
     },
     first_name: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: {
+          args: [2, 50],
+          msg: 'Le prénom doit contenir entre 2 et 50 caractères'
+        }
+      }
     },
     last_name: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: {
+          args: [2, 50],
+          msg: 'Le nom doit contenir entre 2 et 50 caractères'
+        }
+      }
     },
     email: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+        isEmail: {
+          args: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
+          msg: 'le courriel doit être valide'
+        },
+        len: {
+          args: [1, 50],
+          msg: 'Le courriel ne doit pas dépasser 50 caractères'
+        }
+      }
     },
+
+    password: {
+      type: DataTypes.VIRTUAL,
+      allowNull: false,
+      validate: {
+        is: {
+          args: /^(?=.*[A-Z])(?=.*\d)(?=.*[#?!@$%^&*\-_]).{6,}$/,
+          msg: 'Le mot de passe doit contenir au moins 6 caractères, une majuscule, un chiffre et un caractère spécial.'
+        }
+      }
+    },
+
     password_hash: {
       type: DataTypes.STRING(255),
-      allowNull: false
-      
+      allowNull: false  
     },
     phone_number: {
       type: DataTypes.STRING(20),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: {
+          args: /^(\+1\s?)?(\(?[2-9][0-9]{2}\)?[\s.-]?)?[2-9][0-9]{2}[\s.-]?[0-9]{4}$/,
+          msg: 'Le numéro de téléphone doit respecter le format canadien'
+        }
+      }
     },
     role: {
       type: DataTypes.ENUM('client', 'technicien', 'admin'),

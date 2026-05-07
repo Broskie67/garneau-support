@@ -33,6 +33,7 @@ exports.signup = async (req, res, next) => {
       first_name: firstName,
       last_name: lastName,
       email: email,
+      password: password,
       password_hash: hashedPassword,
       phone_number: phoneNumber,
       role: 'client'

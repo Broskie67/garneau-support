@@ -97,7 +97,7 @@ function signupValidation(req, res, next) {
       );
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
     if (!emailRegex.test(trimmedEmail)) {
       return res
         .status(422)
@@ -111,7 +111,7 @@ function signupValidation(req, res, next) {
         );
     }
 
-  const phoneNumberRegex = /^\d{10}$/;
+  const phoneNumberRegex = /^(\+1\s?)?(\(?[2-9][0-9]{2}\)?[\s.-]?)?[2-9][0-9]{2}[\s.-]?[0-9]{4}$/;
     if (!phoneNumberRegex.test(trimmedPhoneNumber)) {
       return res
         .status(422)
