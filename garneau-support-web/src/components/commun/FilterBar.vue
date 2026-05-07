@@ -1,8 +1,10 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/authStore';
+import { useAdminStore } from '@/stores/adminStore';
 
 const authStore = useAuthStore()
+const adminStore = useAdminStore()
 
 defineProps({
   statusOptions: {
@@ -36,6 +38,9 @@ watch(filters, () => {
   emit('filters-changed', filters.value)
 }, { deep: true })
 
+onMounted(async () => {
+  await adminStore.getUsers(authStore.token)
+})
 </script>
 
 <template>
@@ -70,11 +75,23 @@ watch(filters, () => {
       <option value="Autre">Autre</option>
     </select>
 
-    <select v-model="filters.assignedTo" class="filter-select">
+
+    <select v-model="filters.assignedTo" class="filter-select" v-if="authStore.user.role === 'technicien' ">
       <option value="">Assigné à</option>
       <option value="unassigned">Non assigné</option>
       <option value="assigned">{{ authStore.user.first_name }}</option>
     </select>
+    <select v-model="filters.assignedTo" class="filter-select" v-if="authStore.user.role === 'admin' ">
+      <option value="">Assigné à</option>
+      <option value="unassigned">Non assigné</option>
+      <option 
+        v-for="user in adminStore.usersList.filter(user => user.role === 'technicien')"
+        :key="user.id" 
+        :value="user.id">
+        {{ user.first_name }}
+      </option>
+    </select>
+
 
     <button @click="resetFilters" class="filter-reset">
       Réinitialiser

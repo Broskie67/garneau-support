@@ -34,7 +34,7 @@ const activeFilters = ref({
   assignedTo: ''
 })
 
-const closedFilter = ref({
+const closedFilters = ref({
   search: '',
   status: '',
   category: '',
@@ -58,7 +58,7 @@ const updateActiveFilters = (newFilters) => {
 }
 
 const updateCloseFilters = (newFilters) => {
-  closedFilter.value = newFilters
+  closedFilters.value = newFilters
 }
 
 const getActiveTicket = computed(() => {
@@ -84,36 +84,38 @@ const filteredActiveTickets = computed(() => {
 
     const matchAssignedTo =
       !activeFilters.value.assignedTo ||
-      activeFilters.value.assignedTo === 'assigned' && ticket.assigned_to === authStore.user.id ||
-      activeFilters.value.assignedTo === 'unassigned' && ticket.assigned_to === null
+      activeFilters.value.assignedTo === 'assigned' && ticket.assigned_to !== null||
+      activeFilters.value.assignedTo === 'unassigned' && ticket.assigned_to === null ||
+      ticket.assigned_to === activeFilters.value.assignedTo
 
     return matchSearch && matchStatus && matchCategory && matchAssignedTo
   })
 })
 
 const getClosedTicket = computed(() => {
-  return ticketStore.ticketsList.filter(ticket => ticket.assigned_to === authStore.user.id && ticket.status === 'Fermé' )
+  return ticketStore.ticketsList.filter(ticket => ticket.status === 'Fermé' )
 })
 
 const filteredClosedTickets = computed(() => {
   return getClosedTicket.value.filter(ticket => {
     const matchSearch = 
-      !closedFilter.value.search || 
-      ticket.title.toLowerCase().includes(closedFilter.value.search.toLowerCase()) ||
-      ticket.description.toLowerCase().includes(closedFilter.value.search.toLowerCase())
+      !closedFilters.value.search || 
+      ticket.title.toLowerCase().includes(closedFilters.value.search.toLowerCase()) ||
+      ticket.description.toLowerCase().includes(closedFilters.value.search.toLowerCase())
 
     const matchStatus =
-      !closedFilter.value.status ||
-      ticket.status === closedFilter.value.status
+      !closedFilters.value.status ||
+      ticket.status === closedFilters.value.status
 
     const matchCategory =
-      !closedFilter.value.category ||
-      ticket.category === closedFilter.value.category
+      !closedFilters.value.category ||
+      ticket.category === closedFilters.value.category
 
     const matchAssignedTo =
-      !closedFilter.value.assignedTo ||
-      closedFilter.value.assignedTo === 'assigned' && ticket.assigned_to === authStore.user.id ||
-      closedFilter.value.assignedTo === 'unassigned' && ticket.assigned_to === null
+      !closedFilters.value.assignedTo ||
+      closedFilters.value.assignedTo === 'assigned' && ticket.assigned_to !== null||
+      closedFilters.value.assignedTo === 'unassigned' && ticket.assigned_to === null ||
+      ticket.assigned_to === closedFilters.value.assignedTo
 
     return matchSearch && matchStatus && matchCategory && matchAssignedTo
   })
