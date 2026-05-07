@@ -219,17 +219,32 @@ function formatDate(dateString) {
           <span class="disable-status"> Vous ne pouvez modifier que les incidents qui vous sont assignés</span>
         </div>
       </div>
+      <div class="info-grid">
+        <div class="ticket-created-at">
+          <h6>Date de création</h6>
+            <span>{{ formatDate(ticket.created_at) }}</span>
+        </div>
+        <div class="ticket-assigned">
+          <h6>Assigné à</h6>
+          <span>{{ ticket.technicien ? ticket.technicien.first_name : 'Non assigné'  }}</span>
+        </div>
+        <div class="ticket-created-by">
+          <h6>Créé par</h6>
+          <span>{{ ticket.creator.first_name  }} {{ ticket.creator.last_name }}</span>
+        </div>
 
-      <div class="ticket-created-at">
-        <h6>Date de création</h6>
-          <span>{{ formatDate(ticket.created_at) }}</span>
-      </div>
-
-      <div class="ticket-assigned">
-        <h6>Assigné à</h6>
-        <span>{{ ticket.technicien ? ticket.technicien.first_name : 'Non assigné'  }}</span>
+        <div class="ticket-created-by">
+          <h6>Informations</h6>
+          <span>
+            Courriel: {{ ticket.creator.email }} <br>
+            Télephone: {{ ticket.creator.phone_number }}
+          </span>
+        </div>
       </div>
     </div>
+
+    
+      
     <div class="actions">
       <h6>Actions disponibles</h6>
       <div class="actions-buttons">
@@ -268,6 +283,10 @@ function formatDate(dateString) {
     gap: 36px 64px;
     padding: 10px 0;
     max-width: 720px;
+  }
+
+  .info-grid h6 {
+    margin: 0;
   }
 
   .info-grid > div {

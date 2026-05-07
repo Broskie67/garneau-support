@@ -103,6 +103,19 @@ function formatDate(dateString) {
           <span>{{ ticket.technicien ? ticket.technicien.first_name : 'Non assigné' }}</span>
         </div>
 
+        <div class="ticket-created-by">
+          <h6>Créé par</h6>
+          <span>{{ ticket.creator.first_name  }} {{ ticket.creator.last_name }}</span>
+        </div>
+
+        <div class="ticket-created-by">
+          <h6>Informations</h6>
+          <span>
+            Courriel: {{ ticket.creator.email }} <br>
+            Télephone: {{ ticket.creator.phone_number }}
+          </span>
+        </div>
+
       </div>        
     </div>
     <div class="actions">

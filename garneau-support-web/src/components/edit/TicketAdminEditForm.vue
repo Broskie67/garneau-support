@@ -206,12 +206,24 @@ onMounted(async () => {
         </div>
       </div>
       
-
       <div class="ticket-created-at">
         <h6>Date de création</h6>
           <span>{{ formatDate(ticket.created_at) }}</span>
       </div>
     </div>
+
+    <div class="ticket-created-by">
+          <h6>Créé par</h6>
+          <span>{{ ticket.creator.first_name  }} {{ ticket.creator.last_name }}</span>
+        </div>
+
+        <div class="ticket-created-by">
+          <h6>Informations</h6>
+          <span>
+            Courriel: {{ ticket.creator.email }} <br>
+            Télephone: {{ ticket.creator.phone_number }}
+          </span>
+        </div>
     <div class="actions">
       <h6>Actions disponibles</h6>
       <div class="actions-buttons">

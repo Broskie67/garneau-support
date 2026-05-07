@@ -156,7 +156,7 @@ exports.getTicket = async (req, res, next) => {
         {
           model: User,
           as: 'creator',
-          attributes: ['id', 'first_name', 'last_name']
+          attributes: ['id', 'first_name', 'last_name', 'email', 'phone_number']
         }
       ]
     })
