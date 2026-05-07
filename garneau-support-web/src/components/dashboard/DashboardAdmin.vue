@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
 import TicketTable from '@/components/tickets/TicketTable.vue'
 import FilterBar from '../commun/FilterBar.vue'
+import SlaTooltip from '../tickets/SlaTooltip.vue'
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()
@@ -142,7 +143,10 @@ onUnmounted(() =>{
   </p>
 
   <div class="table-active">
-    <h3>Incidents actifs</h3>
+    <div class="flex-title-tooltip">
+      <h3>Incidents actifs</h3>
+      <SlaTooltip/>
+    </div>
     <FilterBar
       :status-options="activeFilterOptions.status"
       @filters-changed="updateActiveFilters"/>
@@ -174,6 +178,15 @@ onUnmounted(() =>{
     border-radius: 18px;
     border: 1px solid rgba(148, 163, 184, 0.25);
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  }
+
+  h3 {
+    align-self: center;
+  }
+
+  .flex-title-tooltip {
+    display: flex;
+    justify-content: space-between;
   }
 
   .table-closed {
