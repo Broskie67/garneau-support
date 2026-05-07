@@ -59,11 +59,15 @@ watch(filters, () => {
 
     <select v-model="filters.category" class="filter-select">
       <option value="">Toutes les catégories</option>
-      <option value="hardware">Matériel</option>
-      <option value="software">Logiciel</option>
-      <option value="network">Réseau</option>
-      <option value="account">Compte</option>
-      <option value="other">Autre</option>
+      <option value="Matériel">Matériel</option>
+      <option value="Logiciel">Logiciel</option>
+      <option value="Réseau">Réseau</option>
+      <option value="Accès et comptes">Accès et comptes</option>
+      <option value=" Courriel"> Courriel</option>
+      <option value="Impression">Impression</option>
+      <option value="Sécurité">Sécurité</option>
+      <option value="Téléphonie">Téléphonie</option>
+      <option value="Autre">Autre</option>
     </select>
 
     <select v-model="filters.assignedTo" class="filter-select">

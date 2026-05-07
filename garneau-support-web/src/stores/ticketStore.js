@@ -62,6 +62,33 @@ export const useTicketStore = defineStore('ticketStore', () => {
   }
 
   /**
+   * Recherche la liste de tous les incident
+   *
+   * @param {string} token - Jeton utilisé pour authentifier la requête.
+   * @returns {Promise<void>} Met a jours la liste d'incidents.
+   * @throws {Error} Lance une erreur si la requête échoue.
+   */
+  async function getAllTickets(token) {
+    try {
+      const response = await fetch(`${ticketBaseUrl}/admin`, {
+        method: 'GET',
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      })
+      if(response.ok) {
+        const data = await response.json()
+        ticketsList.value = data.data
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.message)
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
    * Fetches a specific ticket by its ID.
    *
    * @param {number} ticketId - ID of the ticket to fetch.
@@ -174,6 +201,7 @@ export const useTicketStore = defineStore('ticketStore', () => {
     getClientTickets,
     getTechTickets,
     selfAssignTicket,
+    getAllTickets,
     getTicket,
     createTicket,
     updateTicket

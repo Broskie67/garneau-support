@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
-import UserCreationForm from '@/components/UserCreationForm.vue'
+import UserCreationForm from '@/components/creation/UserCreationForm.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()

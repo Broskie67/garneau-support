@@ -1,7 +1,8 @@
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
-import TicketClientActions from '@/components/TicketClientActions.vue';
-import TicketTechActions from '@/components/TicketTechActions.vue';
+import TicketClientActions from '@/components/actions/TicketClientActions.vue';
+import TicketTechActions from '@/components/actions/TicketTechActions.vue';
+import TicketAdminActions from '@/components/actions/TicketAdminActions.vue';
 
 const authStore = useAuthStore()
 </script>
@@ -13,6 +14,9 @@ const authStore = useAuthStore()
     </div>
     <div>
       <TicketTechActions v-if="authStore.user?.role === 'technicien'"/>
+    </div>
+    <div>
+      <TicketAdminActions v-if="authStore.user?.role === 'admin'"/>
     </div>
   </div>
 
