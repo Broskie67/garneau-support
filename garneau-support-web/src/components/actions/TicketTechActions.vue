@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import TicketDetailInfo from './TicketDetailInfo.vue';
 import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
 import { useRoute } from 'vue-router';
+import TicketDetailInfo from '../tickets/TicketDetailInfo.vue';
 
 const route = useRoute()
 const authStore = useAuthStore()

@@ -3,10 +3,12 @@ import {ref, computed} from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
 import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()
 const route = useRoute()
+const router = useRouter()
 
 const props = defineProps({
   ticket: {
@@ -76,7 +78,12 @@ const updateTicket = async () => {
       priority: form.value.priority,
       status: form.value.status
     })
-    successMessage.value = 'L\'indicent à été modifié avec succès'
+    router.push({
+      path: `/details/${route.params.id}`,
+      query: {
+        succes: 'L\'incident a été modifié avec succès'
+      }
+    })
   } catch (error) {
     errorMessage.value = error.message
   }
@@ -109,9 +116,6 @@ function formatDate(dateString) {
 
 <template>
   <form class="card-content" @submit.prevent="updateTicket">
-    <div v-if="successMessage" class="edit-success">
-      <span class="success">{{ successMessage }}</span>
-    </div>  
     <div v-if="errorMessage" class="edit-error">
       <span class="error">{{ errorMessage }}</span>
     </div>

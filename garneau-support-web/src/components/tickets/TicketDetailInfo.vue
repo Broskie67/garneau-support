@@ -1,81 +1,33 @@
 <script setup>
-import {ref, computed} from 'vue'
-import { useAuthStore } from '@/stores/authStore'
-import { useTicketStore } from '@/stores/ticketStore'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router';
 
-const authStore = useAuthStore()
-const ticketStore = useTicketStore()
-const route = useRoute()
-
-const props = defineProps({
+defineProps({
   ticket: {
     type: Object,
     required: true
+  },
+  isTechnician: {
+    type: Boolean,
+    default: false
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false
   }
 })
 
-const form = ref({
-  status: props.ticket.status
-})
+const route = useRoute()
 
-const errorMessage = ref('')
-const successMessage = ref('')
-
-const status = ref(props.ticket.status)
-const nextStatus = ref('')
-
-const matrix = {
-  'Résolu': [
-    { to: 'En cours', roles: ['client', 'admin'] },
-    { to: 'Fermé', roles: ['client', 'admin'] }
-  ]
-}
-
-const allowedTransition = computed(() =>{
-  const userRole = authStore.user?.role
-
-  return matrix[status.value]
-    ?.filter(transition => transition.roles.includes(userRole))
-    .map(transition => transition.to) || []
-})
-
-function changeStatus(newStatus) {
-  if(allowedTransition.value.includes(newStatus)) {
-    status.value = newStatus
-    form.value.status = newStatus
-    nextStatus.value = ''
-  } else {
-    console.error('Invalid Transition')
-  }
-}
-
-const updateTicket = async () => {
-  errorMessage.value = ''
-  successMessage.value = ''
-
-  if (!authStore.token) {
-    return
-  }
-
-  try {
-    await ticketStore.updateTicket(route.params.id, authStore.token, {
-      status: form.value.status
-    })
-    console.log(form.value)
-    successMessage.value = 'L\'indicent à été modifié avec succès'
-  } catch (error) {
-    errorMessage.value = error.message
-  }
-}
+const successMessage = ref(route.query.succes || '')
 
 const getStatusClass = (status) => ({
   'status-open': status === 'Ouvert',
   'status-assigned': status === 'Assigné',
   'status-in-progress': status === 'En cours',
-  'status-waiting': status === 'En attente',
+  'status-waiting': status === 'En Attente',
   'status-resolved': status === 'Résolu',
-  'status-closed': status === 'Fermé'
+  'status-closed': status === 'Fermé',
 })
 
 const getPriorityClass = (priority) => ({
@@ -99,34 +51,32 @@ function formatDate(dateString) {
     minute: '2-digit'
   })
 }
-
 </script>
 
 <template>
-  <form class="card-content" @submit.prevent="updateTicket">
-    <div v-if="successMessage" class="edit-success">
-      <span class="success">{{ successMessage }}</span>
-    </div>  
-    <div v-if="errorMessage" class="edit-error">
-      <span class="error">{{ errorMessage }}</span>
-    </div>
-    <div class="edit-card-header">
+  <div class="card-content">
+    <span v-if="successMessage" class="success-message">
+      {{ successMessage }}
+    </span>
+    <div class="detail-card-header">
+      
       <div class="flex-title-status">
+        
         <div class="ticket-number">
           <h3>Incident #{{ ticket.id }}</h3>
         </div>
         <div class="ticket-status">
-          <span class="badge-status" :class="getStatusClass(form.status)">
-            {{ form.status }}
+          <span class="badge-status" :class="getStatusClass(ticket.status)">
+            {{ ticket.status }}
           </span>
-        </div>
+        </div> 
       </div>
       <div>
         <h4>{{ ticket.title}}</h4>
       </div>
     </div>
+    <div class="detail-card-body">
 
-    <div class="edit-card-body">
       <div class="ticket-description">
         <h5>Description</h5>
         <span>{{ ticket.description }}</span>
@@ -143,61 +93,38 @@ function formatDate(dateString) {
            <span class="badge-priority" :class="getPriorityClass(ticket.priority)">{{ ticket.priority }}</span>
         </div>
 
-        <div class="ticket-status-edit" v-if="ticket.status === 'Résolu'">
-          <label for="status">Statut</label>
-          <select id="status" v-model="nextStatus" class="form-select" @change="changeStatus(nextStatus)">
-             <option value="" disabled>
-                {{ status }}
-              </option>
-            <option 
-              v-for="transition in allowedTransition" 
-              :key="transition" 
-              :value="transition">
-                {{ transition }}
-            </option>
-          </select>
+        <div class="ticket-created-at">
+          <h6>Date de création</h6>
+           <span>{{ formatDate(ticket.created_at) }}</span>
         </div>
-        <div v-else>
-          <label for="status">Statut</label>
-          <select id="status" v-model="nextStatus" class="form-select" @change="changeStatus(nextStatus)" disabled>
-             <option value="" disabled>
-                {{ status }}
-              </option>
-            <option 
-              v-for="transition in allowedTransition" 
-              :key="transition" 
-              :value="transition">
-                {{ transition }}
-            </option>
-          </select>
-          <span class="disable-status">Pour modifier cet incident, son statut doit d’abord être « Résolu ».</span>
+
+        <div class="ticket-assigned">
+          <h6>Assigné à</h6>
+          <span>{{ ticket.technicien ? ticket.technicien.first_name : 'Non assigné' }}</span>
         </div>
-      </div>
 
-      <div class="ticket-created-at">
-        <h6>Date de création</h6>
-          <span>{{ formatDate(ticket.created_at) }}</span>
-      </div>
-
-      <div class="ticket-assigned">
-        <h6>Assigné à</h6>
-        <span>{{ ticket.technicien ? ticket.technicien.first_name : 'Non assigné'  }}</span>
-      </div>
+      </div>        
     </div>
     <div class="actions">
       <h6>Actions disponibles</h6>
       <div class="actions-buttons">
-        <button type="submit" class="action-btn" v-if="ticket.status === 'Résolu'">
-          Enregistrer
+        <button
+          v-if="isTechnician && ticket.assigned_to === null"
+          class="action-btn assign-btn"
+          @click="$emit('self-assign-ticket', ticket.id)"> 
+            M'assigner
         </button>
-
-        <router-link :to="`/details/${ticket.id}`" class="action-btn">
-          Retour
+        <router-link 
+          :to="`/tickets/${ticket.id}/edit`" 
+          class="action-btn modify-btn" 
+          v-if="ticket.assigned_to !== null || !isTechnician || isAdmin">
+          modifier
         </router-link>
       </div> 
     </div>
-  </form>
+    <router-link to="/dashboard" class="back-btn">Retour à la liste</router-link>
 
+  </div>
 </template>
 
 <style scoped>
@@ -208,7 +135,7 @@ function formatDate(dateString) {
     gap: 2rem;
   }
 
-  .edit-card-body {
+  .detail-card-body {
     margin-top: 18px;
   }
 
@@ -230,12 +157,28 @@ function formatDate(dateString) {
     gap: 8px;
   }
 
-  .ticket-created-at{
-    margin-bottom: 28px;
+  .info-grid h6 {
+    margin: 0;
   }
 
-  .ticket-assigned {
-    margin-bottom: 28px;
+  .success-message{
+    display: block;
+    width: 100%;
+    background-color: var(--success-message-transparent);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--color-success);
+    margin-bottom: 24px;
+  }
+
+  .info-grid span {
+    display: inline-block;
+  }
+
+  .actions {
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(148, 163, 184, 0.25);
   }
 
   .actions h6 {
@@ -246,26 +189,6 @@ function formatDate(dateString) {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-  }
-
-  .edit-success{
-    background-color:var(--success-message-transparent);
-    padding:10px;
-    border-radius: 8px;
-    border: 1px solid var(--color-success);
-    margin-bottom: 20px;
-  }
-
-  .disable-status{
-    color: var(--color-danger)
-  }
-
-  .edit-error{
-    background-color: var(--error-message-transparent);
-    padding:10px;
-    border-radius: 8px;
-    border: 1px solid var(--color-danger);
-    margin-bottom: 20px;
   }
 
   .action-btn,
@@ -327,6 +250,7 @@ function formatDate(dateString) {
     font-weight: 600;
     white-space: nowrap;
   }
+
   .status-open {
     background-color: var(--status-open);
     color: black;
@@ -357,6 +281,11 @@ function formatDate(dateString) {
     color: black;
   }
 
+  .status-archived {
+    background-color: var(--status-archived);
+    color: black;
+  }
+
   .priority-low {
     background-color: var(--priority-low);
     color: black;
@@ -375,5 +304,21 @@ function formatDate(dateString) {
   .priority-critical {
     background-color: var(--priority-critical);
     color: black;
+  }
+
+  @media (max-width: 700px) {
+    .flex-title-status {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .back {
+      min-width: 100%;
+    }
   }
 </style>

@@ -2,9 +2,11 @@
 import { ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/authStore';
 import { useTicketStore } from '@/stores/ticketStore';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()
+const router = useRouter() 
 
 const title = ref('')
 const description = ref('')
@@ -57,8 +59,6 @@ const validatePriority= () => {
 
 const validateForm = () => {
   let isValid = true
-  successMessage.value = ''
-
 
   if(!validateTitle()) isValid = false
   
@@ -80,7 +80,13 @@ const createTicket = async () => {
       priority.value,
       authStore.token
     )
-    successMessage.value = 'un nouvel incident a été ajouté avec succès'
+    router.push({
+      path: '/dashboard',
+      query: {
+        success: 'Un nouvel incident a été créé avec succès'
+      }
+      
+    })
   } catch (error) {
     errorMessage.value = error.message
   }
@@ -114,10 +120,7 @@ watch(priority, (newPriority) => {
 
 <template>
   <div class="create-ticket-card">
-    <h2>Créer un incident</h2>
-    <div v-if="successMessage" class="creation-success">
-      <span class="success">{{ successMessage }}</span>
-    </div>  
+    <h2>Créer un incident</h2> 
     <div v-if="errorMessage" class="creation-error">
       <span class="error">{{ errorMessage }}</span>
     </div>

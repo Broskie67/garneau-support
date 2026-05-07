@@ -1,7 +1,8 @@
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
-import DashboardClient from '@/components/DashboardClient.vue'
-import DashboardTech from '@/components/DashboardTech.vue';
+import DashboardClient from '@/components/dashboard/DashboardClient.vue'
+import DashboardTech from '@/components/dashboard/DashboardTech.vue';
+import DashboardAdmin from '@/components/dashboard/DashboardAdmin.vue';
 
 const authStore = useAuthStore()
 </script>
@@ -11,12 +12,16 @@ const authStore = useAuthStore()
     <div>
       <DashboardClient v-if="authStore.user?.role === 'client'"/>
     </div>
-  </div>
-  <div class="dashboard-page" >
     <div>
       <DashboardTech v-if="authStore.user?.role === 'technicien'"/>
     </div>
+
+    <div>
+      <DashboardAdmin v-if="authStore.user?.role === 'admin'"/>
+    </div>
+
   </div>
+  
 
 </template>
 
