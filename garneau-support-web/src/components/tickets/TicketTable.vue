@@ -15,13 +15,13 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  newTicketIds: {
+  newAssignedTicketIds: {
     type: Array,
     default: () => []
   },
-  newAssignationMessage:{
-    type: String,
-    default: ''
+  newCreatedTicketIds: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -118,7 +118,13 @@ function formatDate(dateString) {
       </thead>
 
       <tbody>
-        <tr v-for="ticket in sortedTickets" :key="ticket.id" :class="{'new-ticket': newTicketIds.includes(ticket.id) }">
+        <tr 
+          v-for="ticket in sortedTickets" 
+          :key="ticket.id" 
+          :class="{
+            'new-ticket': newCreatedTicketIds.includes(ticket.id),
+            'new-assigned-ticket': newAssignedTicketIds.includes(ticket.id)
+          }">
           <td>{{ ticket.id }}</td>
           <td>{{ ticket.title }}</td>
           <td class="sla-cell"> 
@@ -145,7 +151,10 @@ function formatDate(dateString) {
           </td>
 
           <td class="action-btn">
-            <router-link class="details-btn" :to="`/details/${ticket.id}`">
+            <router-link 
+              class="details-btn" 
+              :to="`/details/${ticket.id}`"
+              @click="$emit('view-detail', ticket.id)">
               Voir détails
             </router-link>
 
@@ -156,8 +165,18 @@ function formatDate(dateString) {
             >
               M’assigner
             </button>
-            <span v-if="newTicketIds.includes(ticket.id) && newAssignationMessage" class="assigned-message">
-              {{ newAssignationMessage }}
+            <span 
+              v-if="newAssignedTicketIds.includes(ticket.id)" 
+              class="assigned-message"
+            >
+              Nouvelle assignation
+            </span>
+
+            <span   
+              v-if="newCreatedTicketIds.includes(ticket.id)" 
+              class="created-message"
+            >
+              Nouveau ticket
             </span>
           </td>
         </tr>
@@ -222,6 +241,16 @@ function formatDate(dateString) {
 
   .new-ticket {
     background-color: rgba(57, 247, 128, 0.18);
+    margin: 12px 0;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background-color: #dcfce7;
+    font-weight: 600;
+    border: 1px solid #86efac;
+  }
+
+  .new-assigned-ticket {
+    background-color: rgba(0, 14, 5, 0.18);
     margin: 12px 0;
     padding: 12px 16px;
     border-radius: 10px;
