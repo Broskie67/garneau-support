@@ -129,10 +129,26 @@ const router = createRouter({
       path:'/details/:id',
       name: 'ticketId',
       component: TicketDetailView,
-      beforeEnter: (to, from, next) => {
+      beforeEnter: async (to, from, next) => {
         const authStore = useAuthStore()
+        const ticketStore = useTicketStore()
         if(authStore.isConnected) {
-          next()
+          await ticketStore.getTicket(to.params.id, authStore.token)
+
+          if(authStore.user.role === 'admin'){
+            next()
+          }
+          if (
+            ticketStore.selectedTicket.assigned_to !== null &&
+            ticketStore.selectedTicket.assigned_to !== authStore.user.id
+            && ticketStore.selectedTicket.created_by !== authStore.user.id
+          ){
+            next('/forbidden')
+          }
+          else{
+            next()
+          }
+          
         } else {
           next('/signin')
         }
@@ -142,12 +158,26 @@ const router = createRouter({
       path: '/tickets/:id/edit',
       name: 'edit-ticket',
       component: TicketEditView,
-      beforeEnter: (to, from, next) => {
+      beforeEnter: async (to, from, next) => {
         const authStore = useAuthStore()
         const ticketStore = useTicketStore()
         if(authStore.isConnected) {
-  
-          next()
+          await ticketStore.getTicket(to.params.id, authStore.token)
+
+          if(authStore.user.role === 'admin'){
+            next()
+          }
+          if (
+            ticketStore.selectedTicket.assigned_to !== null &&
+            ticketStore.selectedTicket.assigned_to !== authStore.user.id
+            && ticketStore.selectedTicket.created_by !== authStore.user.id
+          ){
+            next('/forbidden')
+          }
+          else{
+            next()
+          }
+          
         } else {
           next('/signin')
         }
