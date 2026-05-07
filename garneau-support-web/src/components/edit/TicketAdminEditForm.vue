@@ -211,11 +211,6 @@ onMounted(async () => {
         <h6>Date de création</h6>
           <span>{{ formatDate(ticket.created_at) }}</span>
       </div>
-
-      <div class="ticket-assigned">
-        <h6>Assigné à</h6>
-        <span>{{ ticket.technicien ? ticket.technicien.first_name : 'Non assigné'  }}</span>
-      </div>
     </div>
     <div class="actions">
       <h6>Actions disponibles</h6>
@@ -232,7 +227,6 @@ onMounted(async () => {
   </form>
 
 </template>
-
 
 <style scoped>
   .flex-title-status {
