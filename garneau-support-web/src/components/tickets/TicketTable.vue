@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
+import TicketSlaIndicator from './TicketSlaIndicator.vue';
 
 const props = defineProps({
   tickets: {
@@ -84,8 +85,7 @@ function formatDate(dateString) {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    hour: '2-digit'
   })
 }
 </script>
@@ -97,6 +97,7 @@ function formatDate(dateString) {
         <tr>
           <th>Id</th>
           <th>Titre</th>
+          <th>SLA</th>
           <th>Catégorie</th>
           <th>Status</th>
           <th @click="sortBy('priority')">
@@ -120,6 +121,9 @@ function formatDate(dateString) {
         <tr v-for="ticket in sortedTickets" :key="ticket.id" :class="{'new-ticket': newTicketIds.includes(ticket.id) }">
           <td>{{ ticket.id }}</td>
           <td>{{ ticket.title }}</td>
+          <td class="sla-cell"> 
+            <ticket-sla-indicator :ticket="ticket"/>
+          </td>
           <td>{{ ticket.category ? ticket.category : 'Aucune catégorie'}}</td>
 
           <td>
