@@ -12,12 +12,28 @@ const ticketStore = useTicketStore()
 const errorMessage = ref('')
 const successMessage = ref('')
 
-const newTicketIds = ref([])
+const newAssignedTicketIds = ref(
+  JSON.parse(localStorage.getItem('newAssignedTicketIds')) || []
+)
+
+const newCreatedTicketIds = ref(
+  JSON.parse(localStorage.getItem('newCreatedTicketIds')) || []
+)
 const newAssignationMessage = ref('')
 let knownTicketIdsList = []
 let knownTicketsList = []
 let isFirstLoad = true
 let refresh = null
+
+const saveNotifications = () => {
+  localStorage.setItem('newAssignedTicketIds', JSON.stringify(newAssignedTicketIds.value))
+  localStorage.setItem('newCreatedTicketIds', JSON.stringify(newCreatedTicketIds.value))
+}
+
+const removeNewAssignationNotification = (ticketId) => {
+  newAssignedTicketIds.value = newAssignedTicketIds.value.filter(id => id !== ticketId)
+  saveNotifications()
+}
 
 const activeFilterOptions = {
   status: [
@@ -86,13 +102,23 @@ const refreshTicket = async () => {
   })
 
   if (newAssignedTicket.length > 0) {
-    newTicketIds.value = newAssignedTicket.map(ticket => ticket.id)
+    newAssignedTicket.forEach(ticket => {
+      if(!newAssignedTicketIds.value.includes(ticket.id)){
+        newAssignedTicketIds.value.push(ticket.id)
+      }
+    })
     newAssignationMessage.value = 'Nouvelle assignation'
+    saveNotifications()
   }
   
   if (newTicketsCreated.length > 0) {
-    newTicketIds.value = newTicketsCreated.map(ticket => ticket.id)
-
+    newTicketsCreated.forEach(ticket => {
+      if(!newCreatedTicketIds.value.includes(ticket.id)){
+        newCreatedTicketIds.value.push(ticket.id)
+      }
+    })
+    newAssignationMessage.value = 'Nouvelle assignation'
+    saveNotifications()
   }
 
   knownTicketIdsList = currentIds
@@ -100,17 +126,16 @@ const refreshTicket = async () => {
 }
 
 const selfAssignTicket = async (ticketId) => {
-   if (!authStore.token) {
+  if (!authStore.token) {
     return
   }
 
   try {
     await ticketStore.selfAssignTicket(ticketId, authStore.token)
-    successMessage.value = 'l\'incident vous a été attribué avec succès'
-    setTimeout(() => {
-      successMessage.value = ''
-    }, 4000)
 
+    newCreatedTicketIds.value = newCreatedTicketIds.value.filter(id => id !== ticketId)
+    saveNotifications()
+    successMessage.value = 'l\'incident vous a été attribué avec succès'
   } catch (error) {
     errorMessage.value = error.message
   }
@@ -213,6 +238,9 @@ onUnmounted(() => {
       <h3>Incidents actifs</h3>
       <SlaTooltip/>
     </div>
+    <p v-if="newAssignationMessage" class="success-message">
+      {{ newAssignationMessage }}
+    </p>
     
     <FilterBar
       :status-options="activeFilterOptions.status"
@@ -220,9 +248,11 @@ onUnmounted(() => {
     <TicketTable 
       :tickets="filteredAssignedTickets" 
       :isTechnician="true"
-      :new-assignation-message = "newAssignationMessage"
-      :new-ticket-ids="newTicketIds"
-      @self-assign-ticket="selfAssignTicket" />
+      :new-assigned-ticket-ids="newAssignedTicketIds"
+      :new-created-ticket-ids="newCreatedTicketIds"
+      @self-assign-ticket="selfAssignTicket"
+      @view-detail="removeNewAssignationNotification" 
+    />
   </div>
    
   
@@ -243,7 +273,7 @@ onUnmounted(() => {
   .table-active {
     margin-bottom: 3rem;
     background: #ffffff;
-    width: 1200px;
+    width: 1300px;
     padding: 32px 38px;
     border-radius: 18px;
     border: 1px solid rgba(148, 163, 184, 0.25);
