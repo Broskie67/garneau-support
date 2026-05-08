@@ -23,7 +23,7 @@ exports.getTicketComments = async (req, res, next) => {
     return res.status(200).json(formatValidResponse(
       200,
       'La liste des incidents a été récupéré avec succès',
-      allTickets,
+      allTicketComments,
       req.originalUrl
     )) 
   } catch (error) {

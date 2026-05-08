@@ -39,7 +39,7 @@ const comment = sequelize.define(
 
 comment.belongsTo(User, {
   foreignKey: 'created_by',
-  as: 'creator'
+  as: 'author'
 })
 
 comment.belongsTo(Ticket, {
