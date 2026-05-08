@@ -140,7 +140,7 @@ function formatDate(dateString) {
         <h5>Description</h5>
         <span>{{ ticket.description }}</span>
       </div>  
-      <div class="info-grid" v-if="ticket.assigned_to === authStore.user.id">
+      <div class="info-grid" v-if="ticket.assigned_to === authStore.user.id && ticket.status !== 'Fermé'" >
         <div class="ticket-category">
           <label for="category">Catégorie</label>
           <select id="category" v-model="form.category" class="form-select">
@@ -216,7 +216,19 @@ function formatDate(dateString) {
                 {{ transition }}
             </option>
           </select>
-          <span class="disable-status"> Vous ne pouvez modifier que les incidents qui vous sont assignés</span>
+          <span 
+            class="disable-status" 
+            v-if="ticket.assigned_to !== authStore.user.id"
+          >
+            Vous ne pouvez modifier que les incidents qui vous sont assignés
+          </span>
+          <span 
+            class="disable-status" 
+            v-if="ticket.status === 'Fermé'"
+          >
+            Vous ne pouvez modifier un incident avec le status « Fermé »
+          </span>
+
         </div>
       </div>
       <div class="info-grid">
