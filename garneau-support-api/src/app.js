@@ -7,16 +7,18 @@ const authRoute = require('./routes/authRoute')
 const profileRoute = require('./routes/profileRoute')
 const adminRoute = require('./routes/adminRoute')
 const ticketRoute = require('./routes/ticketRoute')
+const commentRoute = require('./routes/commentRoute')
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/auth", authRoute);
-app.use("/profile", profileRoute);
-app.use("/admin", adminRoute);
-app.use("/tickets", ticketRoute);
+app.use(authRoute);
+app.use(profileRoute);
+app.use(adminRoute);
+app.use(ticketRoute);
+app.use(commentRoute);
 
 (async () => {
   try {

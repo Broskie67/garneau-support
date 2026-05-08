@@ -4,8 +4,8 @@ const {signinValidation, signupValidation} = require('../middleware/formValidati
 const express = require('express');
 const router = express.Router();
 
-router.post('/signup', signupValidation, authController.signup);
-router.post('/signin', signinValidation, authController.signin);
-router.post('/check-email', authController.checkEmail)
+router.post('/auth/signup', signupValidation, authController.signup);
+router.post('/auth/signin', signinValidation, authController.signin);
+router.post('/auth/check-email', authController.checkEmail)
 
 module.exports = router;
