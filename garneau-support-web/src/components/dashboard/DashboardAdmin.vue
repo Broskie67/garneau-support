@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
 import TicketTable from '@/components/tickets/TicketTable.vue'
 import FilterBar from '../commun/FilterBar.vue'
-import SlaTooltip from '../tickets/SlaTooltip.vue'
+import SlaTooltip from '../commun/SlaTooltip.vue'
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()
