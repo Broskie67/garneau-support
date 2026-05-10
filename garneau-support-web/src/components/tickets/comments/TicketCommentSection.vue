@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useCommentStore } from '@/stores/commentStore';
 import { useRoute } from 'vue-router'
 import TicketCommentList from './TicketCommentList.vue';
+import TicketCommentForm from './TicketCommentForm.vue';
 
 
 const authStore = useAuthStore()
@@ -36,6 +37,7 @@ onMounted(() => {
     <h3>Commentaires</h3>
     <div class="comment-card">
       <h4>Échanges sur l'incident</h4>
+      <TicketCommentForm /> 
       <TicketCommentList />
     </div>
     

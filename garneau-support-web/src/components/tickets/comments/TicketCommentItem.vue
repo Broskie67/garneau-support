@@ -48,11 +48,10 @@ function formatDate(dateString) {
 <style scoped>
 
 .comment{  
-  background: #dcdbdb;
+  background: #f1f5f9;
   padding: 10px;
   border-radius: 18px;
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  border: none;
   margin-bottom: 10px;
 }
 .flex-author-type {
