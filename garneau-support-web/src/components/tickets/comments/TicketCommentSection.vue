@@ -37,7 +37,7 @@ onMounted(() => {
     <h3>Commentaires</h3>
     <div class="comment-card">
       <h4>Échanges sur l'incident</h4>
-      <TicketCommentForm /> 
+      <TicketCommentForm @comment-created="getTicketComments" /> 
       <TicketCommentList />
     </div>
     

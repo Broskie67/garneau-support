@@ -6,6 +6,7 @@ defineProps({
   }
 })
 
+
 /**
  * Function to convert the time and date 
  * @param dateString the date to convert
@@ -38,6 +39,15 @@ function formatDate(dateString) {
     <p>
       {{ comment.content }}
     </p>
+    
+    <div v-if="comment.attachment" class="attachment">
+      <a
+        v-if="comment.attachment"
+        :href="`http://localhost:3000/uploads/${comment.attachment}`"
+        target="_blank">
+        Voir la pièce jointe
+      </a>
+    </div>
 
     <small>
       {{ formatDate(comment.createdAt) }}

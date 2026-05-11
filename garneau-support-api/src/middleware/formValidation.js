@@ -306,7 +306,7 @@ function profileValidation(req, res, next) {
       );
   }
 
-  const phoneNumberRegex = /^\d{10}$/;
+  const phoneNumberRegex = /^(\+1\s?)?(\(?[2-9][0-9]{2}\)?[\s.-]?)?[2-9][0-9]{2}[\s.-]?[0-9]{4}$/;
     if (!phoneNumberRegex.test(trimmedPhoneNumber)) {
       return res
         .status(422)
@@ -374,7 +374,7 @@ function updatePasswordValidation(req, res, next) {
 }
 
 function validateComment(req, res, next) {
-  const { content, type } = req.body
+  const { content, type } = req.body || {}
 
   const trimmedContent = content ? content.trim() : ''
 

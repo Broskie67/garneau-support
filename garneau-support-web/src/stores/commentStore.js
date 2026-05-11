@@ -26,9 +26,42 @@ export const useCommentStore = defineStore('commentStore',  () => {
     }
   }
 
+  async function createComment(ticketId, content, attachment, type, token) {
+    const formData = new FormData()
+
+    formData.append('content', content)
+    formData.append('type', type)
+
+    if(attachment) {
+      formData.append('attachment', attachment)
+    }
+
+    try {
+      const response = await fetch(`${commentBaseUrl}/${ticketId}/comments/create`, {
+        method: 'POST',
+        headers: {
+          "Authorization": "Bearer " + token
+        },
+        body: formData
+      })
+      const data = await response.json()
+      console.log('attachment envoyé:', attachment)
+
+      if(response.ok){
+        return data
+      } else {
+        throw new Error(data.message)
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
   return {
     commentList,
-    getTicketComments
+    getTicketComments,
+    createComment
   }
+}, {
+  persist: true
 })
-
