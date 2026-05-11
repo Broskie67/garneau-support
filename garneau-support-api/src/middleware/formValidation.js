@@ -374,11 +374,11 @@ function updatePasswordValidation(req, res, next) {
 }
 
 function validateComment(req, res, next) {
-  const { content } = req.body
+  const { content, type } = req.body
 
   const trimmedContent = content ? content.trim() : ''
 
-  if(!content){
+  if(!trimmedContent){
     return res
       .status(422)
       .json(
@@ -391,7 +391,7 @@ function validateComment(req, res, next) {
       );
   }
 
-  if(content.length < 3) {
+  if(trimmedContent.length < 3) {
     return res
       .status(422)
       .json(
@@ -404,8 +404,19 @@ function validateComment(req, res, next) {
       );
   }
 
+  if(type !== 'Public' && type !== 'Interne') {
+    return res
+      .status(422)
+      .json(
+        formatErrorResponse(
+          422,
+          "Unprocessable Entity",
+          "Un commentaire peut être interne ou public seulement", 
+          req.originalUrl
+        )
+      );
+  }
   next()
-  
 }
 
 

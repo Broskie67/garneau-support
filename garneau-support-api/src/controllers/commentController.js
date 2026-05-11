@@ -35,14 +35,18 @@ exports.getTicketComments = async (req, res, next) => {
 }
 
 exports.createComment = async (req, res, next) => {
-  const { content, attachment, type } = req.body
+  const { content, type } = req.body
   const ticketId = req.params.id
   try {
     const userId = req.user.id
+    const userRole = req.user.role
 
+    const commentType = userRole === 'client' ? 'Public' : req.body.type
+    
     const newComment = await Comment.create({
       content: content,
-      attachment: attachment,
+      attachment: req.file ? req.file.filename : null,
+      type: commentType,
       created_by: userId,
       ticket_id: ticketId
     })
