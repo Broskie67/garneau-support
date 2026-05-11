@@ -373,10 +373,47 @@ function updatePasswordValidation(req, res, next) {
     next()
 }
 
+function validateComment(req, res, next) {
+  const { content } = req.body
+
+  const trimmedContent = content ? content.trim() : ''
+
+  if(!content){
+    return res
+      .status(422)
+      .json(
+        formatErrorResponse(
+          422,
+          "Unprocessable Entity",
+          "Le contenu est requis", 
+          req.originalUrl
+        )
+      );
+  }
+
+  if(content.length < 3) {
+    return res
+      .status(422)
+      .json(
+        formatErrorResponse(
+          422,
+          "Unprocessable Entity",
+          "Le commmentaire doit contenir au moins 3 caractères", 
+          req.originalUrl
+        )
+      );
+  }
+
+  next()
+  
+}
+
+
 module.exports = {
   signinValidation,
   signupValidation,
   ticketValidation,
   profileValidation,
-  updatePasswordValidation
+  updatePasswordValidation,
+  validateComment
 }

@@ -7,7 +7,7 @@ const Comment = require('../models/comment')
 exports.getTicketComments = async (req, res, next) => {
   const ticketId = req.params.id
   try {
-    const userId = req.user.Id
+    const userId = req.user.id
 
     const allTicketComments = await Comment.findAll({
       where: { ticket_id: ticketId },
@@ -26,6 +26,33 @@ exports.getTicketComments = async (req, res, next) => {
       allTicketComments,
       req.originalUrl
     )) 
+  } catch (error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+exports.createComment = async (req, res, next) => {
+  const { content, attachment, type } = req.body
+  const ticketId = req.params.id
+  try {
+    const userId = req.user.id
+
+    const newComment = await Comment.create({
+      content: content,
+      attachment: attachment,
+      created_by: userId,
+      ticket_id: ticketId
+    })
+
+    return res.status(201).json(formatValidResponse(
+      201,
+      'Commentaire envoyé avec succès',
+      newComment,
+      req.originalUrl
+    ))
   } catch (error) {
     if(!error.statusCode) {
       error.statusCode = 500;
