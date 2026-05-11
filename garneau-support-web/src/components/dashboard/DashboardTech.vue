@@ -19,7 +19,12 @@ const newAssignedTicketIds = ref(
 const newCreatedTicketIds = ref(
   JSON.parse(localStorage.getItem('newCreatedTicketIds')) || []
 )
+
+const newCommentTicketIds = ref(
+  JSON.parse(localStorage.getItem('newCommentTicketIds')) || []
+)
 const newAssignationMessage = ref('')
+const newCommentsMessage = ref('')
 let knownTicketIdsList = []
 let knownTicketsList = []
 let isFirstLoad = true
@@ -28,10 +33,16 @@ let refresh = null
 const saveNotifications = () => {
   localStorage.setItem('newAssignedTicketIds', JSON.stringify(newAssignedTicketIds.value))
   localStorage.setItem('newCreatedTicketIds', JSON.stringify(newCreatedTicketIds.value))
+  localStorage.setItem('newCommentTicketIds', JSON.stringify(newCommentTicketIds.value))
 }
 
 const removeNewAssignationNotification = (ticketId) => {
   newAssignedTicketIds.value = newAssignedTicketIds.value.filter(id => id !== ticketId)
+  saveNotifications()
+}
+
+const removeNewCommentTicketNotification = (ticketId) => {
+  newCommentTicketIds.value = newCommentTicketIds.value.filter(id => id !== ticketId)
   saveNotifications()
 }
 
@@ -101,6 +112,16 @@ const refreshTicket = async () => {
       currentTicket.assigned_to === authStore.user.id
   })
 
+  const newCommentTickets = currentTickets.filter(currentTicket => {
+    const oldTicket = knownTicketsList.find(oldTicket =>
+      oldTicket.id === currentTicket.id
+    )
+
+    return oldTicket &&
+      currentTicket.assigned_to === authStore.user.id &&
+      oldTicket.comments_count !== currentTicket.comments_count
+  })
+
   if (newAssignedTicket.length > 0) {
     newAssignedTicket.forEach(ticket => {
       if(!newAssignedTicketIds.value.includes(ticket.id)){
@@ -118,6 +139,16 @@ const refreshTicket = async () => {
       }
     })
     newAssignationMessage.value = 'Nouvelle assignation'
+    saveNotifications()
+  }
+
+  if (newCommentTickets.length > 0) {
+    newCommentTickets.forEach(ticket => {
+      if(!newCommentTicketIds.value.includes(ticket.id)) {
+        newCommentTicketIds.value.push(ticket.id)
+      }
+    })
+    newCommentsMessage.value = 'Nouveau(x) commentaire(s)'
     saveNotifications()
   }
 
@@ -208,6 +239,11 @@ const filteredAssignedClosedTicket = computed(() => {
   })
 })
 
+const handleNotification = (ticketId) => {
+  removeNewAssignationNotification(ticketId)
+  removeNewCommentTicketNotification(ticketId)
+}
+
 onMounted(async() => {
   refreshTicket()
 
@@ -250,12 +286,12 @@ onUnmounted(() => {
       :isTechnician="true"
       :new-assigned-ticket-ids="newAssignedTicketIds"
       :new-created-ticket-ids="newCreatedTicketIds"
+      :new-comment-ticket-ids="newCommentTicketIds"
       @self-assign-ticket="selfAssignTicket"
-      @view-detail="removeNewAssignationNotification" 
+      @view-detail="handleNotification" 
     />
   </div>
    
-  
   <div class="table-closed" >
     <h3>Incidents fermés</h3>
 

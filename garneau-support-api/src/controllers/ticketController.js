@@ -2,6 +2,7 @@ const { formatErrorResponse, formatValidResponse } = require('../utils/formatErr
 const { Op } = require('sequelize')
 const User = require('../models/user');
 const Ticket = require('../models/ticket')
+const Comment = require('../models/comment')
 
 /**
  * Recherche la liste des incidents créé par le client
@@ -79,10 +80,27 @@ exports.getTechnicianTickets = async (req, res, next) => {
       ]
     })
 
+    const TechTicketWithCommentsCount = await Promise.all(
+      techTickets.map(async ticket => {
+        const plainTicket = ticket.get({ plain: true })
+
+        const commentsCount = await Comment.count({
+          where: {
+            ticket_id: ticket.id
+          }
+        })
+
+        return {
+          ...plainTicket,
+          comments_count: commentsCount
+        }
+      })
+    )
+
     return res.status(200).json(formatValidResponse(
       200,
       'La liste des incidents a été récupéré avec succès',
-      techTickets,
+      TechTicketWithCommentsCount,
       req.originalUrl
     ))
   } catch (error) {

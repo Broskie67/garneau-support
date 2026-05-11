@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useAuthStore } from '@/stores/authStore';
 import { useCommentStore } from '@/stores/commentStore';
+import { useTicketStore } from '@/stores/ticketStore';
 import { useRoute } from 'vue-router'
 import TicketCommentList from './TicketCommentList.vue';
 import TicketCommentForm from './TicketCommentForm.vue';
@@ -9,6 +10,7 @@ import TicketCommentForm from './TicketCommentForm.vue';
 
 const authStore = useAuthStore()
 const commentStore = useCommentStore()
+const ticketStore = useTicketStore()
 
 const route = useRoute()
 
@@ -27,6 +29,7 @@ const getTicketComments = async () => {
 }
 
 onMounted(() => {
+
   getTicketComments()
 })
 
@@ -37,7 +40,10 @@ onMounted(() => {
     <h3>Commentaires</h3>
     <div class="comment-card">
       <h4>Échanges sur l'incident</h4>
-      <TicketCommentForm @comment-created="getTicketComments" /> 
+
+      <TicketCommentForm 
+        v-if="ticketStore.selectedTicket?.status !== 'Fermé'" 
+        @comment-created="getTicketComments" /> 
       <TicketCommentList />
     </div>
     

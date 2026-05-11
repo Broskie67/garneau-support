@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
 import TicketSlaIndicator from './TicketSlaIndicator.vue';
 
 const props = defineProps({
@@ -22,8 +23,14 @@ const props = defineProps({
   newCreatedTicketIds: {
     type: Array,
     default: () => []
+  },
+  newCommentTicketIds: {
+    type: Array,
+    default: () => []
   }
 })
+
+const authStore = useAuthStore()
 
 const sortColumn = ref('priority')
 const sortDirection = ref('desc')
@@ -178,6 +185,13 @@ function formatDate(dateString) {
             >
               Nouveau ticket
             </span>
+            <span
+              v-if="newCommentTicketIds.includes(ticket.id) && ticket.assigned_to === authStore.user.id"
+              class="new-comments"
+            >
+              Nouveau(x) <br>
+              commentaire(s)
+            </span>
           </td>
         </tr>
       </tbody>
@@ -186,7 +200,7 @@ function formatDate(dateString) {
 </template>
 
 <style scoped>
-.table-wrapper {
+  .table-wrapper {
     width: 100%;
     overflow-x: auto;
   }
@@ -268,6 +282,13 @@ function formatDate(dateString) {
     font-weight: 600;
     white-space: nowrap;
   }
+
+  .new-comments{
+    font-weight: 600;
+    color: #0f5132;
+  }
+
+  
 
   .status-open{
     background-color: var(--status-open);
