@@ -102,7 +102,8 @@ const createComment = async () => {
     </div>
     <div class="field">
       <input 
-        type="file" 
+        type="file"
+        class="upload-input" 
         accept=".jpg,.jpeg,.png,.webp,.pdf"
         @change="handleFileSelection"
       />
@@ -162,6 +163,31 @@ const createComment = async () => {
     background-color: #16a34a;
   }
 
+  .upload-input {
+    width: 100%;
+    font-size: 0.95rem;
+    color: #374151;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+
+  .upload-input::file-selector-button {
+    background-color: #f3f4f6;
+    color: #111827;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 9px 14px;
+    margin-right: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .upload-input::file-selector-button:hover {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+  }
+  
   .form-actions {
     display: flex;
     justify-content: flex-end;
