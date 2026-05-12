@@ -65,7 +65,7 @@ const user = sequelize.define(
       allowNull: false,
       validate: {
         is: {
-          args: /^(\+1\s?)?(\(?[2-9][0-9]{2}\)?[\s.-]?)?[2-9][0-9]{2}[\s.-]?[0-9]{4}$/,
+          args: /^(\+1[\s.-]?)?\(?[2-9][0-9]{2}\)?[\s.-]?[2-9][0-9]{2}[\s.-]?[0-9]{4}$/,
           msg: 'Le numéro de téléphone doit respecter le format canadien'
         }
       }
