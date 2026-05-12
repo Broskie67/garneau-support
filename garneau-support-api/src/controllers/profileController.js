@@ -2,6 +2,14 @@ const { formatErrorResponse, formatValidResponse } = require('../utils/formatErr
 const bcrypt = require('bcrypt')
 const User = require('../models/user');
 
+/** Récupère le profil de l'utilisateur connecté
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @returns {Promise<Object>} La réponse JSON du profil de l'utilisateur connecté.
+ * Retourne une erreur dans le cas d'un échec
+ */
 exports.getProfile = async (req, res, next) => {
   try{
     const userId = req.user.id
@@ -44,6 +52,16 @@ exports.getProfile = async (req, res, next) => {
   }
 }
 
+/**
+ * Met à jours les informations du profil de l'utilisateur
+ * connecté
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @returns {Promise<Object>} La réponse JSON du profil de l'utilisateur connecté.
+ * Retourne une erreur dans le cas d'un échec
+ */
 exports.updateProfile = async (req, res, next) => {
   try{
     const userId = req.user.id
@@ -93,6 +111,16 @@ exports.updateProfile = async (req, res, next) => {
   }
 }
 
+/**
+ * Met à jour le mot de passe de l'utilisateur connecté 
+ * en verifiant si l'ancien mot de passe est bien le mot
+ * de passe de l'utilisateur 
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @returns {Promise<Object>} La réponse JSON du succès de la requête
+ */
 exports.updatePassword = async (req, res, next) => {
   try {
     const userId = req.user.id

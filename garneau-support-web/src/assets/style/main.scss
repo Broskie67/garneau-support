@@ -39,11 +39,26 @@
   --status-closed: #475569;
   --status-archived: #94A3B8;
 
+  /* Texte des status */
+  --status-open-text: white;
+  --status-assigned-text: white;
+  --status-in-progress-text: #083344;
+  --status-waiting-text: #451a03;
+  --status-resolved-text: #052e16;
+  -status-closed-text: white;
+  --status-archived-text: #0f172a;
+
   /* Priorités */
   --priority-low: #22C55E;
   --priority-medium: #EAB308;
   --priority-high: #F97316;
   --priority-critical: #DC2626;
+
+   /* texte des priorités */
+  --priority-low-text: #052e16;
+  --priority-medium-text: #422006;
+  --priority-high-text: #431407;
+  --priority-critical-text: white;
 
   /* États généraux */
   --color-success: #10B981;

@@ -22,7 +22,6 @@ const logout = () => {
       </h1>
       <nav class="app-header-nav" v-if="authStore.isConnected">
         <ul class="app-header-menu" v-if="authStore.user.role === 'client'">
-          <li><router-link to="/">Accueil</router-link></li>
           <li><router-link to="/dashboard">Tableau de bord</router-link></li>
           <li><router-link to="/tickets/create">Créer un ticket</router-link></li>
           <li>
@@ -34,7 +33,6 @@ const logout = () => {
           <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
         <ul class="app-header-menu" v-if="authStore.user.role === 'technicien'">
-          <li><router-link to="/">Accueil</router-link></li>
           <li><router-link to="/dashboard">Tableau de bord</router-link></li>
           <li><router-link to="/profile" class="profile-link">
               <span class="profile-greeting">Bonjour {{ authStore.user.first_name }}!</span>
@@ -44,7 +42,6 @@ const logout = () => {
           <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
         <ul class="app-header-menu" v-if="authStore.user.role === 'admin'">
-          <li><router-link to="/">Accueil</router-link></li>
           <li><router-link to="/dashboard">Tableau de bord</router-link></li>
           <li><router-link to="/admin/users">Liste des utilisateurs</router-link></li>
           <li><router-link to="/admin/technicians/create">Créer un technicien</router-link></li>
@@ -54,7 +51,6 @@ const logout = () => {
       </nav>
       <nav class="app-header-nav" v-else>
         <ul class="app-header-menu">
-          <li><router-link to="/">Accueil</router-link></li>
           <li><router-link to="/signin">Se connecter</router-link></li>
           <li><router-link to="/signup">S'inscrire</router-link></li>
         </ul>

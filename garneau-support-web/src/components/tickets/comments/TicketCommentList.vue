@@ -7,11 +7,14 @@ const commentStore = useCommentStore()
 const authStore = useAuthStore()
 
 const filterComment = () => {
+  let comments = commentStore.commentList
   if (authStore.user?.role === 'client') {
-    return commentStore.commentList.filter(comment => comment.type === 'Public')
+    comments = commentStore.commentList.filter(comment => comment.type === 'Public')
   }
 
-  return commentStore.commentList
+  return [...comments].sort((a,b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt)
+  })
 }
 </script>
 

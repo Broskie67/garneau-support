@@ -1,5 +1,13 @@
 const { formatErrorResponse } = require('../utils/formatErrorResponse');
 
+/**
+ * Vérifie que l'utilisateur connecté est un administrateur.
+ *
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 401 si l'utilisateur n'est pas authentifié ou 403 s'il n'est pas administrateur
+ */
 function isAdmin(req, res, next) {
   if(!req.user) {
     return res
@@ -28,6 +36,14 @@ function isAdmin(req, res, next) {
   next()
 } 
 
+/**
+ * Vérifie que l'utilisateur connecté est un technicien.
+ *
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 401 si l'utilisateur n'est pas authentifié ou 403 s'il n'est pas technicien
+ */
 function isTechnician(req, res, next) {
   if(!req.user) {
     return res
@@ -56,6 +72,14 @@ function isTechnician(req, res, next) {
   next()
 }
 
+/**
+ * Vérifie que l'utilisateur connecté est un client.
+ *
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 401 si l'utilisateur n'est pas authentifié ou 403 s'il n'est pas client
+ */
 function isClient(req, res, next) {
   if(!req.user) {
     return res

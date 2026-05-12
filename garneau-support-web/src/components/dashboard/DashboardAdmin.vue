@@ -5,6 +5,7 @@ import { useTicketStore } from '@/stores/ticketStore'
 import TicketTable from '@/components/tickets/TicketTable.vue'
 import FilterBar from '../commun/FilterBar.vue'
 import SlaTooltip from '../commun/SlaTooltip.vue'
+import DashboardStats from './DashboardStats.vue'
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()
@@ -132,7 +133,14 @@ onUnmounted(() =>{
 </script>
 
 <template>
-  <h2>Tableau de bord</h2>
+  <h2 class="page-title">Tableau de bord</h2>
+
+  <section class="dashboard-section">
+    <DashboardStats 
+      :tickets="ticketStore.ticketsList"
+      is-admin="true" 
+    />
+  </section>
 
   <p class="error-message">
     {{ errorMessage }}
@@ -142,9 +150,9 @@ onUnmounted(() =>{
     {{ successMessage }}
   </p>
 
-  <div class="table-active">
+  <section class="dashboard-section table-active">
     <div class="flex-title-tooltip">
-      <h3>Incidents actifs</h3>
+      <h3 class="section-title">Incidents actifs</h3>
       <SlaTooltip/>
     </div>
     <FilterBar
@@ -153,10 +161,9 @@ onUnmounted(() =>{
     <TicketTable 
       :tickets="filteredActiveTickets" 
       :isAdmin="true"/>
-  </div>
+  </section>
    
-  
-  <div class="table-closed" >
+  <section class="dashboard-section table-closed" >
     <h3>Incidents fermés</h3>
 
     <FilterBar 
@@ -165,7 +172,7 @@ onUnmounted(() =>{
     
     <TicketTable :tickets="filteredClosedTickets" 
       :isAdmin="true"/>
-  </div>
+ </section>
 
 </template>
 
@@ -180,7 +187,18 @@ onUnmounted(() =>{
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
   }
 
-  h3 {
+ .page-title {
+    margin: 0 0 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .section-title {
+    margin: 0 0 1rem;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #111827;
     align-self: center;
   }
 

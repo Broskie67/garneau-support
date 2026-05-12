@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { getAssignementSlaClass, getResolutionSlaClass } from '@/utils/slaUtils'
 const props = defineProps({
   ticket: {
     type: Object,
@@ -10,70 +11,12 @@ const props = defineProps({
 const currentTime = ref(new Date())
 let slaInterval = null
 
-const getHoursSinceCreation = (createdAt) => {
-  return (currentTime.value - new Date(createdAt)) / (1000 * 60 * 60)
-}
-
-const getAssignmentDelay = (priority) => {
-  if(priority === 'Critique') return 0.5
-  if(priority === 'Haute') return 2
-  if(priority === 'Moyenne') return 8
-  if(priority === 'Basse') return 24
-} 
-
-const getResolutionDelay = (priority) => {
-  if(priority === 'Critique') return 4
-  if(priority === 'Haute') return 8
-  if(priority === 'Moyenne') return 24
-  if(priority === 'Basse') return 72
-}
-
 const assignmentSla = computed(() => {
-  if(props.ticket.assigned_to !== null) {
-    return {
-      message: 'Prise en charge respectée',
-      className: 'sla-ok'
-    }
-  }
-
-  const hoursSinceCreation = getHoursSinceCreation(props.ticket.created_at)
-  const maxHour = getAssignmentDelay(props.ticket.priority)
-
-  if(hoursSinceCreation > maxHour) {
-    return {
-      className: 'sla-danger'
-    }
-  }
-
-  return {
-    className: 'sla-warning'
-  }
+  return getAssignementSlaClass(props.ticket, currentTime.value)
 })
 
 const resolutionSla = computed(() => {
-  if(props.ticket.status === 'Résolu' || props.ticket.status === 'Fermé'){
-    return {
-      className: 'sla-ok'
-    }
-  }
-
-  const hoursSinceCreation = getHoursSinceCreation(props.ticket.created_at)
-  const maxHour = getResolutionDelay(props.ticket.priority)
-
-  if(hoursSinceCreation > maxHour) {
-    return {
-      className: 'sla-danger'
-    }
-  }
-
-  if(props.ticket.assigned_to !== null) {
-    return {
-      className: 'sla-info'
-    }
-  }
-  return {
-    className: 'sla-warning'
-  }
+  return getResolutionSlaClass(props.ticket, currentTime.value)
 })
 
 onMounted(() => {
@@ -89,10 +32,10 @@ onUnmounted(() => {
 
 <template>
   <div class="sla-indicator">
-    <div class="sla-item" :class="assignmentSla.className">
+    <div class="sla-item" :class="assignmentSla">
       <span class="sla-symbol"></span>
     </div>
-    <div class="sla-item" :class="resolutionSla.className">
+    <div class="sla-item" :class="resolutionSla">
       <span class="sla-symbol"></span>
     </div>
   </div>

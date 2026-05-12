@@ -2,6 +2,7 @@ const { formatErrorResponse, formatValidResponse } = require('../utils/formatErr
 const { Op } = require('sequelize')
 const User = require('../models/user');
 const Ticket = require('../models/ticket')
+const Comment = require('../models/comment')
 
 /**
  * Recherche la liste des incidents créé par le client
@@ -9,7 +10,8 @@ const Ticket = require('../models/ticket')
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns la liste des incidents créés par le client
+ * @returns {Promise<Object>} la liste JSON des incidents créés par le client.
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.getClientTickets = async (req, res, next) => {
   try {
@@ -52,7 +54,8 @@ exports.getClientTickets = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns la liste des incidents assignés au technicien
+ * @returns {Promise<Object>} la liste JSON des incidents assignés au technicien.
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.getTechnicianTickets = async (req, res, next) => {
   try {
@@ -79,10 +82,27 @@ exports.getTechnicianTickets = async (req, res, next) => {
       ]
     })
 
+    const TechTicketWithCommentsCount = await Promise.all(
+      techTickets.map(async ticket => {
+        const plainTicket = ticket.get({ plain: true })
+
+        const commentsCount = await Comment.count({
+          where: {
+            ticket_id: ticket.id
+          }
+        })
+
+        return {
+          ...plainTicket,
+          comments_count: commentsCount
+        }
+      })
+    )
+
     return res.status(200).json(formatValidResponse(
       200,
       'La liste des incidents a été récupéré avec succès',
-      techTickets,
+      TechTicketWithCommentsCount,
       req.originalUrl
     ))
   } catch (error) {
@@ -99,7 +119,8 @@ exports.getTechnicianTickets = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns la liste de tous les incidents
+ * @returns {Promise<Object>} la liste JSON de tous les incidents. 
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.getAllTickets = async (req, res, next) => {
   try {
@@ -138,7 +159,8 @@ exports.getAllTickets = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns L'incident recherché ou une erreur
+ * @returns {Promise<Object>} le JSON de l'incident recherché. 
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.getTicket = async (req, res, next) => {
   const ticketId = req.params.id
@@ -193,7 +215,8 @@ exports.getTicket = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express  
- * @returns L'incident assigné au technicien concerné ou une erreur
+ * @returns {Promise<Object>} le JSON de l'incident assigné au technicien concerné. 
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.patchSelfAssignTicket = async (req, res, next) => {
   const ticketId = req.params.id
@@ -240,7 +263,8 @@ exports.patchSelfAssignTicket = async (req, res, next) => {
  * @param {Object} req Requête Express
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express
- * @returns Un nouvel incident créé ou une erreur
+ * @returns {Promise<Object>} le JSON du nouvel incident créé. 
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.createTicket = async (req, res, next) => {
   const { title, description, category, priority } = req.body
@@ -280,7 +304,8 @@ exports.createTicket = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns {Promise<Object>} Réponse JSON contenant l'incident modifié ou une erreur
+ * @returns {Promise<Object>} Réponse JSON contenant l'incident modifié.
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.updateTicket = async(req, res, next) => {
   const ticketId = req.params.id
@@ -420,12 +445,12 @@ exports.updateTicket = async(req, res, next) => {
  * @param {Object} req - Requete Express
  * @param {Object} res - Réponse Express 
  * @param {Object} ticket - l'incident à modifié
- * @returns {Promise<Object>} Réponse JSON contenant l'incident ou une erreur
+ * @returns {Promise<Object>} Réponse JSON contenant l'incident. 
+ * Retourne une erreur dans le cas d'un échec
  */
 async function updateByClient(req, res, ticket, allowedStatusTransitionClient) {
   const { status } = req.body
   
-
   if(status === undefined) {
     return res.status(400).json(
       formatErrorResponse(
@@ -460,6 +485,10 @@ async function updateByClient(req, res, ticket, allowedStatusTransitionClient) {
     ticket.status = status
   }
 
+  if ((status === 'Résolu' || status === 'Fermé') && !ticket.resolved_at) {
+    ticket.resolved_at = new Date()
+  }
+
   const updatedTicket = await ticket.save()
 
   return res.status(200).json(formatValidResponse(
@@ -476,7 +505,8 @@ async function updateByClient(req, res, ticket, allowedStatusTransitionClient) {
  * @param {Object} req - Requete Express
  * @param {Object} res - Réponse Express 
  * @param {Object} ticket - l'incident à modifié
- * @returns {Promise<Object>} Réponse JSON contenant l'incident ou une erreur
+ * @returns {Promise<Object>} Réponse JSON contenant l'incident.
+ * Retourne une erreur dans le cas d'un échec
  */
 async function updateByTech(req, res, ticket, allowedCategories, allowedStatus, allowedPriorities, allowedStatusTransitionTech) {
   const { category, priority, status } = req.body
@@ -578,6 +608,10 @@ async function updateByTech(req, res, ticket, allowedCategories, allowedStatus, 
     ticket.status = status
   }
 
+  if ((status === 'Résolu' || status === 'Fermé') && !ticket.resolved_at) {
+    ticket.resolved_at = new Date()
+  }
+
   const updatedTicket = await ticket.save()
 
   return res.status(200).json(formatValidResponse(
@@ -594,7 +628,8 @@ async function updateByTech(req, res, ticket, allowedCategories, allowedStatus, 
  * @param {Object} req - Requete Express
  * @param {Object} res - Réponse Express 
  * @param {Object} ticket - l'incident à modifié
- * @returns {Promise<Object>} Réponse JSON contenant l'incident ou une erreur
+ * @returns {Promise<Object>} Réponse JSON contenant l'incident.
+ * Retourne une erreur dans le cas d'un échec
  */
 async function updateByAdmin(req, res, ticket, allowedCategories, allowedStatus, allowedPriorities, allowedStatusTransitionAdmin) {
   const { assigned_to, category, priority, status } = req.body
@@ -709,6 +744,10 @@ async function updateByAdmin(req, res, ticket, allowedCategories, allowedStatus,
 
   if (status !== undefined) {
     ticket.status = status
+  }
+
+  if ((status === 'Résolu' || status === 'Fermé') && !ticket.resolved_at) {
+    ticket.resolved_at = new Date()
   }
 
   const updatedTicket = await ticket.save()

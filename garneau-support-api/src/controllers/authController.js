@@ -4,10 +4,13 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 /**
- * Controller for handling user signup. Validates input, checks for existing users, hashes the password, and creates a new user record.
- * @param {Object} req - Express request object containing user details in the body.
- * @param {Object} res - Express response object used to send back the appropriate response.
- * @param {Function} next - Express next middleware function for error handling.
+ * Crée un nouvel utilisateur et le connecte à son compte
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @returns {Promise<Object>} Le JSON de l'utilisateur connecté. Retourne une erreur dans 
+ * le cas contraire
  */
 exports.signup = async (req, res, next) => {
   const { firstName, lastName, email, phoneNumber, password, confirmPassword } = req.body;
@@ -57,12 +60,11 @@ exports.signup = async (req, res, next) => {
           {
             user: {
               id: newUser.id,
-              first_name: newUser.first_name,
-              last_name: newUser.last_name,
+              first_name: newUser.firstName,
+              last_name: newUser.lastName,
               email: newUser.email,
-              phone_number: newUser.phone_number,
-              role: newUser.role,
-              is_active: newUser.is_active
+              phone_number: newUser.phoneNumber,
+              role: 'client'
             },
             token: token,
           },
@@ -79,10 +81,13 @@ exports.signup = async (req, res, next) => {
 }
 
 /**
- * Controller for handling user login. Validates credentials and returns a JWT token if successful.
- * @param {Object} req - Express request object containing email and password in the body.
- * @param {Object} res - Express response object used to send back the appropriate response.
- * @param {Function} next - Express next middleware function for error handling.
+ * Connecte un utilisateur à son compte
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @returns {Promise<Object>} la réponse JSON de l'utilisateur connecté. Retourne une erreur dans 
+ * le cas contraire
  */
 exports.signin = async (req, res, next) => {
   const { email, password } = req.body;
@@ -176,6 +181,16 @@ exports.signin = async (req, res, next) => {
     }
 }
 
+/**
+ * Vérifie si un compte a le même email lors de
+ * la création d'un nouveau compte
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @returns Retourne True si le courriel existe déjà, False
+ * si le courriel n'existe pas 
+ */
 exports.checkEmail = async (req, res, next) => {
   const { email } =  req.body
 

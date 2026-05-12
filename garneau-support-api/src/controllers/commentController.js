@@ -4,6 +4,15 @@ const User = require('../models/user')
 const Ticket = require('../models/ticket')
 const Comment = require('../models/comment')
 
+/**
+ * Récupère la liste de tous les commentaires liée à un incident
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @returns {Promise<Object>} La liste JSON des commentaires liée à un incident. 
+ * Retourne une erreur dans le cas d'un échec
+ */
 exports.getTicketComments = async (req, res, next) => {
   const ticketId = req.params.id
   try {
@@ -34,6 +43,15 @@ exports.getTicketComments = async (req, res, next) => {
   }
 }
 
+/**
+ * Crée un nouveau commentaire dans l'incident qui lui est lié
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @returns {Promise<Object>} La reponse JSON du nouveau commentaire créé. 
+ * Retourne une erreur dans le cas d'un échec
+ */
 exports.createComment = async (req, res, next) => {
   const { content, type } = req.body
   const ticketId = req.params.id

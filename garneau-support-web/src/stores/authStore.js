@@ -8,16 +8,33 @@ export const useAuthStore = defineStore('authStore', () => {
 
   const isConnected = computed(() => !!token.value ) 
 
+  /**
+   * Enregistre l'utilisateur connecté.
+   *
+   * @param {Object} newUser Informations de l'utilisateur connecté
+   * @returns {void}
+   */  
   function setUser(newUser) {
     user.value = newUser;
     localStorage.setItem('user', JSON.stringify(newUser))
   }
 
+  /**
+   * Enregistre le token d'authentification.
+   *
+   * @param {string} newToken Token de l'utilisateur connecté
+   * @returns {void}
+   */
   function setToken(newToken) {
     token.value = newToken
     localStorage.setItem('token', newToken)
   }
 
+  /**
+   * Déconnecte l'utilisateur
+   *
+   * @returns {void}
+   */
   function logout() {
     user.value = null;
     token.value = null
@@ -25,6 +42,14 @@ export const useAuthStore = defineStore('authStore', () => {
     localStorage.removeItem('token')
   }
 
+  /**
+   * Connecte un utilisateur à l'application.
+   *
+   * @param {string} email Courriel de l'utilisateur
+   * @param {string} password Mot de passe de l'utilisateur
+   * @returns {Promise<void>} Enregistre l'utilisateur et son token dans le store
+   * @throws {Error} Lance une erreur si la connexion échoue
+   */
   async function signin(email, password) {
     try{
       const response = await fetch(`${apiUrl}/auth/signin`, {
@@ -54,6 +79,18 @@ export const useAuthStore = defineStore('authStore', () => {
     } 
   }
 
+  /**
+   * Crée un nouveau compte client.
+   *
+   * @param {string} firstName Prénom du client
+   * @param {string} lastName Nom du client
+   * @param {string} email Courriel du client
+   * @param {string} phoneNumber Numéro de téléphone du client
+   * @param {string} password Mot de passe du client
+   * @param {string} confirmPassword Confirmation du mot de passe
+   * @returns {Promise<void>} Enregistre l'utilisateur et son token dans le store
+   * @throws {Error} Lance une erreur si l'inscription échoue
+   */
   async function signup(firstName, lastName, email, phoneNumber, password, confirmPassword) {
     try {
       const response = await fetch(`${apiUrl}/auth/signup`, {
@@ -84,6 +121,13 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   }
 
+  /**
+   * Vérifie si un courriel est déjà utilisé.
+   *
+   * @param {string} email Courriel à vérifier
+   * @returns {Promise<void>} Met à jour l'état de disponibilité du courriel
+   * @throws {Error} Lance une erreur si la vérification échoue
+   */
   async function checkEmail(email) {
     try {
       const response = await fetch(`${apiUrl}/auth/check-email`, {
@@ -104,8 +148,7 @@ export const useAuthStore = defineStore('authStore', () => {
       }
     } catch (error) {
       throw error
-    }
-    
+    }  
   }
 
   return {
