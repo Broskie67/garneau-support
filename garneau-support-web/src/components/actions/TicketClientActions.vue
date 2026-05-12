@@ -43,9 +43,23 @@ onMounted(async() => {
 .detail-card{
   margin-bottom: 3rem;
   background: #ffffff;
-  width: 800px;
+  width: 100%;
   padding: 32px 38px;
   border-radius: 18px;
   border: 1px solid rgba(148, 163, 184, 0.25);
   box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
-}</style>
+}
+
+  @media screen and (max-width: 768px) {
+    h2 {
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .detail-card {
+      width: 100%;
+      padding: 22px 18px;
+      border-radius: 14px;
+    }
+  }
+</style>

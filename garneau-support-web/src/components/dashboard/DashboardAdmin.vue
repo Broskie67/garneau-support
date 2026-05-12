@@ -164,7 +164,7 @@ onUnmounted(() =>{
   </section>
    
   <section class="dashboard-section table-closed" >
-    <h3>Incidents fermés</h3>
+    <h3 class="section-title">Incidents fermés</h3>
 
     <FilterBar 
       :status-options="closeFilterOptions.status"
@@ -177,14 +177,23 @@ onUnmounted(() =>{
 </template>
 
 <style scoped>
-  .table-active {
-    margin-bottom: 3rem;
+  .table-active,
+  .table-closed {
     background: #ffffff;
-    width: 1200px;
+    width: 100%;
+    max-width: 1200px;
     padding: 32px 38px;
     border-radius: 18px;
     border: 1px solid rgba(148, 163, 184, 0.25);
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  }
+
+  .table-active {
+    margin-bottom: 3rem;
+  }
+
+  .table-closed {
+    margin-top: 1rem;
   }
 
  .page-title {
@@ -207,16 +216,6 @@ onUnmounted(() =>{
     justify-content: space-between;
   }
 
-  .table-closed {
-    margin-top: 1rem;
-    background: #ffffff;
-    width: 1200px;
-    padding: 32px 38px;
-    border-radius: 18px;
-    border: 1px solid rgba(148, 163, 184, 0.25);
-    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
-  }
-
   .success-message {
     background-color: #DCFCE7;
     color: #166534;
@@ -227,4 +226,27 @@ onUnmounted(() =>{
     margin-bottom: 20px;
   }
 
+  @media screen and (max-width: 768px) {
+    .table-active,
+    .table-closed {
+      width: 100%;
+      padding: 20px 16px;
+      border-radius: 14px;
+    }
+
+    .page-title {
+      font-size: 1.6rem;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+    }
+
+    .flex-title-tooltip {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+  }
 </style>

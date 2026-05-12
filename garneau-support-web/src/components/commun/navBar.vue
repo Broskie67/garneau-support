@@ -30,7 +30,7 @@ const logout = () => {
               <span class="profile-label">Votre profil</span>
             </router-link>
           </li>
-          <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
+          <li><a href="#" class="btn-deconnection" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
         <ul class="app-header-menu" v-if="authStore.user.role === 'technicien'">
           <li><router-link to="/dashboard">Tableau de bord</router-link></li>
@@ -39,7 +39,7 @@ const logout = () => {
               <span class="profile-label">Votre profil</span>
             </router-link>
           </li>
-          <li><a href="#" class="btn-deconnction" @click.prevent="logout">Se déconnecter</a></li>
+          <li><a href="#" class="btn-deconnection" @click.prevent="logout">Se déconnecter</a></li>
         </ul>
         <ul class="app-header-menu" v-if="authStore.user.role === 'admin'">
           <li><router-link to="/dashboard">Tableau de bord</router-link></li>
@@ -60,12 +60,21 @@ const logout = () => {
 </template>
 
 <style scoped>
+  header {
+    width: 100%;
+    background-color: var(--color-primary-dark);
+  }
+
   .app-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
     align-items: center;
-    padding: 20px;
-    background-color: var(--color-primary-dark);
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 16px;
     color: white;
   }
 
@@ -82,12 +91,19 @@ const logout = () => {
   nav ul {
     list-style: none;
     padding: 0;
+    margin: 0;
+  }
+
+  .app-header-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
   }
 
   nav li {
-    display: inline-block;
     font-size: 17px;
-    margin-right: 20px;
   }
 
   .profile-link {
@@ -96,46 +112,26 @@ const logout = () => {
     justify-content: center;
     text-decoration: none;
     color: white;
-    padding: 8px, 14px;
+    padding: 8px 14px;
     border-radius: 10px;
-  }
-
-  .btn-deconnexion{
-    text-decoration: none;
-  }
-
-  @media (max-width: 960px) {
-    .app-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap:16px;
-    }
-    .app-header-menu {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px, 18px;
-    }
-  }
-
-  @media (max-width: 576px) {
-  .app-header {
-    align-items: center;
     text-align: center;
   }
 
-  .app-header-title {
-    font-size: 1.6rem;
+  .btn-deconnection{
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
   }
 
   .app-header-menu {
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  nav li {
-    display: block;
-    font-size: 16px;
+    gap: 12px;
   }
 }
+ 
 </style>

@@ -112,7 +112,7 @@ function formatDate(dateString) {
           <h6>Informations</h6>
           <span>
             Courriel: {{ ticket.creator.email }} <br>
-            Télephone: {{ ticket.creator.phone_number }}
+            Téléphone: {{ ticket.creator.phone_number }}
           </span>
         </div>
 
@@ -131,7 +131,7 @@ function formatDate(dateString) {
           :to="`/tickets/${ticket.id}/edit`" 
           class="action-btn modify-btn" 
           v-if="ticket.status !== 'Fermé' && (ticket.assigned_to !== null || !isTechnician || isAdmin)">
-          modifier
+          Modifier
         </router-link>
       </div> 
     </div>
@@ -244,7 +244,8 @@ function formatDate(dateString) {
     width: fit-content;
     margin-top: 20px;
     border: 1px solid var(--button-primary-border);
-    background-color: var(--button-primary-bg) ;
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
   }
 
@@ -319,19 +320,33 @@ function formatDate(dateString) {
     color: black;
   }
 
-  @media (max-width: 700px) {
-    .flex-title-status {
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .info-grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-
-    .back {
-      min-width: 100%;
-    }
+  @media screen and (max-width: 768px) {
+  .flex-title-status {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 100%;
+  }
+
+  .actions-buttons {
+    flex-direction: column;
+  }
+
+  .action-btn,
+  .back-btn {
+    width: 100%;
+  }
+
+  .badge-priority,
+  .badge-status {
+    font-size: 0.9rem;
+    padding: 7px 12px;
+  }
+}
+
 </style>

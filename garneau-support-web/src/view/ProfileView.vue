@@ -116,7 +116,7 @@
   }
 
   function isValidPhoneNumber(phoneNumber) {
-    const re = /^\d{10}$/
+    const re = /^(\+1[\s.-]?)?\(?[2-9][0-9]{2}\)?[\s.-]?[2-9][0-9]{2}[\s.-]?[0-9]{4}$/
     return re.test(phoneNumber)
   }
 
@@ -128,7 +128,7 @@
 
   watch(lastName, () => {
     if(lastNameValidation()){
-      lastNameError.value = true
+      lastNameError.value = ''
     }
   })
 

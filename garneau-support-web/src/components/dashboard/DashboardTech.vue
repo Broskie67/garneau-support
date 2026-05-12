@@ -318,14 +318,23 @@
 </template>
 
 <style scoped>
-  .table-active {
-    margin-bottom: 3rem;
+  .table-active,
+  .table-closed {
     background: #ffffff;
-    width: 1300px;
+    width: 100%;
+    max-width: 1200px;
     padding: 32px 38px;
     border-radius: 18px;
     border: 1px solid rgba(148, 163, 184, 0.25);
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  }
+
+  .table-active {
+    margin-bottom: 3rem;
+  }
+
+  .table-closed {
+    margin-top: 1rem;
   }
 
  .page-title {
@@ -343,22 +352,9 @@
     align-self: center;
   }
 
-  .table-closed {
-    margin-top: 1rem;
-    background: #ffffff;
-    width: 1200px;
-    padding: 32px 38px;
-    border-radius: 18px;
-    border: 1px solid rgba(148, 163, 184, 0.25);
-    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
-  }
-
   .flex-title-tooltip {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
   }
 
   .success-message {
@@ -371,4 +367,27 @@
     margin-bottom: 20px;
   }
 
+  @media screen and (max-width: 768px) {
+    .table-active,
+    .table-closed {
+      width: 100%;
+      padding: 20px 16px;
+      border-radius: 14px;
+    }
+
+    .page-title {
+      font-size: 1.6rem;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+    }
+
+    .flex-title-tooltip {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+  }
 </style>

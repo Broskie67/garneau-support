@@ -119,4 +119,35 @@ const authStore = useAuthStore()
     color: var(--button-primary-hover-text);
   }
 
+  @media (max-width: 600px) {
+  .content {
+    width: 100%;
+    padding: 24px 14px;
+  }
+
+  .welcome-content h2 {
+    font-size: 1.55rem;
+  }
+
+  .div-message,
+  .div-action {
+    padding: 20px 18px;
+  }
+
+  .message,
+  .action {
+    font-size: 16px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .connect-btn,
+  .login-btn {
+    width: 100%;
+    max-width: 280px;
+  }
+}
 </style>
