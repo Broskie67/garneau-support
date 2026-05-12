@@ -220,5 +220,37 @@
     color: var(--color-primary-dark)
   }
 
+  @media screen and (max-width: 768px) {
+    .section-title {
+      font-size: 1.25rem;
+      text-align: center;
+    }
 
+    .tech-grid,
+    .admin-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+      padding: 18px 20px;
+      min-height: auto;
+    }
+
+    .technician-card {
+      grid-column: span 1;
+      min-height: auto;
+    }
+
+    .card-title {
+      font-size: 0.85rem;
+    }
+
+    .card-value {
+      font-size: 1.7rem;
+    }
+
+    .technician-row {
+      gap: 12px;
+    }
+  } 
 </style>

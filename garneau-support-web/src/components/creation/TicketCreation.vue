@@ -171,7 +171,7 @@ watch(priority, (newPriority) => {
 <style scoped>
   .create-ticket-card {
     background: #ffffff;
-    width: 420px;
+    width: min(100%, 420px);
     padding: 32px 38px;
     border-radius: 18px;
     border: 1px solid rgba(148, 163, 184, 0.25);
@@ -217,6 +217,7 @@ watch(priority, (newPriority) => {
 
   .field textarea {
     min-height: 120px;
+    resize: vertical
   }
 
   .creation-success{
@@ -258,6 +259,23 @@ watch(priority, (newPriority) => {
   .btn:hover{
     background-color: var(--button-primary-hover-bg);
     color: var(--button-primary-hover-text);
+  }
+
+  @media screen and (max-width: 768px) {
+    .create-ticket-card {
+      width: 100%;
+      padding: 24px 18px;
+      border-radius: 14px;
+    }
+
+    .create-ticket-card h2 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .btn {
+      width: 100%;
+    }
   }
 
 </style>

@@ -226,8 +226,7 @@ watch(confirmPassword, () => {
 })
 </script>
 
-<template>
-    
+<template> 
   <div v-if="internalErrorMessage" class="profile-error">
     <span class="error">{{ internalErrorMessage }}</span>
   </div>
@@ -301,6 +300,13 @@ watch(confirmPassword, () => {
     margin-bottom: 20px;
   }
 
+  .note {
+    margin: 4px 0 18px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
   .error {
     color: var(--color-danger);
     font-size: 0.85rem;
@@ -322,5 +328,25 @@ watch(confirmPassword, () => {
   .btn:hover{
     background-color: var(--button-primary-hover-bg);
     color: var(--button-primary-hover-text);
+  }
+
+  @media screen and (max-width: 768px) {
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field input {
+      padding: 11px 12px;
+      font-size: 0.95rem;
+    }
+
+    .note {
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .btn {
+      width: 100%;
+    }
   }
 </style>
