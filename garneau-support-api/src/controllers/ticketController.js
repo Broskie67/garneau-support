@@ -10,7 +10,8 @@ const Comment = require('../models/comment')
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns la liste des incidents créés par le client
+ * @returns {Promise<Object>} la liste JSON des incidents créés par le client.
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.getClientTickets = async (req, res, next) => {
   try {
@@ -53,7 +54,8 @@ exports.getClientTickets = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns la liste des incidents assignés au technicien
+ * @returns {Promise<Object>} la liste JSON des incidents assignés au technicien.
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.getTechnicianTickets = async (req, res, next) => {
   try {
@@ -117,7 +119,8 @@ exports.getTechnicianTickets = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns la liste de tous les incidents
+ * @returns {Promise<Object>} la liste JSON de tous les incidents. 
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.getAllTickets = async (req, res, next) => {
   try {
@@ -156,7 +159,8 @@ exports.getAllTickets = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns L'incident recherché ou une erreur
+ * @returns {Promise<Object>} le JSON de l'incident recherché. 
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.getTicket = async (req, res, next) => {
   const ticketId = req.params.id
@@ -211,7 +215,8 @@ exports.getTicket = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express  
- * @returns L'incident assigné au technicien concerné ou une erreur
+ * @returns {Promise<Object>} le JSON de l'incident assigné au technicien concerné. 
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.patchSelfAssignTicket = async (req, res, next) => {
   const ticketId = req.params.id
@@ -258,7 +263,8 @@ exports.patchSelfAssignTicket = async (req, res, next) => {
  * @param {Object} req Requête Express
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express
- * @returns Un nouvel incident créé ou une erreur
+ * @returns {Promise<Object>} le JSON du nouvel incident créé. 
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.createTicket = async (req, res, next) => {
   const { title, description, category, priority } = req.body
@@ -298,7 +304,8 @@ exports.createTicket = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns {Promise<Object>} Réponse JSON contenant l'incident modifié ou une erreur
+ * @returns {Promise<Object>} Réponse JSON contenant l'incident modifié.
+ * Retourne une erreur dans le cas d'un échec
  */
 exports.updateTicket = async(req, res, next) => {
   const ticketId = req.params.id
@@ -438,7 +445,8 @@ exports.updateTicket = async(req, res, next) => {
  * @param {Object} req - Requete Express
  * @param {Object} res - Réponse Express 
  * @param {Object} ticket - l'incident à modifié
- * @returns {Promise<Object>} Réponse JSON contenant l'incident ou une erreur
+ * @returns {Promise<Object>} Réponse JSON contenant l'incident. 
+ * Retourne une erreur dans le cas d'un échec
  */
 async function updateByClient(req, res, ticket, allowedStatusTransitionClient) {
   const { status } = req.body
@@ -497,7 +505,8 @@ async function updateByClient(req, res, ticket, allowedStatusTransitionClient) {
  * @param {Object} req - Requete Express
  * @param {Object} res - Réponse Express 
  * @param {Object} ticket - l'incident à modifié
- * @returns {Promise<Object>} Réponse JSON contenant l'incident ou une erreur
+ * @returns {Promise<Object>} Réponse JSON contenant l'incident.
+ * Retourne une erreur dans le cas d'un échec
  */
 async function updateByTech(req, res, ticket, allowedCategories, allowedStatus, allowedPriorities, allowedStatusTransitionTech) {
   const { category, priority, status } = req.body
@@ -619,7 +628,8 @@ async function updateByTech(req, res, ticket, allowedCategories, allowedStatus, 
  * @param {Object} req - Requete Express
  * @param {Object} res - Réponse Express 
  * @param {Object} ticket - l'incident à modifié
- * @returns {Promise<Object>} Réponse JSON contenant l'incident ou une erreur
+ * @returns {Promise<Object>} Réponse JSON contenant l'incident.
+ * Retourne une erreur dans le cas d'un échec
  */
 async function updateByAdmin(req, res, ticket, allowedCategories, allowedStatus, allowedPriorities, allowedStatusTransitionAdmin) {
   const { assigned_to, category, priority, status } = req.body

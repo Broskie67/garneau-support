@@ -9,7 +9,7 @@ const User = require('../models/user');
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns l'utilisateur connecté. Retourne une erreur dans 
+ * @returns {Promise<Object>} Le JSON de l'utilisateur connecté. Retourne une erreur dans 
  * le cas contraire
  */
 exports.signup = async (req, res, next) => {
@@ -86,7 +86,7 @@ exports.signup = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @returns L'utilisateur connecté. Retourne une erreur dans 
+ * @returns {Promise<Object>} la réponse JSON de l'utilisateur connecté. Retourne une erreur dans 
  * le cas contraire
  */
 exports.signin = async (req, res, next) => {
