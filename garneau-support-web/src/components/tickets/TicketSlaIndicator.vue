@@ -43,9 +43,10 @@ onUnmounted(() => {
 
 <style scoped>
 .sla-indicator {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   gap: 6px;
+  align-items: flex-start;
 }
 
 .sla-item {
@@ -99,5 +100,21 @@ onUnmounted(() => {
 
 .sla-info .sla-symbol {
   background-color: #3b82f6;
+}
+
+@media screen and (max-width: 768px) {
+  .sla-indicator {
+    align-items: flex-start;
+  }
+
+  .sla-item {
+    padding: 4px 8px;
+    font-size: 0.72rem;
+  }
+
+  .sla-symbol {
+    width: 7px;
+    height: 7px;
+  }
 }
 </style>

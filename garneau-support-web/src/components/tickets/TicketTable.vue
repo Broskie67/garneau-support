@@ -203,10 +203,12 @@ function formatDate(dateString) {
   .table-wrapper {
     width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .ticket-table{
     width: 100%;
+    min-width: 950px;
     border-collapse: collapse;
     background-color: white;
     border: 1px solid var(--color-border);
@@ -214,8 +216,22 @@ function formatDate(dateString) {
     overflow: hidden;
   }
 
-  td {
-    padding: 10px 10px 10px 0 ;
+  .ticket-table th,
+  .ticket-table td {
+    padding: 12px 14px;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .ticket-table th {
+    font-weight: 700;
+    background-color: #f8fafc;
+  }
+
+  .ticket-table td:nth-child(2) {
+    white-space: normal;
+    min-width: 180px;
   }
 
   .assigned-message{
@@ -288,8 +304,6 @@ function formatDate(dateString) {
     color: #0f5132;
   }
 
-  
-
   .status-open{
     background-color: var(--status-open);
     color: white;
@@ -344,5 +358,33 @@ function formatDate(dateString) {
     background-color: var(--priority-critical);
     color: var(--priority-critical-text);
   }
+
+  @media (max-width: 768px) {
+  .table-wrapper {
+    margin-top: 0.5rem;
+  }
+
+  .ticket-table {
+    min-width: 900px;
+    font-size: 0.9rem;
+  }
+
+  .ticket-table th,
+  .ticket-table td {
+    padding: 10px 12px;
+  }
+
+  .badge-priority,
+  .badge-status {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+
+  .details-btn,
+  .assign-btn {
+    padding: 7px 10px;
+    font-size: 0.85rem;
+  }
+}
 
 </style>

@@ -64,24 +64,6 @@ const signup = async (userData) => {
     color: #0f172a;
   }
 
- 
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
   @media (max-width: 768px) {
     .signup-page {
       padding-top: 25px;
