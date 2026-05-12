@@ -1,93 +1,124 @@
-# garneau-support
+# Garneau-support
 
+Garneau Support est une application web de gestion d’incidents. Elle permet aux clients de créer des tickets de soutien, aux techniciens de les consulter et de les traiter, ainsi qu’aux administrateurs de gérer les utilisateurs et le suivi des incidents.
 
+## Technologies utilisées
 
-## Getting started
+### Frontend
+- Vue.js 3
+- Pinia
+- Vue Router
+- SCSS
+- Bootstrap
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### Backend
+- Node.js
+- Express.js
+- Sequelize 
+- MySQL
+- Jwt
+- Bcrypt
+- Multer
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Prérequis
 
-## Add your files
+avant d'installer le projet, assurez-vous d'avoir installer les éléments suivants :
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+- Node.js
+- WampServer
+- npm
+- MySQL
+- Git
+- Éditeur de code
 
+## Installation du projet
+
+### 1. Cloner le dépot
+
+Cloner le projet à partir du dépot GitLab
+
+```bash
+git clone https://gitlab.com/Broskie67/garneau-support.git
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/Broskie67/garneau-support.git
-git branch -M main
-git push -uf origin main
+
+### 2. Lancer les service de WampServer
+
+Il vous faudra lancer les services wampServer pour permettre la connection a la base de données
+
+### 3. Se positionner dans le dossier backend
+
+Positionnez-vous dans le dossier garneau-support-api
+
+```bash
+cd garneau-support-api
 ```
 
-## Integrate with your tools
+### 4. Installer les dépendences
 
-* [Set up project integrations](https://gitlab.com/Broskie67/garneau-support/-/settings/integrations)
+Installer les dépendences requise au projet
 
-## Collaborate with your team
+```bash
+npm install
+```
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+### 5. Lancer le sript de seed pour populer la base de données
 
-## Test and Deploy
+Le projet contient un script permettant d'initialiser la base de données avec des données de départ
 
-Use the built-in continuous integration in GitLab.
+Ce script effectue les action suivantes :
+- vérifie la connexion à la base de données;
+- recrée les tables de la base de données;
+- insère les utilisateurs de départ;
+- insère les tickets de départ;
+- insère les commentaires de départ.
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+Pour executer le script de seed :
 
-***
+```bash
+npm run seed
+```
+> Attention : ce script utilise `sequelize.sync({ force: true })`. Cela supprime et recrée les tables de la base de données. Les données existantes seront donc effacées.
 
-# Editing this README
+### 6. Démarer le backend
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Apres avoir installé les dépendances et lancer le script de seed, demarrez le serveur backend
 
-## Suggestions for a good README
+```bash
+npm run dev
+```
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+L’application devrait être accessible à l’adresse  `http://localhost:3000`
 
-## Name
-Choose a self-explaining name for your project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### 7. Se positionner dans le dossier frontend
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+À partir du dossier `garneau-support-api`, retournez dans le dossier principal du projet, puis accédez au dossier frontend :
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+```bash
+cd ../garneau-support-web
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### 8. Installer les dépendances du frontend
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Installez les dépendances nécessaires au frontend :
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+```bash
+npm install
+```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+### 9. Démarrer le frontend
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Démarrez l’application frontend :
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```bash
+npm run dev
+```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+L’application devrait être accessible à l’adresse `http://localhost:5173`
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
 
-## License
-For open source projects, say how it is licensed.
+## Configurations
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Le fichier `.env` est déjà inclus dans le projet selon les consignes de la remise du travail
+Il contient les informations nécéssaires pour connecter l'application à la base de données MySQL,
+comme le nom de la base de données, l'utilisateur, le port du serveur et la clé utilisé pour les token JWT
