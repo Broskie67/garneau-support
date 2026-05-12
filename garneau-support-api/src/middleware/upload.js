@@ -1,3 +1,11 @@
+/**
+ * Configure Multer pour l'envoi de pièces jointes.
+ *
+ * Les fichiers sont enregistrés dans le dossier uploads
+ * avec un nom unique. Seuls les fichiers PDF et les images
+ * PNG, JPEG et WEBP sont acceptés.
+ */
+
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
