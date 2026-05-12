@@ -443,7 +443,6 @@ exports.updateTicket = async(req, res, next) => {
 async function updateByClient(req, res, ticket, allowedStatusTransitionClient) {
   const { status } = req.body
   
-
   if(status === undefined) {
     return res.status(400).json(
       formatErrorResponse(
@@ -476,6 +475,10 @@ async function updateByClient(req, res, ticket, allowedStatusTransitionClient) {
   
   if (status !== undefined) {
     ticket.status = status
+  }
+
+  if ((status === 'Résolu' || status === 'Fermé') && !ticket.resolved_at) {
+    ticket.resolved_at = new Date()
   }
 
   const updatedTicket = await ticket.save()
@@ -594,6 +597,10 @@ async function updateByTech(req, res, ticket, allowedCategories, allowedStatus, 
 
   if (status !== undefined) {
     ticket.status = status
+  }
+
+  if ((status === 'Résolu' || status === 'Fermé') && !ticket.resolved_at) {
+    ticket.resolved_at = new Date()
   }
 
   const updatedTicket = await ticket.save()
@@ -727,6 +734,10 @@ async function updateByAdmin(req, res, ticket, allowedCategories, allowedStatus,
 
   if (status !== undefined) {
     ticket.status = status
+  }
+
+  if ((status === 'Résolu' || status === 'Fermé') && !ticket.resolved_at) {
+    ticket.resolved_at = new Date()
   }
 
   const updatedTicket = await ticket.save()
