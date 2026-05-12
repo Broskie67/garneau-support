@@ -6,6 +6,14 @@ export const useCommentStore = defineStore('commentStore',  () => {
   const commentBaseUrl = `${apiUrl}/tickets`
   const commentList = ref([])
 
+  /**
+   * Récupère les commentaires d'un incident.
+   *
+   * @param {number} ticketId Identifiant de l'incident
+   * @param {string} token Token utilisé pour authentifier la requête
+   * @returns {Promise<void>} Met à jour la liste des commentaires dans le store
+   * @throws {Error} Lance une erreur si la requête échoue
+   */
   async function getTicketComments(ticketId, token) {
     try {
       const response = await fetch(`${commentBaseUrl}/${ticketId}/comments`, {
@@ -26,6 +34,17 @@ export const useCommentStore = defineStore('commentStore',  () => {
     }
   }
 
+  /**
+   * Crée un nouveau commentaire pour un incident.
+   *
+   * @param {number} ticketId Identifiant de l'incident
+   * @param {string} content Contenu du commentaire
+   * @param {File|null} attachment Pièce jointe du commentaire
+   * @param {string} type Type de commentaire
+   * @param {string} token Token utilisé pour authentifier la requête
+   * @returns {Promise<void>} Ajoute le commentaire dans le store
+   * @throws {Error} Lance une erreur si la requête échoue
+   */
   async function createComment(ticketId, content, attachment, type, token) {
     const formData = new FormData()
 
