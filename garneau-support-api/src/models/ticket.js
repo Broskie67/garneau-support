@@ -91,6 +91,10 @@ const ticket = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW
+    },
+    resolved_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
     }
   },
   {

@@ -1,5 +1,13 @@
 const { formatErrorResponse } = require("../utils/formatErrorResponse");
 
+/**
+ * Valide les champs du formulaire de connexion
+ * 
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 422 si les champs sont invalides, sinon passe au middleware suivant
+ */
 function signinValidation(req, res, next) {
   const { email, password } = req.body;
   const trimmedEmail = email ? email.trim().toLowerCase() : '';
@@ -37,6 +45,14 @@ function signinValidation(req, res, next) {
   next();
 }
 
+/**
+ * Valide les champs du formulaire dd'inscription
+ * 
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 422 si les champs sont invalides, sinon passe au middleware suivant
+ */
 function signupValidation(req, res, next) {
   const { firstName, lastName, email, phoneNumber, password, confirmPassword } = req.body;
 
@@ -162,6 +178,14 @@ function signupValidation(req, res, next) {
   next();
 }
 
+/**
+ * Valide les champs du formulaire de création d'un incident
+ * 
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 422 si les champs sont invalides, sinon passe au middleware suivant
+ */
 function ticketValidation(req, res, next) {
   const { title, description, category, priority } = req.body
   const trimmedTitle = title ? title.trim() : '';
@@ -260,6 +284,14 @@ function ticketValidation(req, res, next) {
   next()
 }
 
+/**
+ * Valide les champs du formulaire de modification du profil utilisateur
+ * 
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 422 si les champs sont invalides, sinon passe au middleware suivant
+ */
 function profileValidation(req, res, next) {
   const {firstName, lastName, phoneNumber} = req.body
 
@@ -306,7 +338,7 @@ function profileValidation(req, res, next) {
       );
   }
 
-  const phoneNumberRegex = /^\d{10}$/;
+  const phoneNumberRegex = /^(\+1\s?)?(\(?[2-9][0-9]{2}\)?[\s.-]?)?[2-9][0-9]{2}[\s.-]?[0-9]{4}$/;
     if (!phoneNumberRegex.test(trimmedPhoneNumber)) {
       return res
         .status(422)
@@ -327,6 +359,14 @@ function profileValidation(req, res, next) {
     next()
 }
 
+/**
+ * Valide les champs du formulaire de modification du mot de passe 
+ * 
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 422 si les champs sont invalides, sinon passe au middleware suivant
+ */
 function updatePasswordValidation(req, res, next) {
   const {currentPassword, newPassword, confirmPassword} = req.body
 
@@ -373,8 +413,16 @@ function updatePasswordValidation(req, res, next) {
     next()
 }
 
+/**
+ * Valide les champs du formulaire d'ajout d'un commentaire
+ * 
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 422 si les champs sont invalides, sinon passe au middleware suivant
+ */
 function validateComment(req, res, next) {
-  const { content, type } = req.body
+  const { content, type } = req.body || {}
 
   const trimmedContent = content ? content.trim() : ''
 

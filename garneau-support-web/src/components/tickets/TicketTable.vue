@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
 import TicketSlaIndicator from './TicketSlaIndicator.vue';
 
 const props = defineProps({
@@ -22,8 +23,14 @@ const props = defineProps({
   newCreatedTicketIds: {
     type: Array,
     default: () => []
+  },
+  newCommentTicketIds: {
+    type: Array,
+    default: () => []
   }
 })
+
+const authStore = useAuthStore()
 
 const sortColumn = ref('priority')
 const sortDirection = ref('desc')
@@ -178,6 +185,13 @@ function formatDate(dateString) {
             >
               Nouveau ticket
             </span>
+            <span
+              v-if="newCommentTicketIds.includes(ticket.id) && ticket.assigned_to === authStore.user.id"
+              class="new-comments"
+            >
+              Nouveau(x) <br>
+              commentaire(s)
+            </span>
           </td>
         </tr>
       </tbody>
@@ -186,7 +200,7 @@ function formatDate(dateString) {
 </template>
 
 <style scoped>
-.table-wrapper {
+  .table-wrapper {
     width: 100%;
     overflow-x: auto;
   }
@@ -269,60 +283,66 @@ function formatDate(dateString) {
     white-space: nowrap;
   }
 
+  .new-comments{
+    font-weight: 600;
+    color: #0f5132;
+  }
+
+  
+
   .status-open{
     background-color: var(--status-open);
-    color: black;
+    color: white;
   }
 
   .status-assigned{
     background-color: var(--status-assigned);
-    color: black;
+    color: white;
   }
 
   .status-in-progress {
     background-color: var(--status-in-progress);
-    color: black;
+    color: var(--status-in-progress-text);
   }
 
   .status-waiting {
     background-color: var(--status-waiting);
-    color: black;
+    color: var(--status-waiting-text)
   }
 
   .status-resolved {
     background-color: var(--status-resolved);
-    color: black;
+    color: var(--status-resolved-text)
   }
 
   .status-closed{
     background-color: var(--status-closed);
-    color: black;
+    color: white;
   }
 
   .status-archived {
     background-color: var(--status-archived);
-    color: black;
+    color: var(--status-archived-text);
   }
-
 
   .priority-low {
     background-color: var(--priority-low);
-    color: black;
+    color: var(--priority-low-text);
   }
 
   .priority-medium {
     background-color: var(--priority-medium);
-    color: black;
+    color: var(--priority-medium-text);
   }
 
   .priority-high {
     background-color: var(--priority-high);
-    color: black;
+    color: var(--priority-high-text);
   }
 
   .priority-critical {
     background-color: var(--priority-critical);
-    color: black;
+    color: var(--priority-critical-text);
   }
 
 </style>

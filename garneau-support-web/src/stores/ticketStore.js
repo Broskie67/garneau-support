@@ -8,11 +8,11 @@ export const useTicketStore = defineStore('ticketStore', () => {
   const selectedTicket = ref(null)
 
   /**
-   * Fetches the list of tickets created by the client.
+   * Récupère la liste des incidents créés par le client.
    *
-   * @param {string} token - Token used to authenticate the request.
-   * @returns {Promise<void>} Updates the tickets list in the store.
-   * @throws {Error} Throws an error if the request fails.
+   * @param {string} token Token utilisé pour authentifier la requête
+   * @returns {Promise<void>} Met à jour la liste des incidents dans le store
+   * @throws {Error} Lance une erreur si la requête échoue
    */
   async function getClientTickets(token) {
     try {
@@ -35,11 +35,11 @@ export const useTicketStore = defineStore('ticketStore', () => {
   }
 
   /**
-   * Fetches the list of tickets assigned to the technician.
+   * Récupère la liste des incidents assignés au technicien.
    *
-   * @param {string} token - Token used to authenticate the request.
-   * @returns {Promise<void>} Updates the tickets list in the store.
-   * @throws {Error} Throws an error if the request fails.
+   * @param {string} token Token utilisé pour authentifier la requête
+   * @returns {Promise<void>} Met à jour la liste des incidents dans le store
+   * @throws {Error} Lance une erreur si la requête échoue
    */
   async function getTechTickets(token) {
     try {
@@ -89,12 +89,12 @@ export const useTicketStore = defineStore('ticketStore', () => {
   }
 
   /**
-   * Fetches a specific ticket by its ID.
+   * Récupère un incident précis selon son identifiant.
    *
-   * @param {number} ticketId - ID of the ticket to fetch.
-   * @param {string} token - Token used to authenticate the request.
-   * @returns {Promise<void>} Updates the selected ticket in the store.
-   * @throws {Error} Throws an error if the request fails.
+   * @param {number} ticketId Identifiant de l'incident à récupérer
+   * @param {string} token Token utilisé pour authentifier la requête
+   * @returns {Promise<void>} Met à jour l'incident sélectionné dans le store
+   * @throws {Error} Lance une erreur si la requête échoue
    */
   async function getTicket(ticketId, token) {
     try {
@@ -118,6 +118,17 @@ export const useTicketStore = defineStore('ticketStore', () => {
     }
   }
 
+  /**
+   * Crée un nouvel incident.
+   *
+   * @param {string} title Titre de l'incident
+   * @param {string} description Description de l'incident
+   * @param {string} category Catégorie de l'incident
+   * @param {string} priority Priorité de l'incident
+   * @param {string} token Token utilisé pour authentifier la requête
+   * @returns {Promise<void>} Ajoute le nouvel incident dans le store
+   * @throws {Error} Lance une erreur si la requête échoue
+   */
   async function createTicket(title, description, category, priority, token) {
     try {
       const response = await fetch(`${ticketBaseUrl}`, {
@@ -146,12 +157,12 @@ export const useTicketStore = defineStore('ticketStore', () => {
   }
 
   /**
-   * Assigns a ticket to the currently authenticated technician.
+   * Assigne un incident au technicien connecté.
    *
-   * @param {number} ticketId - ID of the ticket to assign.
-   * @param {string} token - Token used to authenticate the request.
-   * @returns {Promise<void>} Refreshes the technician tickets list after assignment.
-   * @throws {Error} Throws an error if the request fails.
+   * @param {number} ticketId Identifiant de l'incident à assigner
+   * @param {string} token Token utilisé pour authentifier la requête
+   * @returns {Promise<void>} Met à jour la liste des incidents du technicien
+   * @throws {Error} Lance une erreur si la requête échoue
    */
   async function selfAssignTicket(ticketId, token) {
     try{
@@ -176,6 +187,15 @@ export const useTicketStore = defineStore('ticketStore', () => {
     }
   }
 
+  /**
+   * Modifie un incident existant.
+   *
+   * @param {number} ticketId Identifiant de l'incident à modifier
+   * @param {string} token Token utilisé pour authentifier la requête
+   * @param {Object} body Données de modification de l'incident
+   * @returns {Promise<void>} Met à jour l'incident dans le store
+   * @throws {Error} Lance une erreur si la requête échoue
+   */
   async function updateTicket(ticketId, token, body) {
     try {
       const response = await fetch(`${ticketBaseUrl}/${ticketId}`, {

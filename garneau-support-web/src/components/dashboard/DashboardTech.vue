@@ -1,230 +1,278 @@
 <script setup>
-import { computed, ref, onMounted, onUnmounted} from 'vue'
-import { useAuthStore } from '@/stores/authStore'
-import { useTicketStore } from '@/stores/ticketStore'
-import TicketTable from '@/components/tickets/TicketTable.vue'
-import FilterBar from '../commun/FilterBar.vue'
-import SlaTooltip from '../commun/SlaTooltip.vue'
+  import { computed, ref, onMounted, onUnmounted} from 'vue'
+  import { useAuthStore } from '@/stores/authStore'
+  import { useTicketStore } from '@/stores/ticketStore'
+  import TicketTable from '@/components/tickets/TicketTable.vue'
+  import FilterBar from '../commun/FilterBar.vue'
+  import SlaTooltip from '../commun/SlaTooltip.vue'
+  import DashboardStats from './DashboardStats.vue'
 
-const authStore = useAuthStore()
-const ticketStore = useTicketStore()
+  const authStore = useAuthStore()
+  const ticketStore = useTicketStore()
 
-const errorMessage = ref('')
-const successMessage = ref('')
+  const errorMessage = ref('')
+  const successMessage = ref('')
+  const newAssignationMessage = ref('')
+  const newCommentsMessage = ref('')
 
-const newAssignedTicketIds = ref(
-  JSON.parse(localStorage.getItem('newAssignedTicketIds')) || []
-)
-
-const newCreatedTicketIds = ref(
-  JSON.parse(localStorage.getItem('newCreatedTicketIds')) || []
-)
-const newAssignationMessage = ref('')
-let knownTicketIdsList = []
-let knownTicketsList = []
-let isFirstLoad = true
-let refresh = null
-
-const saveNotifications = () => {
-  localStorage.setItem('newAssignedTicketIds', JSON.stringify(newAssignedTicketIds.value))
-  localStorage.setItem('newCreatedTicketIds', JSON.stringify(newCreatedTicketIds.value))
-}
-
-const removeNewAssignationNotification = (ticketId) => {
-  newAssignedTicketIds.value = newAssignedTicketIds.value.filter(id => id !== ticketId)
-  saveNotifications()
-}
-
-const activeFilterOptions = {
-  status: [
-    'Ouvert',
-    'Assigné',
-    'En cours',
-    'En attente',
-    'Résolu'
-  ]
-}
-const closeFilterOptions = {
-  status: [
-    'Fermé'
-  ]
-}
-const activeFilters = ref({
-  search: '',
-  status: '',
-  category: '',
-  assignedTo: ''
-})
-const closedFilter = ref({
-  search: '',
-  status: '',
-  category: '',
-  assignedTo: ''
-})
-
-const getTickets = async () => {
-  if (!authStore.token) {
-    return
-  }
-
-  try {
-    await ticketStore.getTechTickets(authStore.token)
-  } catch (error) {
-    errorMessage.value = error.message
-  }
-}
-
-const refreshTicket = async () => {
-  await getTickets()
-
-  const currentTickets = filteredAssignedTickets.value || []
-  const currentIds = currentTickets.map(ticket => ticket.id)
-
-  if (isFirstLoad) {
-    knownTicketIdsList = currentIds
-    knownTicketsList = currentTickets
-    isFirstLoad = false
-    return
-  }
-
-  const newTicketsCreated = currentTickets.filter(ticket =>
-    !knownTicketIdsList.includes(ticket.id) && ticket.assigned_to === null
+  const newAssignedTicketIds = ref(
+    JSON.parse(localStorage.getItem('newAssignedTicketIds')) || []
   )
 
-  const newAssignedTicket = currentTickets.filter(currentTicket => {
-    const oldTicket = knownTicketsList.find(oldTicket =>
-      oldTicket.id === currentTicket.id
+  const newCreatedTicketIds = ref(
+    JSON.parse(localStorage.getItem('newCreatedTicketIds')) || []
+  )
+
+  const newCommentTicketIds = ref(
+    JSON.parse(localStorage.getItem('newCommentTicketIds')) || []
+  )
+
+  let knownTicketIdsList = []
+  let knownTicketsList = []
+  let isFirstLoad = true
+  let refresh = null
+
+  const saveNotifications = () => {
+    localStorage.setItem('newAssignedTicketIds', JSON.stringify(newAssignedTicketIds.value))
+    localStorage.setItem('newCreatedTicketIds', JSON.stringify(newCreatedTicketIds.value))
+    localStorage.setItem('newCommentTicketIds', JSON.stringify(newCommentTicketIds.value))
+  }
+
+  const removeNewAssignationNotification = (ticketId) => {
+    newAssignedTicketIds.value = newAssignedTicketIds.value.filter(id => id !== ticketId)
+    saveNotifications()
+  }
+
+  const removeNewCommentTicketNotification = (ticketId) => {
+    newCommentTicketIds.value = newCommentTicketIds.value.filter(id => id !== ticketId)
+    saveNotifications()
+  }
+
+  const activeFilterOptions = {
+    status: [
+      'Ouvert',
+      'Assigné',
+      'En cours',
+      'En attente',
+      'Résolu'
+    ]
+  }
+
+  const closeFilterOptions = {
+    status: [
+      'Fermé'
+    ]
+  }
+
+  const activeFilters = ref({
+   search: '',
+    status: '',
+    category: '',
+    assignedTo: ''
+  })
+
+  const closedFilter = ref({
+    search: '',
+    status: '',
+    category: '',
+    assignedTo: ''
+  })
+
+  const updateActiveFilters = (newFilters) => {
+    activeFilters.value = newFilters
+  }
+
+  const updateCloseFilters = (newFilters) => {
+    closedFilter.value = newFilters
+  }
+
+  const getTickets = async () => {
+    if (!authStore.token) {
+      return
+    }
+
+    try {
+      await ticketStore.getTechTickets(authStore.token)
+    } catch (error) {
+      errorMessage.value = error.message
+    }
+  }
+
+  const refreshTicket = async () => {
+    await getTickets()
+
+    const currentTickets = filteredAssignedTickets.value || []
+    const currentIds = currentTickets.map(ticket => ticket.id)
+
+    if (isFirstLoad) {
+      knownTicketIdsList = currentIds
+      knownTicketsList = currentTickets
+      isFirstLoad = false
+      return
+    }
+
+    const newTicketsCreated = currentTickets.filter(ticket =>
+      !knownTicketIdsList.includes(ticket.id) && ticket.assigned_to === null
     )
 
-    return oldTicket &&
-      oldTicket.assigned_to !== authStore.user.id &&
-      currentTicket.assigned_to === authStore.user.id
-  })
+    const newAssignedTicket = currentTickets.filter(currentTicket => {
+      const oldTicket = knownTicketsList.find(oldTicket =>
+        oldTicket.id === currentTicket.id
+      )
 
-  if (newAssignedTicket.length > 0) {
-    newAssignedTicket.forEach(ticket => {
-      if(!newAssignedTicketIds.value.includes(ticket.id)){
-        newAssignedTicketIds.value.push(ticket.id)
-      }
+      return oldTicket &&
+        oldTicket.assigned_to !== authStore.user.id &&
+        currentTicket.assigned_to === authStore.user.id
     })
-    newAssignationMessage.value = 'Nouvelle assignation'
-    saveNotifications()
-  }
-  
-  if (newTicketsCreated.length > 0) {
-    newTicketsCreated.forEach(ticket => {
-      if(!newCreatedTicketIds.value.includes(ticket.id)){
-        newCreatedTicketIds.value.push(ticket.id)
-      }
+
+    const newCommentTickets = currentTickets.filter(currentTicket => {
+      const oldTicket = knownTicketsList.find(oldTicket =>
+        oldTicket.id === currentTicket.id
+      )
+
+      return oldTicket &&
+        currentTicket.assigned_to === authStore.user.id &&
+        oldTicket.comments_count !== currentTicket.comments_count
     })
-    newAssignationMessage.value = 'Nouvelle assignation'
-    saveNotifications()
+
+    if (newAssignedTicket.length > 0) {
+      newAssignedTicket.forEach(ticket => {
+        if(!newAssignedTicketIds.value.includes(ticket.id)){
+          newAssignedTicketIds.value.push(ticket.id)
+        }
+      })
+      newAssignationMessage.value = 'Nouvelle assignation'
+      saveNotifications()
+    }
+
+    if (newTicketsCreated.length > 0) {
+      newTicketsCreated.forEach(ticket => {
+        if(!newCreatedTicketIds.value.includes(ticket.id)){
+          newCreatedTicketIds.value.push(ticket.id)
+        }
+      })
+      newAssignationMessage.value = 'Nouvelle assignation'
+      saveNotifications()
+    }
+
+    if (newCommentTickets.length > 0) {
+      newCommentTickets.forEach(ticket => {
+        if(!newCommentTicketIds.value.includes(ticket.id)) {
+          newCommentTicketIds.value.push(ticket.id)
+        }
+      })
+      newCommentsMessage.value = 'Nouveau(x) commentaire(s)'
+      saveNotifications()
+    }
+
+    knownTicketIdsList = currentIds
+    knownTicketsList = currentTickets
   }
 
-  knownTicketIdsList = currentIds
-  knownTicketsList = currentTickets
-}
+  const selfAssignTicket = async (ticketId) => {
+    if (!authStore.token) {
+      return
+    }
 
-const selfAssignTicket = async (ticketId) => {
-  if (!authStore.token) {
-    return
+    try {
+      await ticketStore.selfAssignTicket(ticketId, authStore.token)
+
+      newCreatedTicketIds.value = newCreatedTicketIds.value.filter(id => id !== ticketId)
+      saveNotifications()
+      successMessage.value = 'l\'incident vous a été attribué avec succès'
+    } catch (error) {
+      errorMessage.value = error.message
+    }
   }
 
-  try {
-    await ticketStore.selfAssignTicket(ticketId, authStore.token)
-
-    newCreatedTicketIds.value = newCreatedTicketIds.value.filter(id => id !== ticketId)
-    saveNotifications()
-    successMessage.value = 'l\'incident vous a été attribué avec succès'
-  } catch (error) {
-    errorMessage.value = error.message
-  }
-}
-
-const updateActiveFilters = (newFilters) => {
-  activeFilters.value = newFilters
-}
-
-const updateCloseFilters = (newFilters) => {
-  closedFilter.value = newFilters
-}
-
-const getAssignedActiveTicket = computed(() => {
-  return ticketStore.ticketsList.filter(ticket =>
-    (ticket.assigned_to === authStore.user.id || ticket.assigned_to === null) && 
-    ticket.status !== 'Fermé' && ticket.status !== 'Archivé'
-  )
-})
-
-const filteredAssignedTickets = computed(() => {
-  return getAssignedActiveTicket.value.filter(ticket => {
-    const matchSearch = 
-      !activeFilters.value.search || 
-      ticket.title.toLowerCase().includes(activeFilters.value.search.toLowerCase()) ||
-      ticket.description.toLowerCase().includes(activeFilters.value.search.toLowerCase())
-
-    const matchStatus =
-      !activeFilters.value.status ||
-      ticket.status === activeFilters.value.status
-
-    const matchCategory =
-      !activeFilters.value.category ||
-      ticket.category === activeFilters.value.category
-
-    const matchAssignedTo =
-      !activeFilters.value.assignedTo ||
-      activeFilters.value.assignedTo === 'assigned' && ticket.assigned_to === authStore.user.id ||
-      activeFilters.value.assignedTo === 'unassigned' && ticket.assigned_to === null
-
-    return matchSearch && matchStatus && matchCategory && matchAssignedTo
+  const getAssignedActiveTicket = computed(() => {
+    return ticketStore.ticketsList.filter(ticket =>
+      (ticket.assigned_to === authStore.user.id || ticket.assigned_to === null) && 
+      ticket.status !== 'Fermé' && ticket.status !== 'Archivé'
+    )
   })
-})
 
-const getAssignedClosedTicket = computed(() => {
-  return ticketStore.ticketsList.filter(ticket => ticket.assigned_to === authStore.user.id && ticket.status === 'Fermé' )
-})
+  const filteredAssignedTickets = computed(() => {
+    return getAssignedActiveTicket.value.filter(ticket => {
+      const matchSearch = 
+        !activeFilters.value.search || 
+        ticket.title.toLowerCase().includes(activeFilters.value.search.toLowerCase()) ||
+        ticket.description.toLowerCase().includes(activeFilters.value.search.toLowerCase())
 
-const filteredAssignedClosedTicket = computed(() => {
-  return getAssignedClosedTicket.value.filter(ticket => {
-    const matchSearch = 
-      !closedFilter.value.search || 
-      ticket.title.toLowerCase().includes(closedFilter.value.search.toLowerCase()) ||
-      ticket.description.toLowerCase().includes(closedFilter.value.search.toLowerCase())
+      const matchStatus =
+        !activeFilters.value.status ||
+        ticket.status === activeFilters.value.status
 
-    const matchStatus =
-      !closedFilter.value.status ||
-      ticket.status === closedFilter.value.status
+      const matchCategory =
+        !activeFilters.value.category ||
+        ticket.category === activeFilters.value.category
 
-    const matchCategory =
-      !closedFilter.value.category ||
-      ticket.category === closedFilter.value.category
+      const matchAssignedTo =
+        !activeFilters.value.assignedTo ||
+        activeFilters.value.assignedTo === 'assigned' && ticket.assigned_to === authStore.user.id ||
+        activeFilters.value.assignedTo === 'unassigned' && ticket.assigned_to === null
 
-    const matchAssignedTo =
-      !closedFilter.value.assignedTo ||
-      closedFilter.value.assignedTo === 'assigned' && ticket.assigned_to === authStore.user.id ||
-      closedFilter.value.assignedTo === 'unassigned' && ticket.assigned_to === null
-
-    return matchSearch && matchStatus && matchCategory && matchAssignedTo
+      return matchSearch && matchStatus && matchCategory && matchAssignedTo
+    })
   })
-})
 
-onMounted(async() => {
-  refreshTicket()
+  const getAssignedClosedTicket = computed(() => {
+    return ticketStore.ticketsList.filter(ticket => ticket.assigned_to === authStore.user.id && ticket.status === 'Fermé' )
+  })
 
-  refresh = setInterval(() => {
+  const filteredAssignedClosedTicket = computed(() => {
+    return getAssignedClosedTicket.value.filter(ticket => {
+      const matchSearch = 
+        !closedFilter.value.search || 
+        ticket.title.toLowerCase().includes(closedFilter.value.search.toLowerCase()) ||
+        ticket.description.toLowerCase().includes(closedFilter.value.search.toLowerCase())
+
+      const matchStatus =
+        !closedFilter.value.status ||
+        ticket.status === closedFilter.value.status
+
+      const matchCategory =
+        !closedFilter.value.category ||
+        ticket.category === closedFilter.value.category
+
+      const matchAssignedTo =
+        !closedFilter.value.assignedTo ||
+        closedFilter.value.assignedTo === 'assigned' && ticket.assigned_to === authStore.user.id ||
+        closedFilter.value.assignedTo === 'unassigned' && ticket.assigned_to === null
+
+      return matchSearch && matchStatus && matchCategory && matchAssignedTo
+    })
+  })
+
+  const handleNotification = (ticketId) => {
+    removeNewAssignationNotification(ticketId)
+    removeNewCommentTicketNotification(ticketId)
+  }
+
+  onMounted(async() => {
     refreshTicket()
-  }, 10000)
-})
 
-onUnmounted(() => {
-  clearInterval(refresh)
-})
+    refresh = setInterval(() => {
+      refreshTicket()
+    }, 10000)
+  })
+
+  onUnmounted(() => {
+    clearInterval(refresh)
+  })
 
 </script>
 
 <template>
-  <h2>Tableau de bord</h2>
+  <h2 class="page-title">Tableau de bord</h2>
 
+  <section class="dashboard-section">
+    <DashboardStats 
+      :tickets="ticketStore.ticketsList"
+      is-admin="false" 
+    />
+  </section>
+  
   <p class="error-message">
     {{ errorMessage }}
   </p>
@@ -233,9 +281,9 @@ onUnmounted(() => {
     {{ successMessage }}
   </p>
 
-  <div class="table-active">
+  <section class="dashboard-section table-active">
     <div class="flex-title-tooltip">
-      <h3>Incidents actifs</h3>
+      <h3 class="section-title">Incidents actifs</h3>
       <SlaTooltip/>
     </div>
     <p v-if="newAssignationMessage" class="success-message">
@@ -250,14 +298,14 @@ onUnmounted(() => {
       :isTechnician="true"
       :new-assigned-ticket-ids="newAssignedTicketIds"
       :new-created-ticket-ids="newCreatedTicketIds"
+      :new-comment-ticket-ids="newCommentTicketIds"
       @self-assign-ticket="selfAssignTicket"
-      @view-detail="removeNewAssignationNotification" 
+      @view-detail="handleNotification" 
     />
-  </div>
+  </section>
    
-  
-  <div class="table-closed" >
-    <h3>Incidents fermés</h3>
+  <section class="dashboard-section table-closed" >
+    <h3 class="section-title">Incidents fermés</h3>
 
     <FilterBar 
       :status-options="closeFilterOptions.status"
@@ -265,7 +313,7 @@ onUnmounted(() => {
     
     <TicketTable :tickets="filteredAssignedClosedTicket" 
       :isTechnician="true"/>
-  </div>
+  </section>
 
 </template>
 
@@ -280,7 +328,18 @@ onUnmounted(() => {
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
   }
 
-  h3 {
+ .page-title {
+    margin: 0 0 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .section-title {
+    margin: 0 0 1rem;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #111827;
     align-self: center;
   }
 
@@ -296,7 +355,10 @@ onUnmounted(() => {
 
   .flex-title-tooltip {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 
   .success-message {

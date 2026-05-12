@@ -10,8 +10,9 @@ async function seedTickets() {
       status: 'Ouvert',
       created_by: 1,
       assigned_to: null,
-      created_at: new Date('2026-02-01T09:15:00'),
-      updated_at: new Date('2026-02-01T09:15:00')
+      created_at: new Date('2026-05-12T08:15:00'),
+      updated_at: new Date('2026-05-12T08:15:00'),
+      resolved_at: null
     },
     {
       title: 'Mot de passe oublié',
@@ -21,8 +22,9 @@ async function seedTickets() {
       status: 'Assigné',
       created_by: 1,
       assigned_to: 3,
-      created_at: new Date('2026-02-01T10:30:00'),
-      updated_at: new Date('2026-02-01T11:00:00')
+      created_at: new Date('2026-05-11T10:30:00'),
+      updated_at: new Date('2026-05-11T11:00:00'),
+      resolved_at: null
     },
     {
       title: 'Connexion Wi-Fi instable',
@@ -32,8 +34,9 @@ async function seedTickets() {
       status: 'En attente',
       created_by: 1,
       assigned_to: 3,
-      created_at: new Date('2026-02-01T13:45:00'),
-      updated_at: new Date('2026-02-01T14:10:00')
+      created_at: new Date('2026-05-10T13:45:00'),
+      updated_at: new Date('2026-05-10T14:10:00'),
+      resolved_at: null
     },
     {
       title: 'Imprimante indisponible',
@@ -43,8 +46,9 @@ async function seedTickets() {
       status: 'Ouvert',
       created_by: 1,
       assigned_to: null,
-      created_at: new Date('2026-02-02T08:20:00'),
-      updated_at: new Date('2026-02-02T08:20:00')
+      created_at: new Date('2026-05-11T08:20:00'),
+      updated_at: new Date('2026-05-11T08:20:00'),
+      resolved_at: null
     },
     {
       title: 'Logiciel Office ne s\'ouvre plus',
@@ -54,8 +58,9 @@ async function seedTickets() {
       status: 'Résolu',
       created_by: 1,
       assigned_to: 4,
-      created_at: new Date('2026-02-02T09:40:00'),
-      updated_at: new Date('2026-02-02T15:25:00')
+      created_at: new Date('2026-05-09T09:40:00'),
+      updated_at: new Date('2026-05-09T15:25:00'),
+      resolved_at: new Date('2026-05-09T15:25:00')
     },
     {
       title: 'Écran externe non détecté',
@@ -65,8 +70,9 @@ async function seedTickets() {
       status: 'En cours',
       created_by: 2,
       assigned_to: 4,
-      created_at: new Date('2026-02-03T10:10:00'),
-      updated_at: new Date('2026-02-03T10:45:00')
+      created_at: new Date('2026-05-12T07:10:00'),
+      updated_at: new Date('2026-05-12T07:45:00'),
+      resolved_at: null
     },
     {
       title: 'Accès refusé au dossier partagé',
@@ -76,8 +82,9 @@ async function seedTickets() {
       status: 'Assigné',
       created_by: 2,
       assigned_to: 5,
-      created_at: new Date('2026-02-03T11:00:00'),
-      updated_at: new Date('2026-02-03T11:00:00')
+      created_at: new Date('2026-05-12T09:00:00'),
+      updated_at: new Date('2026-05-12T09:20:00'),
+      resolved_at: null
     },
     {
       title: 'Courriel institutionnel inaccessible',
@@ -87,8 +94,9 @@ async function seedTickets() {
       status: 'En cours',
       created_by: 2,
       assigned_to: 5,
-      created_at: new Date('2026-02-03T14:20:00'),
-      updated_at: new Date('2026-02-03T14:45:00')
+      created_at: new Date('2026-05-12T10:20:00'),
+      updated_at: new Date('2026-05-12T10:45:00'),
+      resolved_at: null
     },
     {
       title: 'Téléphone IP sans tonalité',
@@ -98,8 +106,9 @@ async function seedTickets() {
       status: 'Fermé',
       created_by: 2,
       assigned_to: 4,
-      created_at: new Date('2026-02-04T08:30:00'),
-      updated_at: new Date('2026-02-04T13:10:00')
+      created_at: new Date('2026-05-08T08:30:00'),
+      updated_at: new Date('2026-05-08T13:10:00'),
+      resolved_at: new Date('2026-05-08T12:45:00')
     },
     {
       title: 'Alerte de sécurité suspecte',
@@ -109,8 +118,9 @@ async function seedTickets() {
       status: 'Ouvert',
       created_by: 2,
       assigned_to: null,
-      created_at: new Date('2026-02-04T09:50:00'),
-      updated_at: new Date('2026-02-04T09:50:00')
+      created_at: new Date('2026-05-12T09:50:00'),
+      updated_at: new Date('2026-05-12T09:50:00'),
+      resolved_at: null
     }
   ])
 }
