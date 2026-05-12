@@ -1,14 +1,15 @@
 const sequelize = require('../connection');
+const createDatabase = require('../createDatabase')
 const { seedUsers } = require('./data/seedUsers')
 const { seedTickets } = require('./data/seedTickets')
 const { seedComments} = require('./data/seedComments')
 
 /**
- * Connects to the database, synchronizes the Sequelize models,
- * inserts the initial seed data, then closes the connection.
+ * Connecte a la base de données, 
  */
 async function seedDatabase() {
   try {
+    await createDatabse()
     await sequelize.authenticate()
     await sequelize.sync({ force: true })
     await seedUsers()
