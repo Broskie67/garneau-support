@@ -97,7 +97,7 @@ function signupValidation(req, res, next) {
       );
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
     if (!emailRegex.test(trimmedEmail)) {
       return res
         .status(422)
@@ -111,7 +111,7 @@ function signupValidation(req, res, next) {
         );
     }
 
-  const phoneNumberRegex = /^\d{10}$/;
+  const phoneNumberRegex = /^(\+1\s?)?(\(?[2-9][0-9]{2}\)?[\s.-]?)?[2-9][0-9]{2}[\s.-]?[0-9]{4}$/;
     if (!phoneNumberRegex.test(trimmedPhoneNumber)) {
       return res
         .status(422)
@@ -373,10 +373,58 @@ function updatePasswordValidation(req, res, next) {
     next()
 }
 
+function validateComment(req, res, next) {
+  const { content, type } = req.body
+
+  const trimmedContent = content ? content.trim() : ''
+
+  if(!trimmedContent){
+    return res
+      .status(422)
+      .json(
+        formatErrorResponse(
+          422,
+          "Unprocessable Entity",
+          "Le contenu est requis", 
+          req.originalUrl
+        )
+      );
+  }
+
+  if(trimmedContent.length < 3) {
+    return res
+      .status(422)
+      .json(
+        formatErrorResponse(
+          422,
+          "Unprocessable Entity",
+          "Le commmentaire doit contenir au moins 3 caractères", 
+          req.originalUrl
+        )
+      );
+  }
+
+  if(type !== 'Public' && type !== 'Interne') {
+    return res
+      .status(422)
+      .json(
+        formatErrorResponse(
+          422,
+          "Unprocessable Entity",
+          "Un commentaire peut être interne ou public seulement", 
+          req.originalUrl
+        )
+      );
+  }
+  next()
+}
+
+
 module.exports = {
   signinValidation,
   signupValidation,
   ticketValidation,
   profileValidation,
-  updatePasswordValidation
+  updatePasswordValidation,
+  validateComment
 }

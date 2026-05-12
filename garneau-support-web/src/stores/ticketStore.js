@@ -22,12 +22,12 @@ export const useTicketStore = defineStore('ticketStore', () => {
           "Authorization": "Bearer " + token
         }
       })
+      const data = await response.json()
+
       if(response.ok) {
-        const data = await response.json()
         ticketsList.value = data.data
       } else {
-        const errorData = await response.json()
-        throw new Error(errorData.message)
+        throw new Error(data.message)
       }
     } catch (error) {
       throw error
@@ -49,12 +49,12 @@ export const useTicketStore = defineStore('ticketStore', () => {
           "Authorization": "Bearer " + token
         }
       })
+      const data = await response.json()
+
       if(response.ok) {
-        const data = await response.json()
         ticketsList.value = data.data
       } else {
-        const errorData = await response.json()
-        throw new Error(errorData.message)
+        throw new Error(data.message)
       }
     } catch (error) {
       throw error
@@ -76,12 +76,12 @@ export const useTicketStore = defineStore('ticketStore', () => {
           "Authorization": "Bearer " + token
         }
       })
+      const data = await response.json()
+
       if(response.ok) {
-        const data = await response.json()
         ticketsList.value = data.data
       } else {
-        const errorData = await response.json()
-        throw new Error(errorData.message)
+        throw new Error(data.message)
       }
     } catch (error) {
       throw error
@@ -104,20 +104,20 @@ export const useTicketStore = defineStore('ticketStore', () => {
           "Authorization": "Bearer " + token
         }
       })
+      const data = await response.json()
+
       if(response.ok) {
-        const data = await response.json()
         selectedTicket.value = data.data
+      } else if(response.status === 404) {
+        selectedTicket.value = null
       } else {
-        const errorData = await response.json()
-        throw new Error(errorData.message)
+        throw new Error(data.message)
       }
     } catch (error) {
       throw error
     }
-    
   }
 
-  
   async function createTicket(title, description, category, priority, token) {
     try {
       const response = await fetch(`${ticketBaseUrl}`, {
@@ -133,12 +133,12 @@ export const useTicketStore = defineStore('ticketStore', () => {
           priority
         })
       })
-      if(response.ok) {
-        const data = await response.json()
+      const data = await response.json()
+
+      if(response.ok) {  
         selectedTicket.value = data.data
       } else {
-        const errorData = await response.json()
-        throw new Error(errorData.message)
+        throw new Error(data.message)
       }
     } catch (error) {
       throw error
@@ -161,11 +161,15 @@ export const useTicketStore = defineStore('ticketStore', () => {
           "Authorization": "Bearer " + token
         }
       })
+      const data = await response.json()
+
       if(response.ok) {
         getTechTickets(token)
+      } else if (response.status === 404){
+        selectedTicket.value = null
       } else {
-        const errorData = await response.json()
-        throw new Error(errorData.message)
+        
+        throw new Error(data.message)
       }
     } catch (error) {
       throw error
@@ -182,13 +186,13 @@ export const useTicketStore = defineStore('ticketStore', () => {
         },
         body: JSON.stringify(body)
       })
+      const data = await response.json()
+
       if(response.ok) {
-        const data = await response.json()
         selectedTicket.value = data.data
         return data
       } else {
-        const errorData = await response.json()
-        throw new Error(errorData.message)
+        throw new Error(data.message)
       }
     } catch (error) {
       throw error

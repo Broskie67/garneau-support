@@ -5,8 +5,8 @@ const { signupValidation } = require('../middleware/formValidation')
 const express = require('express');
 const router = express.Router()
 
-router.get('/users', isAuth, isAdmin, adminController.getUsers)
-router.patch('/users/:id/status', isAuth, isAdmin, adminController.updateUserActiveStatus)
-router.post('/technicians/create', isAuth, isAdmin, signupValidation, adminController.createTech)
+router.get('/admin/users', isAuth, isAdmin, adminController.getUsers)
+router.patch('/admin/users/:id/status', isAuth, isAdmin, adminController.updateUserActiveStatus)
+router.post('/admin/technicians/create', isAuth, isAdmin, signupValidation, adminController.createTech)
 
 module.exports = router

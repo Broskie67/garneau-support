@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useTicketStore } from '@/stores/ticketStore'
 import { useRoute } from 'vue-router'
 import TicketTable from '@/components/tickets/TicketTable.vue'
-import SlaTooltip from '../tickets/SlaTooltip.vue'
+import SlaTooltip from '../commun/SlaTooltip.vue'
 
 const authStore = useAuthStore()
 const ticketStore = useTicketStore()
