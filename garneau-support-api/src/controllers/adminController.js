@@ -9,7 +9,7 @@ const { Op } = require('sequelize');
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @return La liste de tous les utilisateurs. Retourne une
+ * @returns La liste de tous les utilisateurs. Retourne une
  * erreur dans le cas contraire
  */
 exports.getUsers = async (req, res, next) => {
@@ -44,7 +44,7 @@ exports.getUsers = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @return L'utilisateur qui a été activé ou désactivé. Retourne une
+ * @returns L'utilisateur qui a été activé ou désactivé. Retourne une
  * erreur dans le cas contraire
  */
 exports.updateUserActiveStatus = async (req, res, next) => {
@@ -111,7 +111,7 @@ exports.updateUserActiveStatus = async (req, res, next) => {
  * @param {Object} req Requête Express 
  * @param {Object} res Réponse Express
  * @param {Function} next Middleware Express 
- * @return Le nouveau technicien créé. Retourne une
+ * @returns Le nouveau technicien créé. Retourne une
  * erreur dans le cas contraire
  */
 exports.createTech = async (req, res, next) => {
