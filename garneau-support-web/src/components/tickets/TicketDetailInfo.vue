@@ -130,7 +130,7 @@ function formatDate(dateString) {
         <router-link 
           :to="`/tickets/${ticket.id}/edit`" 
           class="action-btn modify-btn" 
-          v-if="ticket.assigned_to !== null || !isTechnician || isAdmin">
+          v-if="ticket.status !== 'Fermé' && (ticket.assigned_to !== null || !isTechnician || isAdmin)">
           modifier
         </router-link>
       </div> 

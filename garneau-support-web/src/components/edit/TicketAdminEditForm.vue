@@ -155,7 +155,7 @@ onMounted(async () => {
         <h5>Description</h5>
         <span>{{ ticket.description }}</span>
       </div>  
-      <div class="info-grid" >
+      <div class="info-grid" v-if="ticket.status !== 'Fermé'" >
         <div class="ticket-category">
           <label for="category">Catégorie</label>
           <select id="category" v-model="form.category" class="form-select">
@@ -204,6 +204,62 @@ onMounted(async () => {
             </option>
           </select>
         </div>
+      </div>
+      <div class="info-grid" v-else >
+        <div class="ticket-category">
+          <label for="category">Catégorie</label>
+          <select id="category" v-model="form.category" class="form-select" disabled>
+            <option value="Matériel">Matériel</option>
+            <option value="Logiciel">Logiciel</option>
+            <option value="Réseau">Réseau</option>
+            <option value="Accès et comptes">Accès et comptes</option>
+            <option value="Courriel">Courriel</option>
+            <option value="Impression">Impression</option>
+            <option value="Sécurité">Sécurité</option>
+            <option value="Téléphonie">Téléphonie</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div> 
+        <div class="ticket-priority">
+          <label for="priority">Priorité</label>
+          <select id="priority" v-model="form.priority" class="form-select" disabled>
+            <option value="Basse">Basse</option>
+            <option value="Moyenne">Moyenne</option>
+            <option value="Haute">Haute</option>
+            <option value="Critique">Critique</option>
+          </select>
+        </div>
+        <div class="ticket-status-edit">
+          <label for="status">Statut</label>
+          <select id="status" v-model="nextStatus" class="form-select" @change="changeStatus(nextStatus)" disabled>
+            <option value="" disabled>
+              {{ status }}
+            </option>
+            <option 
+              v-for="transition in allowedTransition" 
+              :key="transition" 
+              :value="transition">
+                {{ transition }}
+            </option>
+          </select>
+        </div>
+        <div class="ticket-assign-to-edit">
+          <label for="status">Assigné à</label>
+          <select id="assigned" v-model="form.assigned_to" class="form-select" disabled>
+            <option 
+              v-for="user in adminStore.usersList.filter(user => user.role === 'technicien')"
+              :key="user.id"
+              :value="user.id">
+              {{ user.first_name }}
+            </option>
+          </select>
+        </div>
+        <span 
+          class="disable-status" 
+          v-if="ticket.status === 'Fermé'"
+        >
+          Vous ne pouvez modifier un incident avec le status « Fermé »
+        </span>
       </div>
       
       <div class="ticket-created-at">

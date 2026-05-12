@@ -12,11 +12,24 @@ const ticket = sequelize.define(
     },
     title: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: false,
+      validation: {
+        len: {
+          args: [3, 100],
+          msg: 'Le titre doit contenir entre 3 et 100 caractères'
+        }
+      }
     },
     description: {
       type: DataTypes.STRING(),
-      allowNull: false
+      allowNull: false,
+      validation: {
+        len: {
+          args: [10],
+          msg: 'La description doit contenir plus de 10 caractères'
+        }
+      }
+
     },
     category: {
       type: DataTypes.ENUM(

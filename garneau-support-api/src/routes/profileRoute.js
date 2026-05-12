@@ -4,8 +4,8 @@ const express = require('express');
 const { profileValidation, updatePasswordValidation } = require('../middleware/formValidation');
 const router = express.Router();
 
-router.get('/', isAuth, profileController.getProfile)
-router.put('/', isAuth, profileValidation, profileController.updateProfile)
-router.put('/password', isAuth, updatePasswordValidation, profileController.updatePassword)
+router.get('/profile', isAuth, profileController.getProfile)
+router.put('/profile', isAuth, profileValidation, profileController.updateProfile)
+router.put('/profile/password', isAuth, updatePasswordValidation, profileController.updatePassword)
 
 module.exports = router

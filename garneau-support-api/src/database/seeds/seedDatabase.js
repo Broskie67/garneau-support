@@ -1,6 +1,7 @@
 const sequelize = require('../connection');
 const { seedUsers } = require('./data/seedUsers')
 const { seedTickets } = require('./data/seedTickets')
+const { seedComments} = require('./data/seedComments')
 
 /**
  * Connects to the database, synchronizes the Sequelize models,
@@ -12,6 +13,7 @@ async function seedDatabase() {
     await sequelize.sync({ force: true })
     await seedUsers()
     await seedTickets()
+    await seedComments()
     
     console.log('Database seeded successfully.');
   } catch (error) {

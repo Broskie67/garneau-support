@@ -5,12 +5,12 @@ const { ticketValidation } = require('../middleware/formValidation')
 const express = require('express');
 const router = express.Router();
 
-router.post('/', isAuth, isClient, ticketValidation, ticketController.createTicket)
-router.get('/client', isAuth, isClient, ticketController.getClientTickets)
-router.get('/technician', isAuth, isTechnician, ticketController.getTechnicianTickets)
-router.get('/admin', isAuth, isAdmin, ticketController.getAllTickets)
-router.get('/:id', isAuth, ticketController.getTicket)
-router.patch('/:id', isAuth, ticketController.updateTicket)
-router.patch('/:id/assign/me', isAuth, isTechnician, ticketController.patchSelfAssignTicket)
+router.post('/tickets', isAuth, isClient, ticketValidation, ticketController.createTicket)
+router.get('/tickets/client', isAuth, isClient, ticketController.getClientTickets)
+router.get('/tickets/technician', isAuth, isTechnician, ticketController.getTechnicianTickets)
+router.get('/tickets/admin', isAuth, isAdmin, ticketController.getAllTickets)
+router.get('/tickets/:id', isAuth, ticketController.getTicket)
+router.patch('/tickets/:id', isAuth, ticketController.updateTicket)
+router.patch('/tickets/:id/assign/me', isAuth, isTechnician, ticketController.patchSelfAssignTicket)
 
 module.exports = router

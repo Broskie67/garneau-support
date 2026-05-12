@@ -134,6 +134,9 @@ const router = createRouter({
         const ticketStore = useTicketStore()
         if(authStore.isConnected) {
           await ticketStore.getTicket(to.params.id, authStore.token)
+          if(!ticketStore.selectedTicket){
+            next('/notFound')
+          }
 
           if(authStore.user.role === 'admin'){
             next()
@@ -164,6 +167,9 @@ const router = createRouter({
         if(authStore.isConnected) {
           await ticketStore.getTicket(to.params.id, authStore.token)
 
+          if(!ticketStore.selectedTicket){
+            next('/notFound')
+          }
           if(authStore.user.role === 'admin'){
             next()
           }
