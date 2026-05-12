@@ -3,6 +3,17 @@ const dotenv = require('dotenv')
 dotenv.config()
 const { formatErrorResponse } = require('../utils/formatErrorResponse');
 
+/**
+ * Vérifie que l'utilisateur est authentifié.
+ *
+ * Valide le token JWT reçu dans l'en-tête Authorization
+ * et ajoute les informations de l'utilisateur à la requête.
+ *
+ * @param {Object} req Requête Express
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware suivant
+ * @returns Une erreur 401 si le token est absent, invalide ou expiré
+ */
 module.exports = (req, res, next) => {
   const authHeader = req.get('Authorization');
 
