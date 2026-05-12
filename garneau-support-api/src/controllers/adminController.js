@@ -3,6 +3,15 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const { Op } = require('sequelize');
 
+/**
+ * Recupère la liste de tous les utilisateurs
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @return La liste de tous les utilisateurs. Retourne une
+ * erreur dans le cas contraire
+ */
 exports.getUsers = async (req, res, next) => {
   try{
     const allUser = await User.findAll({
@@ -29,6 +38,15 @@ exports.getUsers = async (req, res, next) => {
   }
 }
 
+/**
+ * Modifie le statut actif d'un utilisateur selectionné
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @return L'utilisateur qui a été activé ou désactivé. Retourne une
+ * erreur dans le cas contraire
+ */
 exports.updateUserActiveStatus = async (req, res, next) => {
   const userId = req.params.id
   try{
@@ -86,6 +104,16 @@ exports.updateUserActiveStatus = async (req, res, next) => {
   }
 }
 
+/**
+ * Vérifie si le technicien existe déjà, s'il n'existe pas,
+ * un nouveau technicien est créé
+ * 
+ * @param {Object} req Requête Express 
+ * @param {Object} res Réponse Express
+ * @param {Function} next Middleware Express 
+ * @return Le nouveau technicien créé. Retourne une
+ * erreur dans le cas contraire
+ */
 exports.createTech = async (req, res, next) => {
   const { firstName, lastName, email, phoneNumber, password, confirmPassword } = req.body;
 
