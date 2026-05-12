@@ -100,56 +100,79 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.filter-bar {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-  padding: 18px;
-  background: #F8FAFC;
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  border-radius: 14px;
+  .filter-bar {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    padding: 18px;
+    background: #F8FAFC;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 14px;
+  }
+
+  .filter-input,
+  .filter-select {
+    height: 42px;
+    padding: 0 14px;
+    border-radius: 10px;
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+    color: #0F172A;
+    font-size: 0.95rem;
+  }
+
+  .filter-input {
+    min-width: 280px;
+    flex: 1;
+  }
+
+  .filter-select {
+    min-width: 150px;
+  }
+
+  .filter-input:focus,
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent);
+  }
+
+  .filter-reset {
+    height: 42px;
+    padding: 0 16px;
+    border-radius: 10px;
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+    color: #334155;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .filter-reset:hover {
+    background: #F1F5F9;
+  }
+
+  @media screen and (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-input,
+  .filter-select,
+  .filter-reset {
+    width: 100%;
+  }
+
+  .filter-input {
+    min-width: 0;
+  }
+
+  .filter-select {
+    min-width: 0;
+  }
 }
 
-.filter-input,
-.filter-select {
-  height: 42px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1px solid #CBD5E1;
-  background: #FFFFFF;
-  color: #0F172A;
-  font-size: 0.95rem;
-}
-
-.filter-input {
-  min-width: 280px;
-  flex: 1;
-}
-
-.filter-select {
-  min-width: 150px;
-}
-
-.filter-input:focus,
-.filter-select:focus {
-  outline: none;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px var(--color-accent);
-}
-
-.filter-reset {
-  height: 42px;
-  padding: 0 16px;
-  border-radius: 10px;
-  border: 1px solid #CBD5E1;
-  background: #FFFFFF;
-  color: #334155;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.filter-reset:hover {
-  background: #F1F5F9;
-}</style>
+</style>

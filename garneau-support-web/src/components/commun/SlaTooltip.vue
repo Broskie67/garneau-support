@@ -137,4 +137,21 @@
 .sla-info .sla-symbol {
   background-color: #3b82f6;
 }
+
+@media screen and (max-width: 768px) {
+  .sla-legend {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .legend-line {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .legend-item {
+    width: 100%;
+  }
+}
+
 </style>

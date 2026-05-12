@@ -297,6 +297,10 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+  .card-content{
+    width: 100%;
+  }
+  
   .flex-title-status {
     display: flex;
     justify-content: space-between;
@@ -451,4 +455,33 @@ onMounted(async () => {
     background-color: var(--status-closed);
     color: black;
   }
+
+  @media screen and (max-width: 768px) {
+    .flex-title-status {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    
+    .info-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      max-width: 100%;
+    }
+    
+    .actions-buttons {
+      flex-direction: column;
+    }
+    
+    .action-btn,
+    .back-btn {
+      width: 100%;
+    }
+    
+    .badge-status {
+      font-size: 0.9rem;
+      padding: 7px 12px;
+    }
+  }
+
 </style>
