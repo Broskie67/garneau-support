@@ -19,7 +19,7 @@ async function seedUsers() {
       password_hash: bcrypt.hashSync('Password123!', 10),
       phone_number: '418-555-5678',
       role: 'client',
-      is_active: true
+      is_active: false
     },
     {
       first_name: 'tech1',

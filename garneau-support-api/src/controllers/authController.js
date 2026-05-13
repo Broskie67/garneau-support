@@ -60,10 +60,10 @@ exports.signup = async (req, res, next) => {
           {
             user: {
               id: newUser.id,
-              first_name: newUser.firstName,
-              last_name: newUser.lastName,
+              first_name: newUser.first_name,
+              last_name: newUser.last_name,
               email: newUser.email,
-              phone_number: newUser.phoneNumber,
+              phone_number: newUser.phone_number,
               role: 'client'
             },
             token: token,

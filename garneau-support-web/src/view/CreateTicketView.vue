@@ -1,5 +1,5 @@
 <script setup>
-import TicketCreation from '@/components/Creation/TicketCreation.vue';
+import TicketCreation from '@/components/creation/TicketCreation.vue';
 
 </script>
 

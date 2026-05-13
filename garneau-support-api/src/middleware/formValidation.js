@@ -135,7 +135,7 @@ function signupValidation(req, res, next) {
           formatErrorResponse(
             422,
             "Unprocessable Entity",
-            "Le format du numéro de téléphone est invalide. Il doit contenir exactement 10 chiffres.(ex: 4181234567)",
+            "Le format du numéro de téléphone est invalide. Il doit etre de format canadien",
             req.originalUrl
           )
         );

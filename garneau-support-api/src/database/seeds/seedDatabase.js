@@ -9,7 +9,7 @@ const { seedComments} = require('./data/seedComments')
  */
 async function seedDatabase() {
   try {
-    await createDatabse()
+    await createDatabase()
     await sequelize.authenticate()
     await sequelize.sync({ force: true })
     await seedUsers()
